@@ -4,24 +4,71 @@ We get something like
 I'd like to split it up a bit
 First off, by sleep "session"
 
+
+So if we do descending, we have a big INBED followed by a bunch of intervals within it
+
  */
+
+export const INBED = "INBED";
+export const ASLEEP = "ASLEEP";
+export const CORE = "CORE";
+export const DEEP = "DEEP";
+export const REM = "REM";
+export const AWAKE = "AWAKE";
+
+
 export const processSleep = raw => {
-    raw = raw.map(x => {
-        const {endDate, startDate, value} = x;
-        return {endDate, startDate, value};
-    });
+    /*raw = raw.map(x => {
+        const {startDate, endDate, value} = x;
+        return {startDate, endDate, value};
+    });*/
 
     //const object = raw.reduce((acc, curr) => (acc[curr.id]=curr, acc), {});
     //console.log(Object.keys(object));
 
+    let groupings = [];
+
+    let currentGroup = {samples: []};
 
 
     raw.forEach(sample => {
+        //if (currentGroup.samples.length > 1)
+            //console.log(sample.endDate, currentGroup.samples[0].startDate);
+        if (sample.value === INBED || (currentGroup.samples.length > 1 && sample.endDate !== currentGroup.samples[0].startDate)) {
+
+            // signifies new sleep
+            groupings.push(currentGroup);
+            currentGroup = {
+                bedStart: sample.startDate,
+                bedEnd: sample.endDate,
+                samples:[]
+            };
+
+        } else {
+            if (new Date(sample.startDate) < new Date(currentGroup.bedStart)){
+                console.log('impossible scenario')
+            }
+
+            currentGroup.samples.unshift(sample);
+        }
         //console.log(object[sample.sourceId]);
-        console.log(sample);
-    })
+        //console.log(sample, (new Date(sample.endDate) - new Date(sample.startDate))/1000);
+    });
 
+    groupings.push(currentGroup);
 
+    groupings.map(group => {
+        const start = new Date(group.bedStart);
+        group.samples = group.samples.map(sample => ({
+            start: new Date(sample.startDate) - start,
+            end: new Date(sample.endDate) - start,
+            value: sample.value
+        }));
 
-    return raw;
+        return group;
+    });
+
+    groupings = groupings.filter(g => g.samples.length);
+
+    return groupings;
 };
