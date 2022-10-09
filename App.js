@@ -8,6 +8,7 @@
 import React, {useEffect, useState} from 'react';
 import type {Node} from 'react';
 import {
+    DeviceEventEmitter, EventEmitter, NativeEventEmitter, NativeModules,
     SafeAreaView,
     ScrollView,
     StatusBar,
@@ -16,6 +17,8 @@ import {
     useColorScheme,
     View,
 } from 'react-native';
+
+import { NativeAppEventEmitter } from 'react-native';
 
 import {
     Colors,
@@ -82,6 +85,28 @@ adding chagnes from
 to fix sleep
  */
 
+// We now have our basic data type:
+/*
+{
+    bedStart: int,
+    bedEnd: int,
+    samples: [{
+        startDiff: int,
+        endDiff: int,
+        value: AWAKE | INBED | CORE | REM | DEEP | ASLEEP,
+    }]
+}
+
+
+Workflow:
+The user wakes up, gets a notification that a new sleep is available to upload manually
+    Or has it already been uploaded automatically
+    To do so, we also need to keep track of new INBED events
+    How to do so?
+
+
+ */
+
 const App: () => Node = () => {
     const [sleepData, setSleepData] = useState([]);
 
@@ -95,6 +120,35 @@ const App: () => Node = () => {
     useEffect(() => {
         getSleep(sd => setSleepData(processSleep(sd)));
 
+        DeviceEventEmitter.addListener('healthKit:SleepAnalysis:setup:success', () => {
+            console.log('sleep analysis setup success')
+        })
+
+        DeviceEventEmitter.addListener('healthKit:SleepAnalysis:setup:failure', () => {
+            console.log('sleep analysis setup failure')
+        })
+
+        DeviceEventEmitter.addListener('healthKit:SleepAnalysis:new', () => {
+            console.log('new sleep analysis')
+        })
+        DeviceEventEmitter.addListener('healthKit:fdafds:new', () => {
+            console.log('new sleep analysis')
+        })
+
+        NativeAppEventEmitter.addListener('healthKit:SleepAnalysis:setup:success', () => {
+            console.log('sleep analysis setup success')
+        })
+
+        NativeAppEventEmitter.addListener('healthKit:SleepAnalysis:setup:failure', () => {
+            console.log('sleep analysis setup failure')
+        })
+
+        NativeAppEventEmitter.addListener('healthKit:SleepAnalysis:new', () => {
+            console.log('new sleep analysis')
+        })
+        NativeAppEventEmitter.addListener('healthKit:fdafds:new', () => {
+            console.log('new sleep analysis')
+        })
     }, []);
 
     return (
