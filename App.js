@@ -119,6 +119,11 @@ const App: () => Node = () => {
 
     useEffect(() => {
         getSleep(sd => setSleepData(processSleep(sd)));
+        /* Register native listener that will be triggered when successfuly enabled */
+        NativeAppEventEmitter.addListener('healthKit:HeartRate:setup:success', () => console.log('new heart rate'))
+
+        /* Register native listener that will be triggered on each update */
+        NativeAppEventEmitter.addListener('healthKit:HeartRate:new', () => console.log('new heart rate'))
 
         DeviceEventEmitter.addListener('healthKit:SleepAnalysis:setup:success', () => {
             console.log('sleep analysis setup success')
@@ -150,6 +155,12 @@ const App: () => Node = () => {
             console.log('new sleep analysis')
         })
     }, []);
+
+    // going with https://medium.com/react-native-training/how-to-handle-background-app-refresh-with-healthkit-in-react-native-3a32704461fe
+
+    // fuck that, it's old. Just going to wait for a fix to react-native-health. In the mean time, let's just run a query once an hour and see if any new bed thing pops up
+    // then notify the user.
+
 
     return (
         <SafeAreaView style={backgroundStyle}>
