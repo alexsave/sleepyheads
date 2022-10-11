@@ -14,6 +14,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-sleepyheads-sleepyheadsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-sleepyheads-sleepyheadsTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		FAFAF54628F344A500DF5E55 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAFAF54528F344A500DF5E55 /* Background.swift */; };
+		FAFAF54828F3452400DF5E55 /* Background.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAF54728F3452400DF5E55 /* Background.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +46,10 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sleepyheads/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-sleepyheads-sleepyheadsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sleepyheads-sleepyheadsTests.release.xcconfig"; path = "Target Support Files/Pods-sleepyheads-sleepyheadsTests/Pods-sleepyheads-sleepyheadsTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FAFD347928E55E82000ECF0D /* sleepyheads.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = sleepyheads.entitlements; path = sleepyheads/sleepyheads.entitlements; sourceTree = "<group>"; };
+		FAFAF54428F344A500DF5E55 /* sleepyheads-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "sleepyheads-Bridging-Header.h"; sourceTree = "<group>"; };
+		FAFAF54528F344A500DF5E55 /* Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		FAFAF54728F3452400DF5E55 /* Background.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Background.m; sourceTree = "<group>"; };
+		FAFAF54928F351A500DF5E55 /* sleepyheads.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = sleepyheads.entitlements; path = sleepyheads/sleepyheads.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,13 +92,16 @@
 		13B07FAE1A68108700A75B9A /* sleepyheads */ = {
 			isa = PBXGroup;
 			children = (
-				FAFD347928E55E82000ECF0D /* sleepyheads.entitlements */,
+				FAFAF54928F351A500DF5E55 /* sleepyheads.entitlements */,
+				FAFAF54528F344A500DF5E55 /* Background.swift */,
+				FAFAF54728F3452400DF5E55 /* Background.m */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				FAFAF54428F344A500DF5E55 /* sleepyheads-Bridging-Header.h */,
 			);
 			name = sleepyheads;
 			sourceTree = "<group>";
@@ -415,7 +423,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				FAFAF54628F344A500DF5E55 /* Background.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				FAFAF54828F3452400DF5E55 /* Background.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +444,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-sleepyheads-sleepyheadsTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -461,6 +472,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-sleepyheads-sleepyheadsTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = sleepyheadsTests/Info.plist;
@@ -503,6 +515,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = sleepyheads;
+				SWIFT_OBJC_BRIDGING_HEADER = "sleepyheads-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -530,6 +543,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = sleepyheads;
+				SWIFT_OBJC_BRIDGING_HEADER = "sleepyheads-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -602,8 +616,10 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				PRODUCT_NAME = sleepyheads;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "";
 			};
 			name = Debug;
 		};
@@ -666,6 +682,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				PRODUCT_NAME = sleepyheads;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

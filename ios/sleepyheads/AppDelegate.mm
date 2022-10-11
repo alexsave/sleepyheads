@@ -1,6 +1,5 @@
 #import "AppDelegate.h"
-
-#import "RCTAppleHealthKit.h"
+#import "sleepyheads-Swift.h"
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -60,7 +59,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  [[RCTAppleHealthKit new] initializeBackgroundObservers:bridge];
+  [[Background new] startObservingStepCount];
+  
   
   return YES;
 }
@@ -116,14 +116,14 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const std::string &)name
-jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
+                                                      jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
 {
   return nullptr;
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const std::string &)name
-initParams:
-(const facebook::react::ObjCTurboModule::InitParams &)params
+                                                     initParams:
+                                                         (const facebook::react::ObjCTurboModule::InitParams &)params
 {
   return nullptr;
 }
