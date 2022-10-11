@@ -11,53 +11,51 @@ import HealthKit
 @objc(Background)
 class Background: NSObject {
   let healthKitStore: HKHealthStore = HKHealthStore()
-  let sampleType = HKObjectType.quantityType(forIdentifier: .stepCount)!
+  let sampleType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
   
   override init() { }
   
+  // I might just call this from react itself, that way we can do logic there
   @objc public func startObservingStepCount() {
     print("startObserving called")
-    /*let content = UNMutableNotificationContent()
-    content.title = "Background delivery is set"
-    content.body = "trying out notifications"
-    
-    let uuidString = UUID().uuidString
-    let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: nil)
-    
-    let notificationCenter = UNUserNotificationCenter.current()
-    notificationCenter.add(request) {error in
-      if let theError = error {
-        print("Couldn't notify user. ")
-        print("Error = \(theError)")
-      }
-    }*/
     let center = UNUserNotificationCenter.current()
     
-    // this is key
-    center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+    let read: Set<HKObjectType> = Set(arrayLiteral:
+                                        HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!,
+                                      HKObjectType.quantityType(forIdentifier: .stepCount)!)
     
+    let write: Set<HKSampleType> = Set(arrayLiteral: HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!)
+    // health auth has to come first
+    healthKitStore.requestAuthorization(toShare: write, read: read) { granted, error in
       if let error = error {
         print(error)
       } else {
-      
-      }
-    }
-    
-    
-    let query: HKObserverQuery = HKObserverQuery(sampleType: sampleType, predicate: nil, updateHandler: self.stepCountChangedHandler)
-    healthKitStore.execute(query)
-    
-    healthKitStore.enableBackgroundDelivery(for: sampleType, frequency: HKUpdateFrequency.immediate) { (success: Bool, error: Error!) in
-      if (success) {
-        print("Enabled background delivery of step count")
         
-      } else {
-        if let theError = error{
-          print("Failed to enable background delivery of step count. ")
-          print("Error = \(theError)")
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+          
+          if let error = error {
+            print(error)
+          } else {
+            let query: HKObserverQuery = HKObserverQuery(sampleType: self.sampleType, predicate: nil, updateHandler: self.stepCountChangedHandler)
+            self.healthKitStore.execute(query)
+            
+            self.healthKitStore.enableBackgroundDelivery(for: self.sampleType, frequency: HKUpdateFrequency.immediate) { (success: Bool, error: Error!) in
+              if (success) {
+                print("Enabled background delivery of step count")
+                
+              } else {
+                if let theError = error{
+                  print("Failed to enable background delivery of step count. ")
+                  print("Error = \(theError)")
+                }
+              }
+            }
+          }
         }
       }
     }
+    
+    
   }
   
   func stepCountChangedHandler(query: HKObserverQuery!, completionHandler: HKObserverQueryCompletionHandler, error: Error!){
@@ -83,8 +81,8 @@ class Background: NSObject {
         // Process the samples here.
         // Send notification
         let content = UNMutableNotificationContent()
-        content.title = "Mo steps, mo problems"
-        content.body = samples![samples!.count-1].debugDescription
+        content.title = "Mo sleep, mo problems"
+        content.body = "\(samples![samples!.count-1].debugDescription) from thread \(Thread.current)"
         if #available(iOS 13.0, *) {
           content.targetContentIdentifier = "importScreen"
         }
