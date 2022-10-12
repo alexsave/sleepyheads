@@ -36,7 +36,7 @@ class Background: NSObject {
           if let error = error {
             print(error)
           } else {
-            let query: HKObserverQuery = HKObserverQuery(sampleType: self.sampleType, predicate: nil, updateHandler: self.stepCountChangedHandler)
+            let query: HKObserverQuery = HKObserverQuery(sampleType: self.sampleType, predicate: nil, updateHandler: self.sleepChangedHandler)
             self.healthKitStore.execute(query)
             
             self.healthKitStore.enableBackgroundDelivery(for: self.sampleType, frequency: HKUpdateFrequency.immediate) { (success: Bool, error: Error!) in
@@ -58,31 +58,57 @@ class Background: NSObject {
     
   }
   
-  func stepCountChangedHandler(query: HKObserverQuery!, completionHandler: HKObserverQueryCompletionHandler, error: Error!){
+  func sleepChangedHandler(query: HKObserverQuery!, completionHandler: HKObserverQueryCompletionHandler, error: Error!){
+    completionHandler()
+    
     if let theError = error{
       print("Observer query failed. ")
       print("Error = \(theError)")
     }
     
+    
+    
     // Run the query.
     // Actually query the stepcount changes
-    let query: HKSampleQuery = HKSampleQuery(sampleType: sampleType,
-                                             predicate: nil,
-                                             limit: HKObjectQueryNoLimit, // one day should be fine
-                                             sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]) { (query, samples, error) in
+    let sampleQuery: HKSampleQuery = HKSampleQuery(sampleType: sampleType,
+                                                   predicate: nil,
+                                                   limit: HKObjectQueryNoLimit, // one day should be fine
+                                                   sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]) { (query, samples, error) in
       
       if let error = error {
         // Handle errors here.
         print("Query results handler error = \(error)")
       }
       
+      
+      
       // note: the query works fine
-      DispatchQueue.main.async {
-        // Process the samples here.
-        // Send notification
-        let content = UNMutableNotificationContent()
-        content.title = "Mo sleep, mo problems"
-        content.body = "\(samples![samples!.count-1].debugDescription) from thread \(Thread.current)"
+      // Process the samples here.
+      // Send notification
+      let content = UNMutableNotificationContent()
+      content.title = "Mo sleep, mo problems"
+      
+      let casted = samples! as! [HKCategorySample]
+      
+      let lastInbedSample = casted.filter { sample in
+        return HKCategoryValueSleepAnalysis.inBed.rawValue == sample.value
+      }.last!
+      
+      
+      // here, we check if it's actually a new sleep
+      
+      // not the biggest fan of this, as we'll probably be doing something similar in React
+      let defaults = UserDefaults.standard
+      let lastFound: Int = defaults.integer(forKey: "lastSleepFound")
+      
+      let x = Int(lastInbedSample.endDate.timeIntervalSince1970)
+      
+      if (x > lastFound) {
+        defaults.set(x, forKey: "lastSleepFound")
+        
+        
+        // add and notify
+        content.body = "\(lastInbedSample.value) type from \(lastInbedSample.startDate.description(with: .current)) to \(lastInbedSample.endDate.description(with: .current)) from thread \(Thread.current)"
         if #available(iOS 13.0, *) {
           content.targetContentIdentifier = "importScreen"
         }
@@ -97,11 +123,19 @@ class Background: NSObject {
             print("Error = \(theError)")
           }
         }
+        
       }
+      //else dw about it
+      
+      
+      
+      
+      
+      
+      
     }
-    healthKitStore.execute(query)
+    healthKitStore.execute(sampleQuery)
     
-    completionHandler()
   }
   
   @objc
