@@ -40,6 +40,7 @@ import {
     REM,
 } from './src/Utils/ProcessSleep';
 import {Row} from './src/Components/Basic/Row';
+import SplashScreen from "react-native-splash-screen";
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 const getSleepPermissions = cb => {
@@ -133,6 +134,7 @@ const App: () => Node = () => {
     };
 
     useEffect(() => {
+        SplashScreen.hide();
         getSleepPermissions(() =>
           getSleep(sd => setSleepData(processSleep(sd)))
         );
@@ -154,22 +156,13 @@ const App: () => Node = () => {
             contentInsetAdjustmentBehavior="automatic"
             style={backgroundStyle}>
               <Words>Step One: Just get the sleep data and display it</Words>
-              {sleepData.map(sleepSession => {
+              {sleepData.map((sleepSession, j) => {
                   const duration =
                     new Date(sleepSession.bedEnd) -
                     new Date(sleepSession.bedStart);
-                  /*const something = (new Date(sample.endDate) - new Date(sample.startDate)) / 1000 / 100;
-                              const pos = (new Date(sample.startDate) - new Date(2022, 8, 29))/1000/ 100;
-                              //const pos = new Date(sample.startDate).getTime();
-                              //const pos = new Date(2022, 9, 25).getTime();
-                              return <View style={{
-                              }}>
-                                  <Words>{JSON.stringify({...sample})}</Words>
-                                  <Words>Height {something}</Words>
-                                  <Words>Pos {pos}</Words>
-                              </View>*/
                   return (
                     <View
+                      key={sleepSession.bedStart}
                       style={{
                           //position: 'absolute',
                           //top: pos,
@@ -179,11 +172,10 @@ const App: () => Node = () => {
                           //backgroundColor: sample.value === 'UNKNOWN' ? 'black' : sample.value === 'ASLEEP' ? 'blue': 'green',
                           //zIndex: sample.value === 'INBED' ? -1: 1,
                           //height: something,
-                          key: sleepSession.startDate,
                       }}>
                         <Words>{duration}</Words>
                         <Row style={{height: 200}}>
-                            {sleepSession.samples.map(sample => {
+                            {sleepSession.samples.map((sample,i) => {
                                 return (
                                   <View style={{
                                       position: 'absolute',
@@ -210,8 +202,8 @@ const App: () => Node = () => {
                                         sleepTypeToColor(
                                           sample.value,
                                         ),
-                                      key: sample.end,
                                   }}
+                                        key={sample.start}
                                   />
                                 );
                             })}

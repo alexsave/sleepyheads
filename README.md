@@ -12,7 +12,7 @@ Theme color: #2F097E or even #300880
 So you download the app.
 * We need **Sleepyheads** not sleepyheads to appears. ✅
 * We need an icon.✅
-* We need a custom splash screen.
+* We need a custom splash screen.✅
   
 Once launched, the first prompt should be 
 * to log in or sign up
