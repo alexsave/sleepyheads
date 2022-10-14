@@ -1,5 +1,4 @@
 import {Text} from 'react-native';
 
-export const Words = props => {
-    return <Text {...props} style={{color: 'white'}}/>
-}
+export const Words = props =>
+  <Text style={[{ color: "white" }, props.style]}>{props.children}</Text>;
