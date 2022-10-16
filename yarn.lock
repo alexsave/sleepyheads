@@ -1398,6 +1398,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@react-native-community/blur@^4.2.0":
+  "integrity" "sha512-StgP5zQJOCHqDRjmcKnzVkJ920S6DYBKRJfigSUnlkNQp+HzZtVtyKq0j5a7x84NtHcV7j8Uy5mz1Lx9ZKRKfA=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/blur/-/blur-4.2.0.tgz"
+  "version" "4.2.0"
+
 "@react-native-community/cli-clean@^9.1.0":
   "integrity" "sha512-3HznNw8EBQtLsVyV8b8+h76M9EeJcJgYn5wZVGQ5mghAOhqnSWVbwRvpDdb8ITXaiTIXFGNOxXnGKMXsu0CYTw=="
   "resolved" "https://registry.npmjs.org/@react-native-community/cli-clean/-/cli-clean-9.1.0.tgz"

@@ -52,7 +52,7 @@ export const Post = props => {
       //height: something,
     }}>
     <View style={{backgroundColor: 'black'}}>
-      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedEnd).toDateString()}</Words>
+      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
       <Sample duration={duration} samples={sleepSession.samples}/>
     </View>
