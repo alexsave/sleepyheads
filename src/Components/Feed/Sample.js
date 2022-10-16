@@ -2,7 +2,6 @@ import { View } from "react-native";
 import { Defs, LinearGradient, Rect, Stop, Svg } from "react-native-svg";
 import { ASLEEP, AWAKE, CORE, DEEP, INBED, REM } from "../../Utils/ProcessSleep";
 import { DARKER, PRIMARY } from "../../Values/Colors";
-import { Words } from "../Basic/Words";
 import { BlurView } from "@react-native-community/blur";
 
 const sleepTypeToColor = value => {
@@ -14,7 +13,7 @@ const sleepTypeToColor = value => {
     case CORE:
       return PRIMARY;//'blue';
     case REM:
-      return 'green';
+      return 'skyblue';
     case DEEP:
       return DARKER;//'navy';
     case ASLEEP:
@@ -25,8 +24,6 @@ const sleepTypeToColor = value => {
 export const Sample = props => {
   const {duration, samples} = props;
   return <View>
-
-
       <Svg height={100} width='100%' style={{height: '100%', width: '100%'}}>
         <Defs>
           <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -42,14 +39,10 @@ export const Sample = props => {
         }
       </Svg>
     <BlurView
-      style={{/*has to match svg*/position: 'absolute', height: 100, width: '100%'}}
+      style={{position: 'absolute',/*has to match svg*/ height: 0, width: '100%'}}
       blurType='light'//dark not bad
       blurAmount={1}
       reducedTransparencyFallbackColor={'black'}/>
-    <Words>hi</Words>
-
-
 
   </View>
-
-}
+};

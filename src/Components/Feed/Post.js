@@ -59,22 +59,16 @@ export const Post = props => {
 
     <Row style={{width: '100%', height: 50, justifyContent: 'space-between', alignItems: 'center', backgroundColor: PRIMARY}}>
       <View style={{flex:1, alignItems: 'center'}}>
-        <Words>
-          😴
-        </Words>
+        <Words> 😴</Words>
       </View>
       <View style={{
         borderLeftWidth: StyleSheet.hairlineWidth,
         borderRightWidth: StyleSheet.hairlineWidth,
         flex:1, alignItems: 'center'}}>
-        <Words>
-          😴
-        </Words>
+        <Words>😳</Words>
       </View>
       <View style={{flex:1, alignItems: 'center'}}>
-        <Words>
-          😴
-        </Words>
+        <Words>⬆️</Words>
       </View>
 
     </Row>
