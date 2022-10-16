@@ -31,7 +31,7 @@ export const Sample = props => {
           <Stop offset="0" stopColor={ 'black' }/>
           {
             samples.map(sample => {
-              return <Stop stopColor={sleepTypeToColor(sample.value)} offset={(sample.start + (sample.end-sample.start)/2)/duration}/>
+              return <Stop stopColor={sleepTypeToColor(sample.value)} offset={(sample.start + (sample.end-sample.start)/2)/duration} key={sample.start}/>
             })
           }
           <Stop offset="1" stopColor={ 'black' }/>

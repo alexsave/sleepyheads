@@ -18,23 +18,23 @@ export const AWAKE = "AWAKE";
 
 
 export const processSleep = raw => {
-    /*raw = raw.map(x => {
-        const {startDate, endDate, value} = x;
-        return {startDate, endDate, value};
-    });*/
-
-    //const object = raw.reduce((acc, curr) => (acc[curr.id]=curr, acc), {});
-    //console.log(Object.keys(object));
-
     let groupings = [];
 
     let currentGroup = {samples: []};
 
+    // Finding: INBED isn't the most accurate, as there might be samples that extend "through" the inbed endDate
+    // so it's now sorted by startDate ascending
+    // For instance:
+
+    //LOG  {"endDate": "2022-10-15T08:08:02.797-0700", "startDate": "2022-10-15T07:48:32.797-0700", "value": "CORE"}
+    //LOG  {"endDate": "2022-10-15T07:48:32.797-0700", "startDate": "2022-10-15T07:44:32.797-0700", "value": "AWAKE"}
+    //LOG  {"endDate": "2022-10-15T07:44:32.797-0700", "startDate": "2022-10-15T06:45:32.797-0700", "value": "CORE"}
+    //LOG  {"endDate": "2022-10-15T07:00:00.640-0700", "startDate": "2022-10-14T23:49:58.000-0700", "value": "INBED"}
+    //LOG  {"endDate": "2022-10-15T06:45:32.797-0700", "startDate": "2022-10-15T06:45:02.797-0700", "value": "AWAKE"}
 
     raw.forEach(sample => {
         //if (currentGroup.samples.length > 1)
-            //console.log(sample.endDate, currentGroup.samples[0].startDate);
-        if (sample.value === INBED || (currentGroup.samples.length > 1 && sample.endDate !== currentGroup.samples[0].startDate)) {
+        if (sample.value === INBED || (currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
 
             // signifies new sleep
             groupings.push(currentGroup);
@@ -49,10 +49,10 @@ export const processSleep = raw => {
                 console.log('impossible scenario')
             }
 
-            currentGroup.samples.unshift(sample);
+            currentGroup.samples.push(sample);
+            if (sample.endDate > currentGroup.bedEnd)
+                  currentGroup.bedEnd = sample.endDate;
         }
-        //console.log(object[sample.sourceId]);
-        //console.log(sample, (new Date(sample.endDate) - new Date(sample.startDate))/1000);
     });
 
     groupings.push(currentGroup);
@@ -70,5 +70,6 @@ export const processSleep = raw => {
 
     groupings = groupings.filter(g => g.samples.length);
 
+    //return [];
     return groupings;
 };

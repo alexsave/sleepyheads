@@ -43,7 +43,7 @@ const getSleep = cb => {
     ).toISOString();
     const options = {
         startDate,
-        //ascending: true
+        ascending: true
     };
     AppleHealthKit.getSleepSamples(options, (error, results) => {
         if (error) {
@@ -114,8 +114,7 @@ const App: () => Node = () => {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={backgroundStyle}>
-              <Words>Step One: Just get the sleep data and display it</Words>
-              {sleepData.map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
+              {sleepData.reverse().map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
           </ScrollView>
       </SafeAreaView>
     );
