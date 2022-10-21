@@ -1,11 +1,11 @@
-import { SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
 import AppleHealthKit from 'react-native-health';
 import { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { processSleep } from '../Utils/ProcessSleep';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { Post } from "../Components/Feed/Post";
+import { Post } from '../Components/Feed/Post';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 const getSleepPermissions = cb => {

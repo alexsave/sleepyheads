@@ -9,6 +9,7 @@ import type { Node } from "react";
 import React from "react";
 import { Feed } from "./src/Screens/Feed";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 
 /*
@@ -39,7 +40,7 @@ The user wakes up, gets a notification that a new sleep is available to upload m
 
  */
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
 
@@ -53,6 +54,8 @@ const App: () => Node = () => {
 
           <Stack.Navigator initialRouteName="feed" /*screepOptions={{headerShown: flase}}*/>
               <Stack.Screen name="feed" component={Feed}/>
+            <Stack.Screen name="search" component={Search}/>
+            <Stack.Screen name="profile" component={Profile}/>
           </Stack.Navigator>
       </NavigationContainer>
     );

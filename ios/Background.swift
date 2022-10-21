@@ -86,7 +86,7 @@ class Background: NSObject {
       // Process the samples here.
       // Send notification
       let content = UNMutableNotificationContent()
-      content.title = "Mo sleep, mo problems"
+      content.title = "New sleep available"
       
       let casted = samples! as! [HKCategorySample]
       
