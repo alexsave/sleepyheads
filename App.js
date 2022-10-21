@@ -10,6 +10,8 @@ import React from "react";
 import { Feed } from "./src/Screens/Feed";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Search } from "./src/Screens/Search";
+import { Profile } from "./src/Screens/Profile";
 
 
 /*
@@ -44,21 +46,21 @@ const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
 
-    // going with https://medium.com/react-native-training/how-to-handle-background-app-refresh-with-healthkit-in-react-native-3a32704461fe
+  // going with https://medium.com/react-native-training/how-to-handle-background-app-refresh-with-healthkit-in-react-native-3a32704461fe
 
-    // fuck that, it's old. Just going to wait for a fix to react-native-health. In the mean time, let's just run a query once an hour and see if any new bed thing pops up
-    // then notify the user.
+  // fuck that, it's old. Just going to wait for a fix to react-native-health. In the mean time, let's just run a query once an hour and see if any new bed thing pops up
+  // then notify the user.
 
-    return (
-      <NavigationContainer>
+  return (
+    <NavigationContainer>
 
-          <Stack.Navigator initialRouteName="feed" /*screepOptions={{headerShown: flase}}*/>
-              <Stack.Screen name="feed" component={Feed}/>
-            <Stack.Screen name="search" component={Search}/>
-            <Stack.Screen name="profile" component={Profile}/>
-          </Stack.Navigator>
-      </NavigationContainer>
-    );
+      <Stack.Navigator initialRouteName="profile" screenOptions={{headerShown: true}}>
+        <Stack.Screen name="feed" component={Feed}/>
+        <Stack.Screen name="search" component={Search}/>
+        <Stack.Screen name="profile" component={Profile}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 
