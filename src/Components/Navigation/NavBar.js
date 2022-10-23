@@ -5,20 +5,17 @@ import { useNavigation } from '@react-navigation/native';
 //import { UserContext } from '../../Contexts/UserProvider';
 import { Words } from "../Basic/Words";
 import { DARKER } from "../../Values/Colors";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const routes = [
-    'home',
-    'explore',
-    'workout',
-    'routine',
+    'feed',
+    'search',
     'profile',
 ];
 
 const iconMapping = {
-    home: 'home',
-    explore: 'search',
-    workout: 'barbell',
-    routine: 'reload',
+    feed: 'home',
+    search: 'search',
     profile: 'person',
 };
 
@@ -32,16 +29,11 @@ const NavBar = props => {
         if (r === currentPage)
             return;
 
-        if (r === 'workout'){
-
-        }
-            //navigation.navigate(r);
-        else if (r === 'profile'){
-            //navigation.replace(r, {userID: username})
-        }
-
+        if (r === 'profile')
+            //navigation.replace(r, {userID: username});
+            navigation.reset({index: 0, routes: [{name:r}]});
         else
-            navigation.replace(r);
+            navigation.reset({index: 0, routes: [{name:r}]});
     };
 
     return (<View style={styles.navBar}>{
@@ -55,9 +47,7 @@ const NavBar = props => {
             }
 
             return (<TouchableOpacity style={styles.button} key={r} onPress={() => handlePress(r)}>
-                <Words>
-                        ⬆️
-                </Words>
+                <Words><Ionicons name={icon} size={40}/></Words>
             </TouchableOpacity>); })
     }</View>);
 };

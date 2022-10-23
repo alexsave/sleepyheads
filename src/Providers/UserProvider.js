@@ -6,7 +6,7 @@ export const UserContext = React.createContext();
 
 const UserProvider = props => {
     //is this legal
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState('sleepyhead1');
     const [profileURI, setProfileURI] = useState('');
 
     const [location, setLocation] = useState([null, null, null, null]);

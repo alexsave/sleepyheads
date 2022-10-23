@@ -48,12 +48,19 @@ export const processSleep = raw => {
             }
 
             currentGroup.samples.push(sample);
-            if (sample.endDate > currentGroup.bedEnd)
+            if (!currentGroup.bedEnd || sample.endDate > currentGroup.bedEnd)
                   currentGroup.bedEnd = sample.endDate;
+            if (!currentGroup.bedStart || sample.startDate < currentGroup.bedStart)
+                currentGroup.bedStart = sample.startDate;
         }
     });
 
     groupings.push(currentGroup);
+
+    // somehow, it's possible that a gropuing doesn't have a start date at this poitn
+    /*groupings.forEach(g => {
+        console.log(g);
+    })*/
 
     groupings.map(group => {
         const start = new Date(group.bedStart);

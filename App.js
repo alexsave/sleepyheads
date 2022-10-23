@@ -12,6 +12,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Search } from "./src/Screens/Search";
 import { Profile } from "./src/Screens/Profile";
+import UserProvider from './src/Providers/UserProvider';
 
 
 /*
@@ -52,14 +53,17 @@ const App: () => Node = () => {
   // then notify the user.
 
   return (
-    <NavigationContainer>
+    <UserProvider>
 
-      <Stack.Navigator initialRouteName="profile" screenOptions={{headerShown: true}}>
-        <Stack.Screen name="feed" component={Feed}/>
-        <Stack.Screen name="search" component={Search}/>
-        <Stack.Screen name="profile" component={Profile}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+
+        <Stack.Navigator initialRouteName="profile" screenOptions={{headerShown: false}}>
+          <Stack.Screen name="feed" component={Feed}/>
+          <Stack.Screen name="search" component={Search}/>
+          <Stack.Screen name="profile" component={Profile}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 };
 

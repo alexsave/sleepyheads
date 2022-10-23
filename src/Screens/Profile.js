@@ -19,9 +19,15 @@ import PostList from '../Components/Feed/PostList';
 import CachedImage from '../Components/Profile/CachedImage';
 import { UserContext } from '../Providers/UserProvider';
 import { BACKGROUND, DARKER } from '../Values/Colors';
+import SplashScreen from 'react-native-splash-screen';
 
 export const Profile = props => {
+    useEffect(() => {
+        SplashScreen.hide();
+    }, []);
+    //return <View></View>;
     //fuck it, we'll just do it straight from this without using the context
+    // This could be something like longest sleep streak, longest sleep
     const [records, setRecords] = useState({
         Bench: {weight: 0},
         Squat: {weight: 0},
@@ -202,11 +208,19 @@ export const Profile = props => {
             )
         }
     })
+    //return <View></View>
 
     return (
         <View style={{flex: 1, backgroundColor: BACKGROUND}}>
             <Animated.View style={[{position: 'absolute'}, imageStyle]}>
-                <CachedImage imageKey={imageKey} style={{height: width, width: width}}/>
+                <CachedImage imageKey={imageKey} style={{height: width, width: width}} placeholder={
+                    <Words style={{fontSize: 50}}>
+                        zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
+                        z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
+                        z😴zzz😴z😴z😴z😴z😴zzz😴z😴z😴
+                        z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
+                    </Words>
+                }/>
             </Animated.View>
 
 
@@ -259,8 +273,7 @@ export const Profile = props => {
 
                             <Words>{routineTitle}</Words>
 
-                            <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Maxes</Words>
-                            {/*idk what I want here*/}
+                            <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
                             <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
                                 Object.entries(records).map(([k,v]) =>
                                     <TouchableOpacity

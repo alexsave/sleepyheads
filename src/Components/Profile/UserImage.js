@@ -36,7 +36,7 @@ const UserImage = props => {
         }}
     >
         <CachedImage imageKey={imageKey} style={{height: size, width: size}} placeholder={
-            <Words><Ionicons color={TEXT_COLOR} name='person-outline' size={40}/></Words>
+            <Words style={{fontSize: 40}}>😴</Words>
         }/>
     </TouchableOpacity>;
 };
