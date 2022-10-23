@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import Words from '../Simple/Words';
-import { PRIMARY_DARKER } from '../../Style/Colors';
+import { Words } from '../Basic/Words';
+import { DARKER, PRIMARY } from '../../Values/Colors';
 //again, this appears in nearly every screen
 
 //this takes rightText, onPressLeft, title, onPressRight, and rightText
-const TopBar = props => {
-    const {leftText, onPressLeft, title, onPressRight, rightText} = props;
-    return <View style={{ zIndex: 5, alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: PRIMARY_DARKER, height: 60, justifyContent: 'center'}}>
+const TopBar = ({leftText, onPressLeft, title, onPressRight, rightText}) => {
+    //const {leftText, onPressLeft, title, onPressRight, rightText} = props;
+    return <View style={{ zIndex: 5, alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}}>
         <View style={{position: 'absolute', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, top: 0, left: 0}}>
             <TouchableOpacity onPress={onPressLeft} style={styles.topButton}>
                 <Words style={{fontSize: 30}}>{leftText}</Words>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         height: 120,
         width: '100%',
         flexDirection: 'row',
-        //backgroundColor: PRIMARY,
+        backgroundColor: PRIMARY,
         alignItems: 'center',
         justifyContent: 'center'
 

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 //import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation, useNavigationState, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 //import { UserContext } from '../../Contexts/UserProvider';
-import { Words } from "../Basic/Words";
-import { BACKGROUND, DARKER, PRIMARY } from '../../Values/Colors';
+import { Words } from '../Basic/Words';
+import { BACKGROUND, DARKER } from '../../Values/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const routes = [
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         borderColor: DARKER,
         borderTopWidth: StyleSheet.hairlineWidth,
         alignItems: 'center',
-        position: 'absolute',
+        //position: 'absolute', this seems to cause issues
         bottom: 0
     },
 });

@@ -13,11 +13,7 @@ import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/
 import { Search } from "./src/Screens/Search";
 import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
-import NavBar from './src/Components/Navigation/NavBar';
-import { View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
-
+import { Upload } from './src/Screens/Upload';
 
 /*
 adding chagnes from
@@ -49,12 +45,6 @@ The user wakes up, gets a notification that a new sleep is available to upload m
 
 const Stack = createStackNavigator();
 
-const forFade = ({ current }) => ({
-  cardStyle: {
-    opacity: current.progress,
-  },
-});
-
 const App: () => Node = () => {
 
   // going with https://medium.com/react-native-training/how-to-handle-background-app-refresh-with-healthkit-in-react-native-3a32704461fe
@@ -66,9 +56,12 @@ const App: () => Node = () => {
 
       <NavigationContainer>
 
-        <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="upload" screenOptions={{headerShown: false}}>
           <Stack.Screen name="feed" component={Feed} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+          <Stack.Screen name="upload" component={Upload}/>
+
           <Stack.Screen name="search" component={Search} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+
           <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
         </Stack.Navigator>
       </NavigationContainer>

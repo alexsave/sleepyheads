@@ -3,6 +3,7 @@ import { Words } from "../Basic/Words";
 import { Row } from "../Basic/Row";
 import { PRIMARY } from "../../Values/Colors";
 import { Sample } from "./Sample";
+import UserImage from '../Profile/UserImage';
 
 
 const formatDuration = ms => {
@@ -52,12 +53,13 @@ export const Post = props => {
       //height: something,
     }}>
     <View style={{backgroundColor: 'black'}}>
+      <UserImage size={50}/>
       <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
       <Sample duration={duration} samples={sleepSession.samples}/>
     </View>
 
-    <Row style={{width: '100%', height: 50, justifyContent: 'space-between', alignItems: 'center', backgroundColor: PRIMARY}}>
+    <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: PRIMARY}}>
       <View style={{flex:1, alignItems: 'center'}}>
         <Words> 😴</Words>
       </View>
