@@ -41,16 +41,16 @@ const NavBar = props => {
             navigation.reset({index: 0, routes: [{name:r}]});
     };
 
-    return (<View style={styles.navBar}>{
+    return <View style={styles.navBar}>{
         routes.map(r => {
             let icon = iconMapping[r];
             if (r !== currentPage)
                 icon += '-outline'
 
-            return (<TouchableOpacity style={styles.button} key={r} onPress={() => handlePress(r)}>
+            return <TouchableOpacity style={styles.button} key={r} onPress={() => handlePress(r)}>
                 <Words><Ionicons name={icon} size={40}/></Words>
-            </TouchableOpacity>); })
-    }</View>);
+            </TouchableOpacity>; })
+    }</View>;
 };
 //needs to be placed in safeareaview and view with flex:1
 const styles = StyleSheet.create({

@@ -9,12 +9,14 @@ import type { Node } from "react";
 import React from "react";
 import { Feed } from "./src/Screens/Feed";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 import { Search } from "./src/Screens/Search";
 import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
 import NavBar from './src/Components/Navigation/NavBar';
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 
 
 /*
@@ -45,7 +47,13 @@ The user wakes up, gets a notification that a new sleep is available to upload m
 
  */
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
+
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
 
 const App: () => Node = () => {
 
@@ -54,19 +62,18 @@ const App: () => Node = () => {
   // fuck that, it's old. Just going to wait for a fix to react-native-health. In the mean time, let's just run a query once an hour and see if any new bed thing pops up
   // then notify the user.
 
-  return (
-    <UserProvider>
+  return <UserProvider>
 
       <NavigationContainer>
 
         <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
-          <Stack.Screen name="feed" component={Feed}/>
-          <Stack.Screen name="search" component={Search}/>
-          <Stack.Screen name="profile" component={Profile}/>
+          <Stack.Screen name="feed" component={Feed} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+          <Stack.Screen name="search" component={Search} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+          <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
         </Stack.Navigator>
       </NavigationContainer>
-    </UserProvider>
-  );
+    </UserProvider>;
+
 };
 
 

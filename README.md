@@ -3,6 +3,9 @@ This is the Sleepyheads app.
 A thing to note is that react-native-health didn't have all the functionality I needed it to have when I started working on this.
 As such, I have manually added changes from https://github.com/agencyenterprise/react-native-health/pull/247/.
 Might as well fork at this point.
+Run this to copy the manual changes 
+
+`cp RCTAppleHealthKit+Queries.m node_modules/react-native-health/RCTAppleHealthKit/`
 
 Theme color: #2F097E or even #300880
 

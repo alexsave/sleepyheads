@@ -5,6 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
 import { loadPosts } from '../Network/PostLoad';
+import { BACKGROUND } from '../Values/Colors';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 
@@ -14,7 +15,7 @@ export const Feed = props => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? BACKGROUND : Colors.lighter,
     height: '100%',
   };
 
