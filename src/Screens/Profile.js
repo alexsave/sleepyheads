@@ -20,6 +20,8 @@ import CachedImage from '../Components/Profile/CachedImage';
 import { UserContext } from '../Providers/UserProvider';
 import { BACKGROUND, DARKER } from '../Values/Colors';
 import SplashScreen from 'react-native-splash-screen';
+import { loadPosts } from '../Network/PostLoad';
+import { Post } from '../Components/Feed/Post';
 
 export const Profile = props => {
     useEffect(() => {
@@ -51,6 +53,7 @@ export const Profile = props => {
 
     //this does so much lol
     useEffect(() => {
+        loadPosts(setSleepData);
         if(!signedInUser || !profileUser)
             return;
 
@@ -124,14 +127,14 @@ export const Profile = props => {
                 //res.uri is what you want
 
                 uploadImage(res.uri)
-                    .then(key => {
-                        /*API.graphql(graphqlOperation(createUserImage, {
-                            input: {
-                                userID: signedInUser,
-                                uri: key
-                            }
-                        }))*/
-                    });
+                  .then(key => {
+                      /*API.graphql(graphqlOperation(createUserImage, {
+                          input: {
+                              userID: signedInUser,
+                              uri: key
+                          }
+                      }))*/
+                  });
             }
         });
     };
@@ -160,26 +163,26 @@ export const Profile = props => {
 
     const simpleHeaderStyle = useAnimatedStyle(() => ({
         opacity: interpolate(y.value,
-            [imageHeight-25, imageHeight],
-            [0, 1],
-            Extrapolate.CLAMP,
+          [imageHeight-25, imageHeight],
+          [0, 1],
+          Extrapolate.CLAMP,
         ),
     }));
 
     const scrollHandler = useAnimatedScrollHandler(e =>
-        y.value = e.contentOffset.y
+      y.value = e.contentOffset.y
     );
 
     const imageStyle = useAnimatedStyle(() => {
         const scale = interpolate(y.value,
-            [-width, 0, width/2],
-            [4, 1.2, 1],
-            Extrapolate.CLAMP
+          [-width, 0, width/2],
+          [4, 1.2, 1],
+          Extrapolate.CLAMP
         );
         const opacity = interpolate(y.value,
-            [-width, 0, width],
-            [0, 1, 0],
-            Extrapolate.CLAMP
+          [-width, 0, width],
+          [0, 1, 0],
+          Extrapolate.CLAMP
         );
         return {
             transform: [{scale}],
@@ -191,9 +194,9 @@ export const Profile = props => {
     const fadeInProfile = useAnimatedStyle(() => {
         return {
             opacity: interpolate(y.value,
-                [imageHeight-25, imageHeight],
-                [0, 1],
-                Extrapolate.CLAMP
+              [imageHeight-25, imageHeight],
+              [0, 1],
+              Extrapolate.CLAMP
             )
         }
 
@@ -202,117 +205,120 @@ export const Profile = props => {
     const coolText = useAnimatedStyle(() => {
         return {
             opacity: interpolate(y.value,
-                [0, imageHeight],
-                [1, 0],
-                Extrapolate.CLAMP
+              [0, imageHeight],
+              [1, 0],
+              Extrapolate.CLAMP
             )
         }
     })
     //return <View></View>
+    const [sleepData, setSleepData] = useState([]);
 
     return (
-        <View style={{flex: 1, backgroundColor: BACKGROUND}}>
-            <Animated.View style={[{position: 'absolute'}, imageStyle]}>
-                <CachedImage imageKey={imageKey} style={{height: width, width: width}} placeholder={
-                    <Words style={{fontSize: 50}}>
-                        zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
-                        z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
-                        z😴zzz😴z😴z😴z😴z😴zzz😴z😴z😴
-                        z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
-                        zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
-                        z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
-                        z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
-                    </Words>
-                }/>
-            </Animated.View>
+      <View style={{flex: 1, backgroundColor: BACKGROUND}}>
+          <Animated.View style={[{position: 'absolute'}, imageStyle]}>
+              <CachedImage imageKey={imageKey} style={{height: width, width: width}} placeholder={
+                  <Words style={{fontSize: 50}}>
+                      zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
+                      z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
+                      z😴zzz😴z😴z😴z😴z😴zzz😴z😴z😴
+                      z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
+                      zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
+                      z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
+                      z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
+                  </Words>
+              }/>
+          </Animated.View>
 
 
-            <SafeAreaView style={{flex: 1}}>
-                <View style={{flex: 1}}>
+          <SafeAreaView style={{flex: 1}}>
+              <View style={{flex: 1}}>
 
 
-                    <View style={{zIndex: 10, position: 'absolute', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, top: 0, right: 0}}>
-                        {
-                            viewingSelf?
-                                <TouchableOpacity onPress={() => props.navigation.navigate('settings')}>
-                                    <Words><Ionicons size={30} name='settings-outline'/></Words>
-                                </TouchableOpacity>
+                  <View style={{zIndex: 10, position: 'absolute', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, top: 0, right: 0}}>
+                      {
+                          viewingSelf?
+                            <TouchableOpacity onPress={() => props.navigation.navigate('settings')}>
+                                <Words><Ionicons size={30} name='settings-outline'/></Words>
+                            </TouchableOpacity>
+                            :
+                            <FollowButton profileUser={profileUser}/>
+                      }
+                  </View>
+
+                  <Animated.View style={[{zIndex: 5, position: 'absolute', top: 10, left: 10}, fadeInProfile]}>
+                      <UserImage onPress={handleProfilePress} imageKey={imageKey} userID={profileUser} size={100}/>
+                  </Animated.View>
+
+
+                  <Animated.View style={[{ alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}, simpleHeaderStyle]}>
+                      <Words style={{fontSize: 30, fontWeight: 'bold'}}>{profileUser}</Words>
+                  </Animated.View>
+
+
+                  <Animated.ScrollView
+                    onScroll={scrollHandler}
+                    showsVerticalScrollIndicator={false}
+                    scrollEventThrottle={1}
+                    contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
+                  >
+                      <View
+                        style={{width: '95%', backgroundColor: BACKGROUND, top: imageHeight-HEADER_MAX_HEIGHT}}
+                      >
+
+                          <Animated.View style={[{paddingHorizontal: 10, borderRadius: 10, position: 'absolute', right: 0, top: -70, zIndex: 20, backgroundColor: 'rgba(93,93,93,0.37)'},coolText]}>
+                              <Words style={{fontSize: 60, fontWeight: 'bold'}}>{profileUser}</Words>
+                          </Animated.View>
+
+                          <TouchableOpacity onPress={handleGymPress}>{
+                              //no, you can't use location, you need to load the users location
+                              //should add more stuff here that isn't visible on close
+                              (viewingSelf && !location[3]) ?
+                                <Words>Set Gym</Words>
                                 :
-                                <FollowButton profileUser={profileUser}/>
-                        }
-                    </View>
+                                <Words>{gym.name}</Words>
+                          }</TouchableOpacity>
 
-                    <Animated.View style={[{zIndex: 5, position: 'absolute', top: 10, left: 10}, fadeInProfile]}>
-                        <UserImage onPress={handleProfilePress} imageKey={imageKey} userID={profileUser} size={100}/>
-                    </Animated.View>
+                          <Words>{routineTitle}</Words>
 
+                          <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
+                          <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
+                              Object.entries(records).map(([k,v]) =>
+                                <TouchableOpacity
+                                  key={k}
+                                  style={{width: 150}}
+                                  onPress={() =>
+                                    props.navigation.navigate('post', {postID: v.postID})
+                                  }
+                                >
+                                    <Row style={{display: 'flex', justifyContent: 'space-between'}}>
+                                        <Words style={{fontSize: 20, textAlign: 'center'}}>{k + '\n' /* + FORMAT_WEIGHT(v.weight)*/}</Words>
+                                    </Row>
+                                </TouchableOpacity>
+                              )
+                          }</View>
 
-                    <Animated.View style={[{ alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}, simpleHeaderStyle]}>
-                        <Words style={{fontSize: 30, fontWeight: 'bold'}}>{profileUser}</Words>
-                    </Animated.View>
+                          {sleepData.map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
+                          <PostList
+                            listOperation={''/*listPostsSortedByUserAndTimestamp*/}
+                            sortKey={'userID'}
+                            sortValue={profileUser}
+                            filledSubscriptionOperation={() => {}}
+                            subscriptionCriteria={post =>
+                              post.userID === profileUser
+                            }
+                          />
+                      </View>
 
+                  </Animated.ScrollView>
 
-                    <Animated.ScrollView
-                        onScroll={scrollHandler}
-                        showsVerticalScrollIndicator={false}
-                        scrollEventThrottle={1}
-                    >
-                        <View
-                            style={{width: '90%', backgroundColor: BACKGROUND, top: imageHeight-HEADER_MAX_HEIGHT}}
-                        >
-
-                            <Animated.View style={[{paddingHorizontal: 10, borderRadius: 10, position: 'absolute', right: 0, top: -70, zIndex: 20, backgroundColor: 'rgba(93,93,93,0.37)'},coolText]}>
-                                <Words style={{fontSize: 60, fontWeight: 'bold'}}>{profileUser}</Words>
-                            </Animated.View>
-
-                            <TouchableOpacity onPress={handleGymPress}>{
-                                //no, you can't use location, you need to load the users location
-                                //should add more stuff here that isn't visible on close
-                                (viewingSelf && !location[3]) ?
-                                    <Words>Set Gym</Words>
-                                    :
-                                    <Words>{gym.name}</Words>
-                            }</TouchableOpacity>
-
-                            <Words>{routineTitle}</Words>
-
-                            <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
-                            <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
-                                Object.entries(records).map(([k,v]) =>
-                                    <TouchableOpacity
-                                        key={k}
-                                        style={{width: 150}}
-                                        onPress={() =>
-                                            props.navigation.navigate('post', {postID: v.postID})
-                                        }
-                                    >
-                                        <Row style={{display: 'flex', justifyContent: 'space-between'}}>
-                                            <Words style={{fontSize: 20, textAlign: 'center'}}>{k + '\n' /* + FORMAT_WEIGHT(v.weight)*/}</Words>
-                                        </Row>
-                                    </TouchableOpacity>
-                                )
-                            }</View>
-
-                            <PostList
-                                listOperation={''/*listPostsSortedByUserAndTimestamp*/}
-                                sortKey={'userID'}
-                                sortValue={profileUser}
-                                filledSubscriptionOperation={() => {}}
-                                subscriptionCriteria={post =>
-                                    post.userID === profileUser
-                                }
-                            />
-                        </View>
-
-                    </Animated.ScrollView>
-
-                    {
-                        viewingSelf &&
-                        <NavBar current={'profile'}/>
-                    }
-                </View>
-            </SafeAreaView>
-        </View>
+                  {
+                    viewingSelf &&
+                    <NavBar current={'profile'}/>
+                  }
+              </View>
+          </SafeAreaView>
+      </View>
     );
 };
 

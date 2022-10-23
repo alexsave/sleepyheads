@@ -37,7 +37,7 @@ export const Feed = props => {
     <ScrollView
       contentInsetAdjustmentBehavior='automatic'
       style={backgroundStyle}>
-      {sleepData.reverse().map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
+      {sleepData.map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
     </ScrollView>
     <NavBar/>
   </View></SafeAreaView>

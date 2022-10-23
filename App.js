@@ -59,7 +59,7 @@ const App: () => Node = () => {
 
       <NavigationContainer>
 
-        <Stack.Navigator initialRouteName="search" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
           <Stack.Screen name="feed" component={Feed}/>
           <Stack.Screen name="search" component={Search}/>
           <Stack.Screen name="profile" component={Profile}/>

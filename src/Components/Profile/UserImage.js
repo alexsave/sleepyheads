@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 //import { getUserImage } from '../../../graphql/queries';
 import CachedImage from './CachedImage';
 import { Words } from '../Basic/Words';
+import { DARKER } from '../../Values/Colors';
 
 //nice and circular, with default little icon if not loaded
 const UserImage = ({userID, imageKey, onPress, size=100}) => {
@@ -34,7 +35,7 @@ const UserImage = ({userID, imageKey, onPress, size=100}) => {
         }}
     >
         <CachedImage imageKey={key} style={{height: size, width: size}} placeholder={
-            <View style={{height: size, justifyContent: 'center'}}>
+            <View style={{height: size, width: size, alignItems: 'center', justifyContent: 'center', backgroundColor: DARKER}}>
                 <Words style={{fontSize: 40}}>😴</Words>
             </View>
         }/>

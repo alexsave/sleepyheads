@@ -76,5 +76,5 @@ export const processSleep = raw => {
     groupings = groupings.filter(g => g.samples.length);
 
     //return [];
-    return groupings;
+    return groupings.reverse();
 };
