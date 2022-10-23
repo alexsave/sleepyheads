@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, StatusBar, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
 import { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
@@ -27,8 +27,10 @@ export const Feed = props => {
     /* Register native listener that will be triggered when successfuly enabled */
   }, []);
 
-  return <SafeAreaView style={backgroundStyle}>
+  return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
+
     <StatusBar
+      // do we need this?
       barStyle={isDarkMode ? 'light-content' : 'dark-content'}
       backgroundColor={backgroundStyle.backgroundColor}
     />
@@ -38,7 +40,7 @@ export const Feed = props => {
       {sleepData.reverse().map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
     </ScrollView>
     <NavBar/>
-  </SafeAreaView>
+  </View></SafeAreaView>
 }
 
 const styles = StyleSheet.create({

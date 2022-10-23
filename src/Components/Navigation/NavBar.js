@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 //import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState, useRoute } from '@react-navigation/native';
 //import { UserContext } from '../../Contexts/UserProvider';
 import { Words } from "../Basic/Words";
-import { DARKER } from "../../Values/Colors";
+import { BACKGROUND, DARKER, PRIMARY } from '../../Values/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const routes = [
@@ -19,6 +19,11 @@ const iconMapping = {
     profile: 'person',
 };
 
+/*
+ this is best within a
+<SafeAreaView style={{flex: 1}}><View style={{flex: 1}}>
+</View></SafeAreaView>
+ */
 const NavBar = props => {
     //const {username} = useContext(UserContext);
 
@@ -30,7 +35,7 @@ const NavBar = props => {
             return;
 
         if (r === 'profile')
-            //navigation.replace(r, {userID: username});
+          //navigation.replace(r, {userID: username});
             navigation.reset({index: 0, routes: [{name:r}]});
         else
             navigation.reset({index: 0, routes: [{name:r}]});
@@ -41,10 +46,6 @@ const NavBar = props => {
             let icon = iconMapping[r];
             if (r !== currentPage)
                 icon += '-outline'
-
-            if (r === 'workout') {
-                //return <WorkoutButton key={r}/>
-            }
 
             return (<TouchableOpacity style={styles.button} key={r} onPress={() => handlePress(r)}>
                 <Words><Ionicons name={icon} size={40}/></Words>
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
         height: 60,
         width: '100%',
         flexDirection: 'row',
-        backgroundColor: 'black',
+        backgroundColor: BACKGROUND,
         justifyContent: 'space-around',
         borderColor: DARKER,
         borderTopWidth: StyleSheet.hairlineWidth,

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 //import { getUserImage } from '../../../graphql/queries';
 import CachedImage from './CachedImage';
 import { Words } from '../Basic/Words';
-import { TEXT_COLOR } from '../../Values/Colors';
 
 //nice and circular, with default little icon if not loaded
-const UserImage = props => {
+const UserImage = ({userID, imageKey, onPress, size=100}) => {
     const navigation = useNavigation();
-    const {size, userID, onPress} = props;
+    //const {size, userID, onPress} = props;
     //optionally uses prop.imagekey, np if this is undefined
-    const [imageKey, setImageKey] = useState(props.imageKey);
+    const [key, setKey] = useState(imageKey);
 
     useEffect(() => {
         if(!userID)
@@ -35,8 +33,10 @@ const UserImage = props => {
                 onPress();
         }}
     >
-        <CachedImage imageKey={imageKey} style={{height: size, width: size}} placeholder={
-            <Words style={{fontSize: 40}}>😴</Words>
+        <CachedImage imageKey={key} style={{height: size, width: size}} placeholder={
+            <View style={{height: size, justifyContent: 'center'}}>
+                <Words style={{fontSize: 40}}>😴</Words>
+            </View>
         }/>
     </TouchableOpacity>;
 };

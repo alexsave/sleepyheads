@@ -219,6 +219,9 @@ export const Profile = props => {
                         z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
                         z😴zzz😴z😴z😴z😴z😴zzz😴z😴z😴
                         z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
+                        zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
+                        z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
+                        z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
                     </Words>
                 }/>
             </Animated.View>
@@ -255,7 +258,7 @@ export const Profile = props => {
                         scrollEventThrottle={1}
                     >
                         <View
-                            style={{backgroundColor: BACKGROUND, top: imageHeight-HEADER_MAX_HEIGHT}}
+                            style={{width: '90%', backgroundColor: BACKGROUND, top: imageHeight-HEADER_MAX_HEIGHT}}
                         >
 
                             <Animated.View style={[{paddingHorizontal: 10, borderRadius: 10, position: 'absolute', right: 0, top: -70, zIndex: 20, backgroundColor: 'rgba(93,93,93,0.37)'},coolText]}>

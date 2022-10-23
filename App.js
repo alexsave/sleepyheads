@@ -13,6 +13,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Search } from "./src/Screens/Search";
 import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
+import NavBar from './src/Components/Navigation/NavBar';
+import { View } from 'react-native';
 
 
 /*
@@ -57,7 +59,7 @@ const App: () => Node = () => {
 
       <NavigationContainer>
 
-        <Stack.Navigator initialRouteName="profile" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="search" screenOptions={{headerShown: false}}>
           <Stack.Screen name="feed" component={Feed}/>
           <Stack.Screen name="search" component={Search}/>
           <Stack.Screen name="profile" component={Profile}/>
