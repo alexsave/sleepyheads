@@ -1,48 +1,12 @@
 import { StyleSheet, SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
-import AppleHealthKit from 'react-native-health';
 import { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import { processSleep } from '../Utils/ProcessSleep';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
+import { loadPosts } from '../Network/PostLoad';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
-const getSleepPermissions = cb => {
-  const permissions = {
-    permissions: {
-      read: [
-        AppleHealthKit.Constants.Permissions.SleepAnalysis,
-        AppleHealthKit.Constants.Permissions.StepCount,
-      ],
-    },
-  };
-  AppleHealthKit.initHealthKit(permissions, error => {
-    if (error) {
-      console.log(error);
-    } else if (cb) {
-      cb();
-    }
-  });
-};
-
-
-const getSleep = cb => {
-  const startDate = new Date(
-    Date.now() - 7 * 24 * 60 * 60 * 1000,
-  ).toISOString();
-  const options = {
-    startDate,
-    ascending: true
-  };
-  AppleHealthKit.getSleepSamples(options, (error, results) => {
-    if (error) {
-      console.log(error);
-    }
-    //console.log(results);
-    cb(results);
-  });
-};
 
 export const Feed = props => {
   const [sleepData, setSleepData] = useState([]);
@@ -56,9 +20,10 @@ export const Feed = props => {
 
   useEffect(() => {
     SplashScreen.hide();
-    getSleepPermissions(() =>
+    loadPosts(setSleepData);
+    /*getSleepPermissions(() =>
       getSleep(sd => setSleepData(processSleep(sd)))
-    );
+    );*/
     /* Register native listener that will be triggered when successfuly enabled */
   }, []);
 
