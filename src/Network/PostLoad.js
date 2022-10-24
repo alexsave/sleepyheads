@@ -11,7 +11,7 @@ import AppleHealthKit from 'react-native-health';
 
 const getSleep = () => {
   const startDate = new Date(
-    Date.now() -  7 * 24 * 60 * 60 * 1000,
+    Date.now() -  8 * 7 * 24 * 60 * 60 * 1000,
   ).toISOString();
   const options = {
     startDate,
