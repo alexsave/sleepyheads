@@ -1,13 +1,13 @@
 import { View } from "react-native";
 import { Defs, LinearGradient, Path, Rect, Stop, Svg } from 'react-native-svg';
 import { ASLEEP, AWAKE, CORE, DEEP, INBED, REM } from "../../Utils/ProcessSleep";
-import { DARKER, PRIMARY } from "../../Values/Colors";
+import { BACKGROUND, DARK_GRAY, DARKER, PRIMARY } from '../../Values/Colors';
 import { BlurView } from "@react-native-community/blur";
 
 const sleepTypeToColor = value => {
   switch (value) {
     case AWAKE:
-      return 'gray';
+      return 'white';
     case INBED:
       return 'gray';
     case CORE:
@@ -60,43 +60,67 @@ export const Sample = props => {
   const {samples, bedStart, bedEnd} = props.session;
 
   const startTheta = timeToTheta(bedStart);
-  return <View>
-      <Svg height={100} width='100%' style={{height: '100%', width: '100%'}}>
-        <Defs>
-          <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <Stop offset="0" stopColor={ 'black' }/>
-            <Stop offset="1" stopColor={ sleepTypeToColor(samples[0].value)}/>
-          </LinearGradient>
-        </Defs>
-        <Rect width={(samples[0].start)/duration*100 + '%'} height="100%" fill={"url(#grad)"}/>
-        {
-          samples.map(sample =>
-            <Rect x={sample.start/duration*100 + '%'} width={(sample.end-sample.start)/duration*100 + '%'} height="100%" fill={sleepTypeToColor(sample.value)} key={sample.start}/>
-          )
-        }
-      </Svg>
 
-    <Svg height={graphicHeight} width={graphicWidth} style={{height: '100%', width: '100%'}}>
+  const hourTicks = [1, 2, 4, 5, 7, 8, 10, 11].map(n => {
+    const theta = Math.PI/2*(1- n/3);
+    const r1 = graphicHeight/2/3;
+    const r2 = r1 * 1.5;
+    return `M ${graphicWidth/2 + r1*Math.cos(theta)} ${graphicHeight/2 - r1*Math.sin(theta)} L ${graphicWidth/2 + r2*Math.cos(theta)} ${graphicHeight/2 - r2*Math.sin(theta)} `;
+  }).join('');
+
+  return <View style={{alignItems: 'center'}}>
+    <Svg height={100} width='100%' style={{height: '100%', width: '100%'}}>
       <Defs>
         <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
           <Stop offset="0" stopColor={ 'black' }/>
           <Stop offset="1" stopColor={ sleepTypeToColor(samples[0].value)}/>
         </LinearGradient>
       </Defs>
+      <Rect width={(samples[0].start)/duration*100 + '%'} height="100%" fill={"url(#grad)"}/>
+      {
+        samples.map(sample =>
+          <Rect x={sample.start/duration*100 + '%'} width={(sample.end-sample.start)/duration*100 + '%'} height="100%" fill={sleepTypeToColor(sample.value)} key={sample.start}/>
+        )
+      }
+    </Svg>
+
+    <Svg height={graphicHeight} width={graphicWidth} style={{height: '100%', width: '100%'}}>
+      <Defs>
+        <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <Stop offset="0" stopColor={ BACKGROUND }/>
+          <Stop offset="1" stopColor={ sleepTypeToColor(samples[0].value)}/>
+        </LinearGradient>
+      </Defs>
+
       <Path
         d={bedToPath(bedStart, bedEnd, graphicHeight *.45)}
-        //fill={sleepTypeToColor(sample.value)}
+        stroke={DARK_GRAY}
+        strokeWidth={15} />
+
+      <Path
+        d={`M ${graphicWidth/2} 0 V ${graphicHeight} 
+        M 0 ${graphicHeight/2} H ${graphicWidth}`}
+        stroke={DARK_GRAY}
+        strokeWidth={2}
+      />
+
+      <Path
+        d={hourTicks}
         stroke={'gray'}
-        strokeWidth={10} />
+        strokeWidth={1}
+      />
+
+
       {
         samples.map(sample =>
           <Path
             d={sampleToPath(sample, graphicHeight*.45, startTheta)}
             //fill={sleepTypeToColor(sample.value)}
             stroke={sleepTypeToColor(sample.value)}
-            strokeWidth={5} />
+            strokeWidth={10} />
         )
       }
+
     </Svg>
     <BlurView
       style={{position: 'absolute',/*has to match svg*/ height: 0, width: '100%'}}
