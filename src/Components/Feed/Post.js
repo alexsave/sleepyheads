@@ -56,7 +56,9 @@ export const Post = props => {
       <UserImage size={50}/>
       <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
-      <Sample duration={duration} samples={sleepSession.samples}/>
+      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toTimeString()}</Words>
+      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedEnd).toTimeString()}</Words>
+      <Sample duration={duration} session={sleepSession}/>
     </View>
 
     <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: PRIMARY}}>
