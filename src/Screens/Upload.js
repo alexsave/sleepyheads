@@ -1,12 +1,12 @@
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { FlatList, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import { Words } from '../Components/Basic/Words';
-import { loadFromHealth } from '../Network/PostLoad';
 import { BACKGROUND, DARKER, PRIMARY, TEXT_COLOR } from '../Values/Colors';
 import { Row } from '../Components/Basic/Row';
-import { getSleepKey, SLEEP_PREFIX, SleepContext } from '../Providers/SleepProvider';
+import { makeSleepKey, SleepContext } from '../Providers/SleepProvider';
 import SplashScreen from 'react-native-splash-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Flip from '../Components/Basic/Flip';
 
 //similar to the import activites screen in Strava, but this might just be temporary while I figure out how to upload stuff
 
@@ -21,7 +21,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const Upload = props => {
 
-  const {inHealth, imported, importSleep} = useContext(SleepContext);
+  const {inHealth, autoImport, setAutoImport, imported, uploadSleep, importSleep, clearCache} = useContext(SleepContext);
+
+  const [autoUpload, setAutoUpload] = useState(false);
 
   useEffect(() => {
     SplashScreen.hide();
@@ -29,33 +31,46 @@ export const Upload = props => {
   }, []);
 // Apple Health -> react-native-async-storage
   return <SafeAreaView style={{flex: 1, backgroundColor: BACKGROUND}}>
-    <ScrollView >
+    <Row style={{height: 50}}>
+      <Words>Auto-import: </Words>
+      <Flip value={autoImport} onChange={setAutoImport}/>
+    </Row>
 
-      <Words>Auto-upload: false</Words>
-      {
-        inHealth.map(sess => {
-          const i = imported.has(getSleepKey(sess));
-          return <Row
-            key={sess.bedStart}
-            style={{
-              justifyContent: 'space-between',
-              height: 50,
-              backgroundColor: i ? PRIMARY : DARKER,
-              borderColor: BACKGROUND,
-              borderWidth: 1
-            }}>
-            <Words>Sleep on {new Date(sess.bedStart).toLocaleDateString()}</Words>
-            <Words>Backed up: {i ? 'true' : 'false'}</Words>
-            <Words>Uploaded: {true}</Words>
-            <TouchableOpacity
-              onPress={() => importSleep(sess)}
-            >
-              <Words><Ionicons color={TEXT_COLOR} size={40} name={'save-outline'} /></Words>
+    <Row style={{height: 50}}>
+      <Words>Auto-upload: </Words>
+      <Flip value={autoUpload} onChange={setAutoUpload}/>
+    </Row>
 
-            </TouchableOpacity>
-          </Row>
-        })
+    <TouchableOpacity style={{backgroundColor: 'red', height: 50, width: 100}} onPress={clearCache}>
+      <Words>Clear cache</Words>
+    </TouchableOpacity>
+
+    <FlatList
+
+      data={inHealth}
+      renderItem={({item}) => {
+        const i = imported.has(makeSleepKey(item));
+        return <Row
+          key={item.bedStart}
+          style={{
+            justifyContent: 'space-between',
+            height: 50,
+            backgroundColor: i ? PRIMARY : DARKER,
+            borderColor: BACKGROUND,
+            borderWidth: 1
+          }}>
+          <Words>Sleep on {new Date(item.bedStart).toLocaleDateString()}</Words>
+          <Words>Backed up: {i ? 'true' : 'false'}</Words>
+          <Words>Uploaded: {true}</Words>
+          <TouchableOpacity onPress={() => importSleep(item)}>
+            <Words><Ionicons color={TEXT_COLOR} size={40} name={'save-outline'} /></Words>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => uploadSleep(item)}>
+            <Words><Ionicons color={TEXT_COLOR} size={40} name={'cloud-upload-outline'} /></Words>
+          </TouchableOpacity>
+        </Row>
+
       }
-    </ScrollView>
+      }/>
   </SafeAreaView>
 };
