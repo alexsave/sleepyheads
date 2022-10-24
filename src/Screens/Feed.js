@@ -1,19 +1,20 @@
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, useColorScheme, View, FlatList } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
-import { loadPosts } from '../Network/PostLoad';
 import { BACKGROUND } from '../Values/Colors';
 import TopBar from '../Components/Navigation/TopBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { SleepContext } from '../Providers/SleepProvider';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 
 export const Feed = props => {
-  const [sleepData, setSleepData] = useState([]);
+  //const [sleepData, setSleepData] = useState([]);
+  const {inHealth} = useContext(SleepContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
@@ -25,7 +26,6 @@ export const Feed = props => {
 
   useEffect(() => {
     SplashScreen.hide();
-    loadPosts(setSleepData);
     /*getSleepPermissions(() =>
       getSleep(sd => setSleepData(processSleep(sd)))
     );*/
@@ -39,7 +39,7 @@ export const Feed = props => {
       onPressRight={() => navigation.navigate('upload')}
     />
     <FlatList
-      data={sleepData}
+      data={inHealth}
       renderItem={({item}) => <Post sleepSession={item}/>}
     />
     <NavBar current='feed'/>

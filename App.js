@@ -14,6 +14,7 @@ import { Search } from "./src/Screens/Search";
 import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
 import { Upload } from './src/Screens/Upload';
+import SleepProvider from './src/Providers/SleepProvider';
 
 /*
 adding chagnes from
@@ -54,6 +55,8 @@ const App: () => Node = () => {
 
   return <UserProvider>
 
+    <SleepProvider>
+
       <NavigationContainer>
 
         <Stack.Navigator initialRouteName="upload" screenOptions={{headerShown: false}}>
@@ -65,7 +68,8 @@ const App: () => Node = () => {
           <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
         </Stack.Navigator>
       </NavigationContainer>
-    </UserProvider>;
+    </SleepProvider>
+  </UserProvider>
 
 };
 

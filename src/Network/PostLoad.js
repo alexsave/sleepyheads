@@ -9,7 +9,7 @@ import { getSleepPermissions } from '../Utils/Permissions';
 import { processSleep } from '../Utils/ProcessSleep';
 import AppleHealthKit from 'react-native-health';
 
-const getSleep = cb => {
+const getSleep = () => {
   const startDate = new Date(
     Date.now() - 7 * 24 * 60 * 60 * 1000,
   ).toISOString();
@@ -17,20 +17,19 @@ const getSleep = cb => {
     startDate,
     ascending: true
   };
-  AppleHealthKit.getSleepSamples(options, (error, results) => {
-    if (error) {
-      console.log(error);
-    }
-    //console.log(results);
-    cb(results);
-  });
+  return new Promise((resolve, reject) => {
+    AppleHealthKit.getSleepSamples(options, (error, results) => {
+      if (error)
+        reject(error);
+      else
+        resolve(results);
+    });
+  })
 };
 
-
 // check sleep permissions, get sleep, process sleep, then send back the promise
-export const loadPosts = cb => {
-
-  getSleepPermissions(() => {
-    getSleep(sd => cb(processSleep(sd)))
-  })
+export const loadFromHealth = async () => {
+  await getSleepPermissions();
+  const rawSleep = await getSleep();
+  return processSleep(rawSleep);
 };

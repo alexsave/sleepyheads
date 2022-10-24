@@ -1,7 +1,7 @@
 import AppleHealthKit from 'react-native-health';
 
 // this might link to native module later, that handles more
-export const getSleepPermissions = cb => {
+export const getSleepPermissions = () => {
   const permissions = {
     permissions: {
       read: [
@@ -10,11 +10,13 @@ export const getSleepPermissions = cb => {
       ],
     },
   };
-  AppleHealthKit.initHealthKit(permissions, error => {
-    if (error) {
-      console.log(error);
-    } else if (cb) {
-      cb();
-    }
-  });
+  return new Promise((resolve, reject) => {
+    AppleHealthKit.initHealthKit(permissions, error => {
+      if (error) {
+        reject(error);//console.log(error);
+      } else {
+        resolve();
+      }
+    });
+  })
 };

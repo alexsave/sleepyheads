@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, useWindowDimensions, SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { v4 as uuidv4 } from 'uuid';
 import NavBar from '../Components/Navigation/NavBar';
@@ -20,8 +20,8 @@ import CachedImage from '../Components/Profile/CachedImage';
 import { UserContext } from '../Providers/UserProvider';
 import { BACKGROUND, DARKER } from '../Values/Colors';
 import SplashScreen from 'react-native-splash-screen';
-import { loadPosts } from '../Network/PostLoad';
 import { Post } from '../Components/Feed/Post';
+import { SleepContext } from '../Providers/SleepProvider';
 
 export const Profile = props => {
     useEffect(() => {
@@ -53,7 +53,6 @@ export const Profile = props => {
 
     //this does so much lol
     useEffect(() => {
-        loadPosts(setSleepData);
         if(!signedInUser || !profileUser)
             return;
 
@@ -212,7 +211,7 @@ export const Profile = props => {
         }
     })
     //return <View></View>
-    const [sleepData, setSleepData] = useState([]);
+    const {inHealth} = useContext(SleepContext);
 
     return (
       <View style={{flex: 1, backgroundColor: BACKGROUND}}>
@@ -298,7 +297,7 @@ export const Profile = props => {
                               )
                           }</View>
 
-                          {sleepData.map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
+                          {inHealth.map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
                           <PostList
                             listOperation={''/*listPostsSortedByUserAndTimestamp*/}
                             sortKey={'userID'}
