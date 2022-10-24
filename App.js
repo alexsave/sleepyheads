@@ -59,7 +59,7 @@ const App: () => Node = () => {
 
       <NavigationContainer>
 
-        <Stack.Navigator initialRouteName="upload" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
           <Stack.Screen name="feed" component={Feed} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
           <Stack.Screen name="upload" component={Upload}/>
 

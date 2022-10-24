@@ -32,8 +32,15 @@ export const processSleep = raw => {
     //LOG  {"endDate": "2022-10-15T06:45:32.797-0700", "startDate": "2022-10-15T06:45:02.797-0700", "value": "AWAKE"}
     // so it's now sorted by startDate ascending
 
+
+    // another finding: older data is not super compatible.
+    // there is only INBED, then a bunch of ASLEEP. There is no AWAKE value
+    // for newer types of data, there is awake 10-11, core 11-12, awake 12-1, core 1-5, and so on
+    // for older, there is alseep 10-11, alseep 12-3, asleep 4-5
+
+    console.log()
     raw.forEach(sample => {
-        if (sample.value === INBED || (currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
+        if (sample.value === INBED || (sample.value !== ASLEEP && currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
 
             // signifies new sleep
             groupings.push(currentGroup);

@@ -49,7 +49,6 @@ const SleepProvider = props => {
   }, [autoImport, imported])
 
   const tryImportDiff = async () => {
-    console.log('called');
     if (!autoImport)
       return;
 
