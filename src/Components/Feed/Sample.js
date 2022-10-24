@@ -23,6 +23,7 @@ const sleepTypeToColor = value => {
 
 const graphicWidth = 200;
 const graphicHeight = 200;
+const strokeWidth = 15;
 
 const noon = 12 * 60 * 60 * 1000;
 
@@ -32,15 +33,21 @@ const timeToTheta = timestamp => {
   return Math.PI/2 - (mseconds)/noon * 2*Math.PI;
 }
 
-const sampleToPath = (sample, radius, offset=0) => {
+const sampleToPath = (sample, radius, offset=0, curl=false) => {
+
+  //const radiusSkew1 = strokeWidth * sample.start/noon;//*2*Math.PI/(2*Math.PI);
+  //const radiusSkew1 = strokeWidth * sample.start/noon;//*2*Math.PI/(2*Math.PI);
+  const r1 = radius - (curl ? strokeWidth*sample.start/noon : 0);
+  const r2 = radius - (curl ? strokeWidth*sample.end/noon : 0);
+
   const theta1 = offset - sample.start/noon * 2*Math.PI;
-  const x1 = Math.cos(theta1)*radius + graphicWidth/2;
-  const y1 = graphicHeight/2 - Math.sin(theta1)*radius;
+  const x1 = Math.cos(theta1)*r1 + graphicWidth/2;
+  const y1 = graphicHeight/2 - Math.sin(theta1)*r1;
 
   const theta2 = offset - sample.end/noon * 2*Math.PI;
-  const x2 = Math.cos(theta2)*radius + graphicWidth/2;
-  const y2 = graphicHeight/2 - Math.sin(theta2)*radius;
-  return `M ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2}`;
+  const x2 = Math.cos(theta2)*r2 + graphicWidth/2;
+  const y2 = graphicHeight/2 - Math.sin(theta2)*r2;
+  return `M ${x1} ${y1} A ${r1} ${r1} 0 0 1 ${x2} ${y2}`;
 }
 
 const bedToPath = (bedStart, bedEnd, radius) => {
@@ -80,7 +87,7 @@ export const Sample = props => {
       <Path
         d={bedToPath(bedStart, bedEnd, graphicHeight *.45)}
         stroke={DARK_GRAY}
-        strokeWidth={15} />
+        strokeWidth={strokeWidth} />
 
       <Path
         d={`M ${graphicWidth/2} 0 V ${graphicHeight} 
@@ -99,7 +106,7 @@ export const Sample = props => {
       {
         samples.map(sample =>
           <Path
-            d={sampleToPath(sample, graphicHeight*.45, startTheta)}
+            d={sampleToPath(sample, graphicHeight*.45, startTheta, duration > noon)}
             //fill={sleepTypeToColor(sample.value)}
             stroke={sleepTypeToColor(sample.value)}
             strokeWidth={10} />
