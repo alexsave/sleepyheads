@@ -8,7 +8,10 @@ export const SleepContext = React.createContext();
 
 const SLEEP_PREFIX = 'sleep-';
 // also consider that we need the username too
-export const makeSleepKey = sleep => SLEEP_PREFIX + new Date(sleep.bedStart).getTime();
+export const makeSleepKey = sleep => {
+  let x =  SLEEP_PREFIX + new Date(sleep.bedStart).getTime();
+  return x;
+}
 
 const SleepProvider = props => {
 
@@ -22,13 +25,14 @@ const SleepProvider = props => {
   const [inHealth, setInHealth] = useState([]);
 
   //should probably go in settings honestly
-  const [autoImport, setAutoImport] = useState(false);
+  const [autoImport, setAutoImport] = useState(true);
 
   const [imported, setImported] = useState(new Set());
   // what's better, to store all the sleep sessions in a single AsyncStorage object,
   // or to split them up?
 
   // check which workouts are backedup in async storage
+  // this needs to be called on wake, literally
   useEffect(() => {
     (async () => {
       setInHealth(await loadFromHealth());
@@ -41,24 +45,39 @@ const SleepProvider = props => {
   }, []);
 
   useEffect(() => {
-    console.log(autoImport);
-    if (autoImport) {
-      let diff = new Set(inHealth.map(makeSleepKey));
-      [...imported].forEach(i => diff.delete(i));
-      console.log(inHealth.length);
-      console.log(imported.size);
-      console.log(diff.size);
-      (async () => {
-        await Promise.all(
-          [...diff].map(sleep =>
-            new Promise((resolve, reject) =>
-              AsyncStorage.setItem(makeSleepKey(sleep), JSON.stringify(sleep)).then(resolve))))
-        setImported(new Set(inHealth.map(makeSleepKey)));
+    tryImportDiff();
+  }, [autoImport, imported])
 
-      })();
+  const tryImportDiff = async () => {
+    console.log('called');
+    if (!autoImport)
+      return;
 
-    }
-  }, [autoImport])
+
+    // kind of a base case
+    if (imported.size >= inHealth.length)
+      return;
+
+    /*let diff = new Set(inHealth.map(makeSleepKey));
+    console.log(imported);
+    [...imported].forEach(i => diff.delete(i));
+    console.log(inHealth.length);
+    console.log(imported.size);
+    console.log(diff.size);*/
+
+    let diff = [...inHealth];
+    diff.filter(d => {
+      !imported.has(makeSleepKey(d))
+    })
+
+
+    await Promise.all(
+      diff.map(sleep =>
+        new Promise((resolve, reject) =>
+          AsyncStorage.setItem(makeSleepKey(sleep), JSON.stringify(sleep)).then(resolve))))
+    setImported(new Set(inHealth.map(makeSleepKey)));
+
+  }
 
   const importSleep = async sleep => {
     try {
