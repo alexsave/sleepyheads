@@ -15,6 +15,8 @@ import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
 import { Upload } from './src/Screens/Upload';
 import SleepProvider from './src/Providers/SleepProvider';
+import { Group } from './src/Screens/Group';
+import { PostScreen } from './src/Screens/PostScreen';
 
 /*
 adding chagnes from
@@ -62,10 +64,12 @@ const App: () => Node = () => {
         <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
           <Stack.Screen name="feed" component={Feed} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
           <Stack.Screen name="upload" component={Upload}/>
+          <Stack.Screen name="post" component={PostScreen}/>
 
           <Stack.Screen name="search" component={Search} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
 
           <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+          <Stack.Screen name="group" component={Group}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SleepProvider>

@@ -109,7 +109,9 @@ export const Sample = props => {
             d={sampleToPath(sample, graphicHeight*.45, startTheta, duration > noon)}
             //fill={sleepTypeToColor(sample.value)}
             stroke={sleepTypeToColor(sample.value)}
-            strokeWidth={10} />
+            strokeWidth={10}
+            key={sample.start}
+          />
         )
       }
 

@@ -1,9 +1,12 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Words } from "../Basic/Words";
 import { Row } from "../Basic/Row";
 import { PRIMARY } from "../../Values/Colors";
 import { Sample } from "./Sample";
 import UserImage from '../Profile/UserImage';
+import { makeSleepKey } from '../../Providers/SleepProvider';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const formatDuration = ms => {
@@ -35,9 +38,12 @@ const formatDuration = ms => {
 
 export const Post = props => {
   const {sleepSession} = props;
+  const navigation = useNavigation();
+
   const duration =
     new Date(sleepSession.bedEnd) -
     new Date(sleepSession.bedStart);
+
   return <View
     style={{
       //position: 'absolute',
@@ -54,6 +60,11 @@ export const Post = props => {
     }}>
     <View style={{backgroundColor: 'black'}}>
       <UserImage size={50}/>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('post', {id: makeSleepKey(sleepSession)})}
+      >
+        <Words><Ionicons size={30} name='pencil-outline'/></Words>
+      </TouchableOpacity>
       <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
       <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toTimeString()}</Words>

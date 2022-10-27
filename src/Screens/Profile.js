@@ -237,9 +237,14 @@ export const Profile = props => {
                   <View style={{zIndex: 10, position: 'absolute', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, top: 0, right: 0}}>
                       {
                           viewingSelf?
-                            <TouchableOpacity onPress={() => props.navigation.navigate('settings')}>
-                                <Words><Ionicons size={30} name='settings-outline'/></Words>
-                            </TouchableOpacity>
+                            <>
+                                <TouchableOpacity onPress={() => props.navigation.navigate('group')}>
+                                    <Words><Ionicons size={30} name='people-outline'/></Words>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => props.navigation.navigate('settings')}>
+                                    <Words><Ionicons size={30} name='settings-outline'/></Words>
+                                </TouchableOpacity>
+                            </>
                             :
                             <FollowButton profileUser={profileUser}/>
                       }
