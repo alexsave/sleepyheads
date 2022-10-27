@@ -4,27 +4,35 @@ import { Words } from '../Components/Basic/Words';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { BACKGROUND } from '../Values/Colors';
+import { Post } from '../Components/Feed/Post';
+import Write from '../Components/Basic/Write';
 
 // look up shared transitions, that's the ideal behavior for this
 export const PostScreen = props => {
   const id = props.route.params.id;
-  const [sleep, setSleep] = useState({});
+  const [sleep, setSleep] = useState(null);
   useEffect(() => {
     if (!id)
       return;
 
     (async () => {
-      console.log(id);
       const val = await AsyncStorage.getItem(id);
-      console.log(val);
-      setSleep(val);
+      setSleep(JSON.parse(val));
     })();
 
   }, [id]);
 
 
   const navigation = useNavigation();
-  return <SafeAreaView style={{background: BACKGROUND}}>
-    <Words>{JSON.stringify(sleep)}</Words>
+  return <SafeAreaView style={{flex: 1, backgroundColor: BACKGROUND}}>
+      <Write style={{height: 100, fontSize: 40}} placeholder={'Title'}/>
+      <Write style={{height: 200}} placeholder={'notes'}/>
+
+
+
+    {
+      sleep &&
+      <Post sleepSession={sleep}/>
+    }
   </SafeAreaView>
 }

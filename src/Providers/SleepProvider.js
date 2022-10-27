@@ -52,7 +52,6 @@ const SleepProvider = props => {
     if (!autoImport)
       return;
 
-
     // kind of a base case
     if (imported.size >= inHealth.length)
       return;
@@ -68,7 +67,6 @@ const SleepProvider = props => {
     diff.filter(d => {
       !imported.has(makeSleepKey(d))
     })
-
 
     await Promise.all(
       diff.map(sleep =>
