@@ -1,4 +1,4 @@
-import { AppState, FlatList, SafeAreaView, StyleSheet, useColorScheme, View } from 'react-native';
+import { AppState, FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
 import { useContext, useEffect, useRef, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
@@ -90,9 +90,12 @@ export const Feed = props => {
       rightText={<Ionicons name='server-outline' size={40}/>}
       onPressRight={() => navigation.navigate('upload')}
     />
-    <View>
+    <TouchableOpacity onLongPress={() => {
+      setForegrounded([]);
+      AsyncStorage.removeItem(funKey)
+    }}>
       <Words>{JSON.stringify(foregrounded)}</Words>
-    </View>
+    </TouchableOpacity>
     <FlatList
       data={inHealth}
       renderItem={({item}) => <Post sleepSession={item}/>}

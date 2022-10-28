@@ -137,8 +137,6 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   return RCTAppSetupDefaultModuleFromClass(moduleClass);
 }
 
-
-
 #endif
 
 @end
