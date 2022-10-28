@@ -106,6 +106,7 @@ class Background: NSObject {
       if (x > lastFound) {
         defaults.set(x, forKey: "lastSleepFound")
         
+        // Can we wake up the app and save to async storage from here?
         
         // add and notify
         content.body = "\(lastInbedSample.value) type from \(lastInbedSample.startDate.description(with: .current)) to \(lastInbedSample.endDate.description(with: .current)) from thread \(Thread.current)"
