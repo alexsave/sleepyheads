@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Defs, LinearGradient, Path, Rect, Stop, Svg } from 'react-native-svg';
+import { Defs, LinearGradient, Path, Rect, Stop, Svg, Text, TextPath } from 'react-native-svg';
 import { ASLEEP, AWAKE, CORE, DEEP, INBED, REM } from "../../Utils/ProcessSleep";
 import { BACKGROUND, DARK_GRAY, DARKER, LIGHTER, PRIMARY } from '../../Values/Colors';
 import { BlurView } from "@react-native-community/blur";
@@ -21,16 +21,21 @@ const sleepTypeToColor = value => {
   }
 };
 
-const graphicWidth = 200;
-const graphicHeight = 200;
+const graphicWidth = 300;
+const graphicHeight = 300;
 const strokeWidth = 15;
 
 const noon = 12 * 60 * 60 * 1000;
+const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 const timeToTheta = timestamp => {
   const s = new Date(timestamp)
   const mseconds = (s.getHours()*60*60 + s.getMinutes() * 60 + s.getSeconds())*1000 + s.getMilliseconds();
-  return Math.PI/2 - (mseconds)/noon * 2*Math.PI;
+  const mod = (Math.PI/2 - (mseconds)/noon * 2*Math.PI) % (2*Math.PI);
+  if (mod < 0)
+    return mod + Math.PI * 2;
+  return mod;
+  //return Math.PI/2 - (mseconds)/noon * 2*Math.PI;
 }
 
 const sampleToPath = (sample, radius, offset=0, curl=false) => {
@@ -50,7 +55,7 @@ const sampleToPath = (sample, radius, offset=0, curl=false) => {
   return `M ${x1} ${y1} A ${r1} ${r1} 0 0 1 ${x2} ${y2}`;
 }
 
-const bedToPath = (bedStart, bedEnd, radius) => {
+const bedToPath = (bedStart, bedEnd, duration, radius) => {
   const theta1 = timeToTheta(bedStart);
   const x1 = Math.cos(theta1)*radius + graphicWidth/2;
   const y1 = graphicHeight/2 - Math.sin(theta1)*radius;
@@ -58,7 +63,27 @@ const bedToPath = (bedStart, bedEnd, radius) => {
   const theta2 = timeToTheta(bedEnd);
   const x2 = Math.cos(theta2)*radius + graphicWidth/2;
   const y2 = graphicHeight/2 - Math.sin(theta2)*radius;
-  return `M ${x1} ${y1} A ${radius} ${radius} 0 1 1 ${x2} ${y2}`;
+
+  const largeArc = duration > SIX_HOURS ? 1 : 0;
+  return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`;
+}
+
+const textTheta = Math.PI/16;
+
+const makeTextPath = (timestamp, radius) => {
+  const theta1 = timeToTheta(timestamp) + textTheta;
+  const x1 = Math.cos(theta1)*radius + graphicWidth/2;
+  const y1 = graphicHeight/2 - Math.sin(theta1)*radius;
+
+  const theta2 = theta1 - 2 * textTheta;
+  const x2 = Math.cos(theta2)*radius + graphicWidth/2;
+  const y2 = graphicHeight/2 - Math.sin(theta2)*radius;
+
+  if (theta1 % (2*Math.PI) > Math.PI) {
+    return `M ${x2} ${y2} A ${radius} ${radius} 0 0 0 ${x1} ${y1}`;
+  } else {
+    return `M ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2}`;
+  }
 }
 
 
@@ -84,8 +109,10 @@ export const Sample = props => {
         </LinearGradient>
       </Defs>
 
+
+
       <Path
-        d={bedToPath(bedStart, bedEnd, graphicHeight *.45)}
+        d={bedToPath(bedStart, bedEnd, duration, graphicHeight *.45)}
         stroke={DARK_GRAY}
         strokeWidth={strokeWidth} />
 
@@ -102,7 +129,6 @@ export const Sample = props => {
         strokeWidth={1}
       />
 
-
       {
         samples.map(sample =>
           <Path
@@ -114,6 +140,28 @@ export const Sample = props => {
           />
         )
       }
+      <Path id="startText" fill="none"
+            d={makeTextPath(bedStart, graphicHeight*.45 )}
+      />
+      <Text fill="gray">
+        <TextPath
+          href="#startText"
+          startOffset={0}>
+          {new Date(bedStart).toTimeString().split('GMT')[0]}
+        </TextPath>
+      </Text>
+
+
+      <Path id="endText" fill="none"
+            d={makeTextPath(bedEnd, graphicHeight*.45 )}
+      />
+      <Text fill="gray">
+        <TextPath
+          href="#endText"
+          startOffset={0}>
+          {new Date(bedEnd).toTimeString().split('GMT')[0]}
+        </TextPath>
+      </Text>
 
     </Svg>
     <BlurView

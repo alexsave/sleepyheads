@@ -67,8 +67,8 @@ export const Post = props => {
       </TouchableOpacity>
       <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
-      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toTimeString()}</Words>
-      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedEnd).toTimeString()}</Words>
+      <Words>{new Date(sleepSession.bedStart).toTimeString()}</Words>
+      <Words>{new Date(sleepSession.bedEnd).toTimeString()}</Words>
       <Sample duration={duration} session={sleepSession}/>
     </View>
 

@@ -47,42 +47,46 @@ export const Feed = props => {
     );*/
     /* Register native listener that will be triggered when successfuly enabled */
     // check this out https://github.com/react-native-push-notification/ios#addnotificationrequest
-    const subscription = AppState.addEventListener("change", nextAppState => {
-      /*if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {*/
-      console.log("App state has changed");
+    //const subscription = AppState.addEventListener("change", nextAppState => {
+    /*if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {*/
+    //console.log("App state has changed");
 
-      (async () => {
-        let val = await AsyncStorage.getItem(funKey);
-        if(val === null)
-          val = [];
-        else
-          val = JSON.parse(val);
+    (async () => {
+      let val = await AsyncStorage.getItem(funKey);
+      if(val === null)
+        val = [];
+      else
+        val = JSON.parse(val);
 
-        val.push(nextAppState + ' ' + new Date().toLocaleString());
-        AsyncStorage.setItem(funKey, JSON.stringify(val));
+      val.push('Feed.js useEffect called ' + new Date().toLocaleString());
+      AsyncStorage.setItem(funKey, JSON.stringify(val));
 
-        // on the swift side, we listen for new INBED values, and then send a notification to the user
-        // apple says "HealthKit wakes your app whenever a process saves or deletes samples of the specified type. "
-        // if "wakes your app" means what I think it means, we might be able to also handle some things on the RN side
+      // on the swift side, we listen for new INBED values, and then send a notification to the user
+      // apple says "HealthKit wakes your app whenever a process saves or deletes samples of the specified type. "
+      // if "wakes your app" means what I think it means, we might be able to also handle some things on the RN side
+
+      // this is certainly called, so we can auto upload here or in some context provider
 
 
-      })();
+
+    })();
 
 
-      //}
+    //}
 
-      appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-    });
+    //appState.current = nextAppState;
+    //setAppStateVisible(appState.current);
+    //console.log("AppState", appState.current);
+    //});
 
-    return () => {
-      subscription.remove();
-    };
+    //return () => {
+      //subscription.remove();
+    //};
   }, []);
+
 
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
 
@@ -94,7 +98,7 @@ export const Feed = props => {
       setForegrounded([]);
       AsyncStorage.removeItem(funKey)
     }}>
-      <Words>{JSON.stringify(foregrounded)}</Words>
+      <Words>{JSON.stringify(foregrounded).substring(0, 100)}</Words>
     </TouchableOpacity>
     <FlatList
       data={inHealth}
