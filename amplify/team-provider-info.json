@@ -10,6 +10,11 @@
       "StackName": "amplify-sleepyheads-production-201055",
       "StackId": "arn:aws:cloudformation:us-west-1:008513856317:stack/amplify-sleepyheads-production-201055/a2debad0-58c9-11ed-9764-06c69cec0ffb",
       "AmplifyAppId": "d1djb8t2u0m9qw"
+    },
+    "categories": {
+      "auth": {
+        "sleepyheads05f2752d": {}
+      }
     }
   }
 }

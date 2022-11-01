@@ -519,7 +519,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.roqyt.sleepyheads;
 				PRODUCT_NAME = sleepyheads;
 				SWIFT_OBJC_BRIDGING_HEADER = "sleepyheads-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -549,7 +549,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.roqyt.sleepyheads;
 				PRODUCT_NAME = sleepyheads;
 				SWIFT_OBJC_BRIDGING_HEADER = "sleepyheads-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

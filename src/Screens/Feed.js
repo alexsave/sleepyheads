@@ -4,18 +4,22 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
-import { BACKGROUND } from '../Values/Colors';
+import { BACKGROUND, PRIMARY } from '../Values/Colors';
 import TopBar from '../Components/Navigation/TopBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from '../Providers/UserProvider';
+import { Auth, Hub } from 'aws-amplify';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { Words } from '../Components/Basic/Words';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 
 export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
+  const {username} = useContext(UserContext);
   const {inHealth} = useContext(SleepContext);
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,61 +36,45 @@ export const Feed = props => {
   const [foregrounded, setForegrounded] = useState([]);
 
   useEffect(() => {
+    // yes, this definitely is called when the app opens due to background delivery. You can assume providers do too.
     SplashScreen.hide();
 
-    (async () => {
-      const val = await AsyncStorage.getItem(funKey);
-      if (val)
-        setForegrounded(JSON.parse(val));
+    const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          console.log(data);
+          break;
+        case "signOut":
+          console.log(null);
+          break;
+        case "customOAuthState":
+          console.log(data);
+      }
+    });
 
-    })();
+    Auth.currentAuthenticatedUser()
+      .then(currentUser => console.log(currentUser))
+      .catch(() => console.log("Not signed in"));
 
+    return unsubscribe;
 
-    /*getSleepPermissions(() =>
-      getSleep(sd => setSleepData(processSleep(sd)))
-    );*/
-    /* Register native listener that will be triggered when successfuly enabled */
-    // check this out https://github.com/react-native-push-notification/ios#addnotificationrequest
-    //const subscription = AppState.addEventListener("change", nextAppState => {
-    /*if (
-      appState.current.match(/inactive|background/) &&
-      nextAppState === "active"
-    ) {*/
-    //console.log("App state has changed");
-
-    (async () => {
-      let val = await AsyncStorage.getItem(funKey);
-      if(val === null)
-        val = [];
-      else
-        val = JSON.parse(val);
-
-      val.push('Feed.js useEffect called ' + new Date().toLocaleString());
-      AsyncStorage.setItem(funKey, JSON.stringify(val));
-
-      // on the swift side, we listen for new INBED values, and then send a notification to the user
-      // apple says "HealthKit wakes your app whenever a process saves or deletes samples of the specified type. "
-      // if "wakes your app" means what I think it means, we might be able to also handle some things on the RN side
-
-      // this is certainly called, so we can auto upload here or in some context provider
-
-
-
-    })();
-
-
-    //}
-
-    //appState.current = nextAppState;
-    //setAppStateVisible(appState.current);
-    //console.log("AppState", appState.current);
-    //});
-
-    //return () => {
-      //subscription.remove();
-    //};
   }, []);
 
+
+  //probably not the best place to put this
+  if (!username){
+    return <SafeAreaView style={{flex: 1, backgroundColor: PRIMARY}}>
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          style={{height: 100, backgroundColor: BACKGROUND}}
+          onPress={() => Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Apple})}
+        >
+          <Words>SIGN IN WITH APPLE</Words>
+        </TouchableOpacity>
+
+      </View>
+    </SafeAreaView>;
+  }
 
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
 
@@ -94,12 +82,6 @@ export const Feed = props => {
       rightText={<Ionicons name='server-outline' size={40}/>}
       onPressRight={() => navigation.navigate('upload')}
     />
-    <TouchableOpacity onLongPress={() => {
-      setForegrounded([]);
-      AsyncStorage.removeItem(funKey)
-    }}>
-      <Words>{JSON.stringify(foregrounded).substring(0, 100)}</Words>
-    </TouchableOpacity>
     <FlatList
       data={inHealth}
       renderItem={({item}) => <Post sleepSession={item}/>}

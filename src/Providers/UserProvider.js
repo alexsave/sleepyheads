@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Auth } from 'aws-amplify';
+
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
 
@@ -13,10 +15,9 @@ const UserProvider = props => {
 
     useEffect(() => {
         //hopefully this doesn't take long lol
-        /*Auth.currentAuthenticatedUser().then(user => {
+        Auth.currentAuthenticatedUser().then(user => {
             setUsername(user.username);
-
-        })*/
+        }).catch(() => setUsername(''))
     }, []);
 
     useEffect(() => {
@@ -47,7 +48,7 @@ const UserProvider = props => {
 
     return (
         <UserContext.Provider value={{
-            username: username,
+            username,
             location: location,
             profileURI: profileURI
         }}>
