@@ -39,41 +39,14 @@ export const Feed = props => {
     // yes, this definitely is called when the app opens due to background delivery. You can assume providers do too.
     SplashScreen.hide();
 
-    const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
-      switch (event) {
-        case "signIn":
-          console.log(data);
-          break;
-        case "signOut":
-          console.log(null);
-          break;
-        case "customOAuthState":
-          console.log(data);
-      }
-    });
+    if (!username)
+      navigation.navigate('auth');
 
-    Auth.currentAuthenticatedUser()
-      .then(currentUser => console.log(currentUser))
-      .catch(() => console.log("Not signed in"));
-
-    return unsubscribe;
-
-  }, []);
+  }, [username]);
 
 
   //probably not the best place to put this
   if (!username){
-    return <SafeAreaView style={{flex: 1, backgroundColor: PRIMARY}}>
-      <View style={{flex: 1}}>
-        <TouchableOpacity
-          style={{height: 100, backgroundColor: BACKGROUND}}
-          onPress={() => Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Apple})}
-        >
-          <Words>SIGN IN WITH APPLE</Words>
-        </TouchableOpacity>
-
-      </View>
-    </SafeAreaView>;
   }
 
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>

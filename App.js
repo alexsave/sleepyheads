@@ -17,6 +17,7 @@ import { Upload } from './src/Screens/Upload';
 import SleepProvider from './src/Providers/SleepProvider';
 import { Group } from './src/Screens/Group';
 import { PostScreen } from './src/Screens/PostScreen';
+import { Join } from './src/Screens/Join';
 
 /*
 adding chagnes from
@@ -70,6 +71,8 @@ const App: () => Node = () => {
 
           <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
           <Stack.Screen name="group" component={Group}/>
+
+          <Stack.Screen name="auth" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SleepProvider>
