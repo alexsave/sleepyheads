@@ -1,19 +1,15 @@
-import { AppState, FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
-import { BACKGROUND, PRIMARY } from '../Values/Colors';
+import { BACKGROUND } from '../Values/Colors';
 import TopBar from '../Components/Navigation/TopBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../Providers/UserProvider';
-import { Auth, Hub } from 'aws-amplify';
-import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-import { Words } from '../Components/Basic/Words';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 
@@ -30,11 +26,6 @@ export const Feed = props => {
     height: '100%',
   };
 
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  const funKey = 'foregrounded';
-  const [foregrounded, setForegrounded] = useState([]);
-
   useEffect(() => {
     // yes, this definitely is called when the app opens due to background delivery. You can assume providers do too.
     SplashScreen.hide();
@@ -43,11 +34,6 @@ export const Feed = props => {
       navigation.navigate('auth');
 
   }, [username]);
-
-
-  //probably not the best place to put this
-  if (!username){
-  }
 
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
 
