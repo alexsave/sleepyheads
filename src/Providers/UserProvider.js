@@ -19,13 +19,14 @@ const UserProvider = props => {
         }).catch(() => setUsername(''))
 
         return Hub.listen("auth", ({ payload: { event, data } }) => {
+            console.log(event, JSON.stringify(data));
             switch (event) {
                 case "signIn":
-                    console.log(data);
+                    //console.log(data);
                     setUsername(data);
                     break;
                 case "signOut":
-                    console.log(null);
+                    //console.log(null);
                     setUsername(null)
                     break;
                 case "customOAuthState":

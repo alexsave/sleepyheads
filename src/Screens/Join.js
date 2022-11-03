@@ -7,11 +7,14 @@ import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
+import { SIGNIN, SIGNUP, SignUpModal } from '../Components/Profile/SignUpModal';
 
 // the login/signup screen
 export const Join = props => {
   const {username} = useContext(UserContext);
   const [backgroundText, setBackgroundText] = useState('');
+
+  const [signUpModal, setSignUpModal] = useState(null);
 
   useEffect(() =>  {
     setBackgroundText([...Array(120)].fill('😴 '))
@@ -51,7 +54,7 @@ export const Join = props => {
 
             <TouchableOpacity
               style={{shadowColor: 'black', shadowRadius: 5, shadowOpacity: 1.0, flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
-              onPress={() => Auth.signIn()}
+              onPress={() => setSignUpModal(SIGNUP)}
             >
 
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'person-outline'} size={40}/></Words>
@@ -59,7 +62,7 @@ export const Join = props => {
             </TouchableOpacity>
             <TouchableOpacity
               style={{flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
-              onPress={() => {/*pop open a keyboard*/}}
+              onPress={() => setSignUpModal(SIGNIN)}
             >
 
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'log-in-outline'} size={40}/></Words>
@@ -67,6 +70,10 @@ export const Join = props => {
             </TouchableOpacity>
           </View>
         </View>
+
+        <SignUpModal type={signUpModal} close={() => setSignUpModal(null)}/>
+
+
       </SafeAreaView>
     </View>
   </View>;
