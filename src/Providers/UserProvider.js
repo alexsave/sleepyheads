@@ -6,6 +6,9 @@ import { Auth, Hub } from 'aws-amplify';
 
 export const UserContext = React.createContext();
 
+// Let them try out the rings and stuff, with no network access.
+export const ANONYMOUS = 'ANONYMOUS';
+
 const UserProvider = props => {
     //is this legal
     const [username, setUsername] = useState(null);
@@ -38,6 +41,7 @@ const UserProvider = props => {
     return (
         <UserContext.Provider value={{
             username,
+            setUsername,
             profileURI: profileURI
         }}>
             {props.children}

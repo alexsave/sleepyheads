@@ -4,14 +4,14 @@ import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { BACKGROUND, DARKER, LIGHTER, PRIMARY, TEXT_COLOR } from '../Values/Colors';
 import { Words } from '../Components/Basic/Words';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-import { UserContext } from '../Providers/UserProvider';
+import { ANONYMOUS, UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
 import { SIGNIN, SIGNUP, SignUpModal } from '../Components/Profile/SignUpModal';
 
 // the login/signup screen
 export const Join = props => {
-  const {username} = useContext(UserContext);
+  const {username, setUsername} = useContext(UserContext);
   const [backgroundText, setBackgroundText] = useState('');
 
   const [signUpModal, setSignUpModal] = useState(null);
@@ -56,18 +56,27 @@ export const Join = props => {
               style={{shadowColor: 'black', shadowRadius: 5, shadowOpacity: 1.0, flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
               onPress={() => setSignUpModal(SIGNUP)}
             >
-
-              <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'person-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with username</Words>
+              <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'call-outline'} size={40}/></Words>
+              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with phone number</Words>
             </TouchableOpacity>
+
+
             <TouchableOpacity
               style={{flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
               onPress={() => setSignUpModal(SIGNIN)}
             >
-
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'log-in-outline'} size={40}/></Words>
               <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with username</Words>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '95%', height: 100, }}
+              onPress={() => setUsername(ANONYMOUS)}
+            >
+              <Words style={{textAlign: 'center', color: 'gray', textDecorationLine: 'underline'}}>Try offline</Words>
+            </TouchableOpacity>
+
+
           </View>
         </View>
 
