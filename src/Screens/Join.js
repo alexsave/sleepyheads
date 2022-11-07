@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Auth, Hub } from 'aws-amplify';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Linking, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { BACKGROUND, DARKER, LIGHTER, PRIMARY, TEXT_COLOR } from '../Values/Colors';
 import { Words } from '../Components/Basic/Words';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
@@ -8,6 +8,9 @@ import { ANONYMOUS, UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
 import { SIGNIN, SIGNUP, SignUpModal } from '../Components/Profile/SignUpModal';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import { Authenticator, Greetings, SignUp } from 'aws-amplify-react-native/src/Auth';
+
 
 // the login/signup screen
 export const Join = props => {
@@ -57,7 +60,7 @@ export const Join = props => {
               onPress={() => setSignUpModal(SIGNUP)}
             >
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'call-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with phone number</Words>
+              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with username</Words>
             </TouchableOpacity>
 
 
