@@ -1,6 +1,6 @@
 {
   "auth": {
-    "sleepyheads05f2752d": {
+    "sleepyheads77b8dbac": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -9,9 +9,11 @@
         "socialProviders": [
           "APPLE"
         ],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "PHONE_NUMBER"
+        ],
         "signupAttributes": [
-          "EMAIL"
+          "NAME"
         ],
         "passwordProtectionSettings": {
           "passwordPolicyMinLength": 8,
