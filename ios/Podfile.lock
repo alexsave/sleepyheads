@@ -384,6 +384,8 @@ PODS:
     - React-perflogger (= 0.70.4)
   - rn-fetch-blob (0.12.0):
     - React-Core
+  - RNAppleAuthentication (2.2.2):
+    - React-Core
   - RNAppleHealthKit (1.7.0):
     - React
   - RNAWSCognito (5.2.12):
@@ -496,6 +498,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
+  - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - RNAppleHealthKit (from `../node_modules/react-native-health`)
   - RNAWSCognito (from `../node_modules/amazon-cognito-identity-js`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
@@ -603,6 +606,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
+  RNAppleAuthentication:
+    :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNAppleHealthKit:
     :path: "../node_modules/react-native-health"
   RNAWSCognito:
@@ -675,6 +680,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 5407e26b5aaafa9b01a08e33653255f8247e7c31
   ReactCommon: abf3605a56f98b91671d0d1327addc4ffb87af77
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNAppleHealthKit: 60a6beefdd89a75811e9a8873a5e24f351dee681
   RNAWSCognito: 8b90597e928a8e336af19c879aff0e9142afe9ff
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca

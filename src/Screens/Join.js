@@ -10,6 +10,8 @@ import { BlurView } from '@react-native-community/blur';
 import { SIGNIN, SIGNUP, SignUpModal } from '../Components/Profile/SignUpModal';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import { Authenticator, Greetings, SignUp } from 'aws-amplify-react-native/src/Auth';
+import appleAuth from '@invertase/react-native-apple-authentication';
+import jwtDecode from 'jwt-decode';
 
 
 // the login/signup screen
@@ -18,6 +20,29 @@ export const Join = props => {
   const [backgroundText, setBackgroundText] = useState('');
 
   const [signUpModal, setSignUpModal] = useState(null);
+
+  const appleSignIn = async () => {
+    let appleAuthRequestResponse;
+    try {
+
+      appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL]
+      })
+      console.log('apple auth response', appleAuthRequestResponse);
+
+      const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+      if (credentialState === appleAuth.State.AUTHORIZED) {
+        const {email, email_verified, is_private_email, sub} = jwtDecode(appleAuthRequestResponse.identityToken);
+      } else {
+        console.log(credentialState);
+      }
+
+    } catch (e) {
+
+    }
+  };
 
   useEffect(() =>  {
     setBackgroundText([...Array(120)].fill('😴 '))
@@ -47,7 +72,7 @@ export const Join = props => {
 
             <TouchableOpacity
               style={{shadowColor: 'black', shadowRadius: 5, shadowOpacity: 1.0,flexDirection: 'row', alignItems: 'center', marginBottom: 20, width: '95%', height: 100, backgroundColor: BACKGROUND}}
-              onPress={() => Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Apple})}
+              onPress={appleSignIn}//Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Apple})}
             >
 
               <Words style={{flex: 1, textAlign: 'center'}}><Ionicons name={'logo-apple'} size={40}/></Words>
