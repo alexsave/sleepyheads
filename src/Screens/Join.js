@@ -21,6 +21,40 @@ export const Join = props => {
 
   const [signUpModal, setSignUpModal] = useState(null);
 
+  const [session, setSession] = useState(null);
+
+  const signOut = () => {};
+  const signIn = (cred) => {
+    Auth.signIn(cred)
+      .then(result => {
+        setSession(result)
+        console.log(result);
+      })
+      .catch(err => {
+        console.log(err)
+        if (err.code === 'UserNotFoundException') {
+          signUp(cred);
+        } else if (err.code === 'UsernameExistsException') {
+          console.log('need verification')
+        }
+
+      })
+
+  };
+  const signUp = async (cred) => {
+    const result = await Auth.signUp({
+      username: cred,
+      password: cred,
+      attributes: {
+        //phone_number:
+      }
+
+    })
+
+  };
+  const verifyOtp = () => {};
+  const verifyAuth = () => {};
+
   const appleSignIn = async () => {
     let appleAuthRequestResponse;
     try {
@@ -34,7 +68,38 @@ export const Join = props => {
       const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 
       if (credentialState === appleAuth.State.AUTHORIZED) {
-        const {email, email_verified, is_private_email, sub} = jwtDecode(appleAuthRequestResponse.identityToken);
+        const decoded = jwtDecode(appleAuthRequestResponse.identityToken);
+        const {email, email_verified, is_private_email, sub} = decoded
+        console.log(decoded);
+        //signIn(email);
+        Auth.signIn(email)
+          .then(result => {
+            setSession(result)
+            console.log(result);
+          })
+          .catch(err => {
+            console.log(err)
+            if (err.code === 'UserNotFoundException') {
+              Auth.signUp({
+                username: email,
+                password: email,
+                attributes: {
+                  email: email,
+                  'custom:siwa': 'true'
+                }
+              })
+                .then(result => console.log(result))
+                .catch(err => console.log(err))
+              //signUp(cred);
+            } else if (err.code === 'UsernameExistsException') {
+              console.log('need verification')
+            }
+
+          })
+
+        // Try to sign in
+
+
       } else {
         console.log(credentialState);
       }

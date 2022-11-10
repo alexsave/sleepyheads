@@ -48,3 +48,13 @@ Then what?
 
 On first launch, ask them to upload the most recent month or so of sleep. I like Strava's screen.
 
+
+Use this package, or native SIWA code with Swift and decode the idToken from Apple, to get the email and name of your user. DONE
+Sign in with amplify with authenticationFlowType: "CUSTOM_AUTH", DONE
+You'll have to implement 3 lambdas to define auth challenge, create auth challenge, and verify auth challenge response DONE
+Add them as hooks to your Cognito user pool DONE
+If your sign-in errors out with UserNotFoundException then sign Up with randomized password
+If your sign in receives challengeName CUSTOM_CHALLENGE, respond with the idToken you've got from apple
+In your verify challenge response hook use verifyAppleToken npm package to validate the token
+In your define auth hook, issue the tokens, voila = you're signed in with your cognito user!
+You might have to verify nonce for extra security

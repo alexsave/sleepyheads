@@ -9,11 +9,27 @@
       "UnauthRoleName": "amplify-sleepyheads-production-221855-unauthRole",
       "StackName": "amplify-sleepyheads-production-221855",
       "StackId": "arn:aws:cloudformation:us-west-1:008513856317:stack/amplify-sleepyheads-production-221855/831bf7d0-5d92-11ed-b349-0238810de0b5",
-      "AmplifyAppId": "d3r4knb2nrjon5"
+      "AmplifyAppId": "d3r4knb2nrjon5",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-sleepyheads-production-221855-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "sleepyheads77b8dbac": {}
+        "sleepyheads77b8dbac": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "sleepyheads77b8dbacCreateAuthChallenge": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheads77b8dbacCreateAuthChallenge-4e414b6d417031574c63-build.zip"
+        },
+        "sleepyheads77b8dbacDefineAuthChallenge": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheads77b8dbacDefineAuthChallenge-36632b4c6f47636f5479-build.zip"
+        },
+        "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheads77b8dbacVerifyAuthChallengeResponse-36764170415559695a64-build.zip"
+        }
       }
     }
   }

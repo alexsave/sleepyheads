@@ -1,12 +1,12 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "sleepyheads77b8dbac_identitypool_77b8dbac",
+    "identityPoolName": "sleepyheadsf6690e0b_identitypool_f6690e0b",
     "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "sleepy77b8dbac",
     "userPoolName": "sleepyheads77b8dbac_userpool_77b8dbac",
     "autoVerifiedAttributes": [
-      "email"
+      "phone_number"
     ],
     "mfaConfiguration": "OFF",
     "mfaTypes": [
@@ -18,7 +18,11 @@
     "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
-    "passwordPolicyCharacters": [],
+    "passwordPolicyCharacters": [
+      "Requires Lowercase",
+      "Requires Uppercase",
+      "Requires Numbers"
+    ],
     "requiredAttributes": [
       "name"
     ],
@@ -26,28 +30,37 @@
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
-      "email"
+      "phone_number",
+      "name"
     ],
     "userpoolClientReadAttributes": [
-      "email"
+      "phone_number"
     ],
     "userpoolClientLambdaRole": "sleepy77b8dbac_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": false,
+    "userpoolClientSetAttributes": true,
     "sharedId": "77b8dbac",
     "resourceName": "sleepyheads77b8dbac",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "defaultSocial",
-    "hostedUI": true,
+    "useDefault": "manual",
+    "hostedUI": false,
     "usernameAttributes": [
-      "phone_number"
+      "phone_number",
+      "email"
     ],
-    "triggers": {},
-    "hostedUIDomainName": "sleepyheads77b8dbac-77b8dbac",
-    "authProvidersUserPool": [
-      "SignInWithApple"
+    "triggers": {
+      "CreateAuthChallenge": [
+        "boilerplate-create-challenge"
+      ],
+      "DefineAuthChallenge": [
+        "boilerplate-define-challenge"
+      ],
+      "VerifyAuthChallengeResponse": [
+        "boilerplate-verify"
+      ]
+    },
+    "userPoolGroupList": [
+      "sleepyheadsuserpool"
     ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"SignInWithApple\",\"authorize_scopes\":\"name\",\"AttributeMapping\":{\"name\":\"name\"}}]",
-    "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
@@ -64,11 +77,43 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:3000/\"],\"LogoutURLs\":[\"https://localhost:3000/\"]}",
+    "dependsOn": [
+      {
+        "category": "function",
+        "resourceName": "sleepyheads77b8dbacCreateAuthChallenge",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "sleepyheads77b8dbacDefineAuthChallenge",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "sleepyheads77b8dbacVerifyAuthChallengeResponse",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      }
+    ],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "permissions": []
+    "permissions": [],
+    "userPoolGroups": true,
+    "adminQueries": false,
+    "authProviders": [],
+    "thirdPartyAuth": false,
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CreateAuthChallenge\",\n    \"lambdaFunctionName\": \"sleepyheads77b8dbacCreateAuthChallenge\"\n  },\n  {\n    \"triggerType\": \"DefineAuthChallenge\",\n    \"lambdaFunctionName\": \"sleepyheads77b8dbacDefineAuthChallenge\"\n  },\n  {\n    \"triggerType\": \"VerifyAuthChallengeResponse\",\n    \"lambdaFunctionName\": \"sleepyheads77b8dbacVerifyAuthChallengeResponse\"\n  }\n]"
   }
-} 
+}

@@ -1,0 +1,17 @@
+{
+  "trigger": true,
+  "modules": [
+    "boilerplate-define-challenge"
+  ],
+  "parentResource": "sleepyheads77b8dbac",
+  "functionName": "sleepyheads77b8dbacDefineAuthChallenge",
+  "resourceName": "sleepyheads77b8dbacDefineAuthChallenge",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/snapshot/repo/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/DefineAuthChallenge",
+  "triggerTemplate": "DefineAuthChallenge.json.ejs",
+  "triggerEventPath": "DefineAuthChallenge.event.json",
+  "roleName": "sleepyheads77b8dbacDefineAuthChallenge",
+  "skipEdit": true,
+  "enableCors": false
+}
