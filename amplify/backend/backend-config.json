@@ -61,21 +61,6 @@
     }
   },
   "function": {
-    "sleepyheads77b8dbacCreateAuthChallenge": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "sleepyheads77b8dbacDefineAuthChallenge": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "sleepyheadsAuthCreateAuthChallenge": {
       "build": true,
       "providerPlugin": "awscloudformation",

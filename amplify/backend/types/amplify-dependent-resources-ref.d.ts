@@ -12,24 +12,6 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
-        "sleepyheads77b8dbacCreateAuthChallenge": {
-            "Name": "string",
-            "Arn": "string",
-            "LambdaExecutionRole": "string",
-            "Region": "string"
-        },
-        "sleepyheads77b8dbacDefineAuthChallenge": {
-            "Name": "string",
-            "Arn": "string",
-            "LambdaExecutionRole": "string",
-            "Region": "string"
-        },
-        "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
-            "Name": "string",
-            "Arn": "string",
-            "LambdaExecutionRole": "string",
-            "Region": "string"
-        },
         "sleepyheadsAuthCreateAuthChallenge": {
             "Name": "string",
             "Arn": "string",

@@ -14,18 +14,6 @@
     },
     "categories": {
       "function": {
-        "sleepyheads77b8dbacCreateAuthChallenge": {
-          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
-          "s3Key": "amplify-builds/sleepyheads77b8dbacCreateAuthChallenge-4e414b6d417031574c63-build.zip"
-        },
-        "sleepyheads77b8dbacDefineAuthChallenge": {
-          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
-          "s3Key": "amplify-builds/sleepyheads77b8dbacDefineAuthChallenge-36632b4c6f47636f5479-build.zip"
-        },
-        "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
-          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
-          "s3Key": "amplify-builds/sleepyheads77b8dbacVerifyAuthChallengeResponse-6567532f5944734d5958-build.zip"
-        },
         "sleepyheadsAuthCreateAuthChallenge": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
           "s3Key": "amplify-builds/sleepyheadsAuthCreateAuthChallenge-345764786b663138724b-build.zip"
