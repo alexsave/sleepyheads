@@ -18,11 +18,15 @@ const UserProvider = props => {
     useEffect(() => {
         //hopefully this doesn't take long lol
         Auth.currentAuthenticatedUser().then(user => {
+            console.log('signed in as ' + JSON.stringify(user))
             setUsername(user.username);
-        }).catch(() => setUsername(''))
+        }).catch(() => {
+            console.log('not signed in');
+            setUsername('')
+        })
 
         return Hub.listen("auth", ({ payload: { event, data } }) => {
-            console.log(event, JSON.stringify(data));
+            //console.log(event);//, JSON.stringify(data));
             switch (event) {
                 case "signIn":
                     //console.log(data);

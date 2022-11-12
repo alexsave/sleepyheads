@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "auth": {
-        "sleepyheads77b8dbac": {
+        "sleepyheadsAuth": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
@@ -9,9 +9,6 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientIDWeb": "string",
             "AppClientID": "string",
             "CreatedSNSRole": "string"
-        },
-        "userPoolGroups": {
-            "sleepyheadsuserpoolGroupRole": "string"
         }
     },
     "function": {
@@ -28,6 +25,30 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string"
         },
         "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
+            "Name": "string",
+            "Arn": "string",
+            "LambdaExecutionRole": "string",
+            "Region": "string"
+        },
+        "sleepyheadsAuthCreateAuthChallenge": {
+            "Name": "string",
+            "Arn": "string",
+            "LambdaExecutionRole": "string",
+            "Region": "string"
+        },
+        "sleepyheadsAuthDefineAuthChallenge": {
+            "Name": "string",
+            "Arn": "string",
+            "LambdaExecutionRole": "string",
+            "Region": "string"
+        },
+        "sleepyheadsAuthPreSignup": {
+            "Name": "string",
+            "Arn": "string",
+            "LambdaExecutionRole": "string",
+            "Region": "string"
+        },
+        "sleepyheadsAuthVerifyAuthChallengeResponse": {
             "Name": "string",
             "Arn": "string",
             "LambdaExecutionRole": "string",

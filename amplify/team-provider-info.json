@@ -13,10 +13,6 @@
       "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-sleepyheads-production-221855-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
-      "auth": {
-        "sleepyheads77b8dbac": {},
-        "userPoolGroups": {}
-      },
       "function": {
         "sleepyheads77b8dbacCreateAuthChallenge": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
@@ -28,8 +24,27 @@
         },
         "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
-          "s3Key": "amplify-builds/sleepyheads77b8dbacVerifyAuthChallengeResponse-36764170415559695a64-build.zip"
+          "s3Key": "amplify-builds/sleepyheads77b8dbacVerifyAuthChallengeResponse-6567532f5944734d5958-build.zip"
+        },
+        "sleepyheadsAuthCreateAuthChallenge": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheadsAuthCreateAuthChallenge-345764786b663138724b-build.zip"
+        },
+        "sleepyheadsAuthDefineAuthChallenge": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheadsAuthDefineAuthChallenge-56496f7574746b585663-build.zip"
+        },
+        "sleepyheadsAuthPreSignup": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheadsAuthPreSignup-7279796c6d356e376b35-build.zip"
+        },
+        "sleepyheadsAuthVerifyAuthChallengeResponse": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheadsAuthVerifyAuthChallengeResponse-44794f38484756706d73-build.zip"
         }
+      },
+      "auth": {
+        "sleepyheadsAuth": {}
       }
     }
   }

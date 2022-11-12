@@ -1,8 +1,8 @@
 /**
  * @type {import('@types/aws-lambda').VerifyAuthChallengeResponseTriggerHandler}
  */
-
-exports.handler = async (event, context) => {
+const verifyAppleToken = require('verify-apple-id-token').default;
+exports.handler = async event => {
   console.log(event);
   let challenge = event.request.privateChallengeParameters.challenge;
 
@@ -21,7 +21,13 @@ exports.handler = async (event, context) => {
         clientId: "com.roqyt.sleepyheads"
       });
       console.log(jwtClaims);
-      event.response.answerCorrect = true;
+      if (jwtClaims.email === event.request.privateChallengeParameters.answer) {
+        event.response.answerCorrect = true;
+      } else {
+        event.response.answerCorrect = true;
+      }
+
+
     } catch (e) {
       event.response.answerCorrect = false;
 
@@ -30,6 +36,5 @@ exports.handler = async (event, context) => {
   } else {
     event.response.answerCorrect = false;
   }
-
-  context.done(null, event);
+  return event;
 };

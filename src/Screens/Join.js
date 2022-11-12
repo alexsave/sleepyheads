@@ -22,6 +22,7 @@ export const Join = props => {
   const [signUpModal, setSignUpModal] = useState(null);
 
   const [session, setSession] = useState(null);
+  const [appleToken, setAppleToken] = useState(null);
 
   const signOut = () => {};
   const signIn = (cred) => {
@@ -52,7 +53,14 @@ export const Join = props => {
     })
 
   };
-  const verifyOtp = () => {};
+  const verifyApple = (session, token) => {
+    // no, this isn't it, the user is empty for some reason
+    Auth.sendCustomChallengeAnswer(session, token).then(idk => {
+      console.log(idk)
+
+    }).catch(e => console.log('61', e))
+
+  };
   const verifyAuth = () => {};
 
   const appleSignIn = async () => {
@@ -63,19 +71,26 @@ export const Join = props => {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL]
       })
-      console.log('apple auth response', appleAuthRequestResponse);
+      //console.log('apple auth response', appleAuthRequestResponse);
 
       const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 
       if (credentialState === appleAuth.State.AUTHORIZED) {
+        setAppleToken(appleAuthRequestResponse.identityToken);
+
         const decoded = jwtDecode(appleAuthRequestResponse.identityToken);
         const {email, email_verified, is_private_email, sub} = decoded
-        console.log(decoded);
+        //console.log(decoded);
         //signIn(email);
         Auth.signIn(email)
           .then(result => {
             setSession(result)
             console.log(result);
+            if(result.challengeName === 'CUSTOM_CHALLENGE'){
+              verifyApple(result, appleAuthRequestResponse.identityToken);
+
+            }
+              console.log('we got em 96')
           })
           .catch(err => {
             console.log(err)
@@ -84,11 +99,24 @@ export const Join = props => {
                 username: email,
                 password: email,
                 attributes: {
-                  email: email,
+                  //email: email,
                   'custom:siwa': 'true'
                 }
               })
-                .then(result => console.log(result))
+                .then(result => {
+                  if(result.challengeName === 'CUSTOM_CHALLENGE')
+                    console.log('we got em 104')
+                  Auth.signIn(email )
+                    .then(res=> {
+                      if(res.challengeName === 'CUSTOM_CHALLENGE')
+                        console.log('we got em 106')
+
+                      console.log(res)
+                      verifyApple(res, appleAuthRequestResponse.identityToken);
+                    })
+                    .catch(e => console.log(e));
+                  console.log(result);
+                })
                 .catch(err => console.log(err))
               //signUp(cred);
             } else if (err.code === 'UsernameExistsException') {
@@ -108,6 +136,8 @@ export const Join = props => {
 
     }
   };
+
+
 
   useEffect(() =>  {
     setBackgroundText([...Array(120)].fill('😴 '))

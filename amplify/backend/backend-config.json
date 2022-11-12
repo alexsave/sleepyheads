@@ -1,12 +1,12 @@
 {
   "auth": {
-    "sleepyheads77b8dbac": {
+    "sleepyheadsAuth": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "sleepyheads77b8dbacCreateAuthChallenge",
+          "resourceName": "sleepyheadsAuthCreateAuthChallenge",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -15,7 +15,7 @@
         },
         {
           "category": "function",
-          "resourceName": "sleepyheads77b8dbacDefineAuthChallenge",
+          "resourceName": "sleepyheadsAuthDefineAuthChallenge",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -24,7 +24,16 @@
         },
         {
           "category": "function",
-          "resourceName": "sleepyheads77b8dbacVerifyAuthChallengeResponse",
+          "resourceName": "sleepyheadsAuthPreSignup",
+          "triggerProvider": "Cognito",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "sleepyheadsAuthVerifyAuthChallengeResponse",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -32,22 +41,14 @@
           ]
         }
       ],
-      "customAuth": false,
+      "customAuth": true,
       "frontendAuthConfig": {
         "socialProviders": [],
-        "usernameAttributes": [
-          "PHONE_NUMBER"
-        ],
-        "signupAttributes": [
-          "NAME"
-        ],
+        "usernameAttributes": [],
+        "signupAttributes": [],
         "passwordProtectionSettings": {
           "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": [
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_UPPERCASE",
-            "REQUIRES_NUMBERS"
-          ]
+          "passwordPolicyCharacters": []
         },
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -57,22 +58,6 @@
           "PHONE_NUMBER"
         ]
       }
-    },
-    "userPoolGroups": {
-      "service": "Cognito-UserPool-Groups",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "sleepyheads77b8dbac",
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ]
-        }
-      ]
     }
   },
   "function": {
@@ -87,6 +72,26 @@
       "service": "Lambda"
     },
     "sleepyheads77b8dbacVerifyAuthChallengeResponse": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sleepyheadsAuthCreateAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sleepyheadsAuthDefineAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sleepyheadsAuthPreSignup": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sleepyheadsAuthVerifyAuthChallengeResponse": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

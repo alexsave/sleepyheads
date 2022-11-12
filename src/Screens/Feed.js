@@ -10,6 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
 import { UserContext } from '../Providers/UserProvider';
+import { Auth } from 'aws-amplify';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
 
@@ -40,6 +41,8 @@ export const Feed = props => {
     <TopBar
       rightText={<Ionicons name='server-outline' size={40}/>}
       onPressRight={() => navigation.navigate('upload')}
+      leftText={'Leave'}
+      onPressLeft={() => {Auth.signOut()}}
     />
     <FlatList
       data={inHealth}
