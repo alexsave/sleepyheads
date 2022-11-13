@@ -63,6 +63,7 @@ export const Join = props => {
   };
   const verifyAuth = () => {};
 
+
   const appleSignIn = async () => {
     let appleAuthRequestResponse;
     try {
@@ -99,7 +100,7 @@ export const Join = props => {
                 username: email,
                 password: email,
                 attributes: {
-                  //email: email,
+                  email: email,
                   'custom:siwa': 'true'
                 }
               })
@@ -180,7 +181,7 @@ export const Join = props => {
               onPress={() => setSignUpModal(SIGNUP)}
             >
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'call-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with username</Words>
+              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with number</Words>
             </TouchableOpacity>
 
 
@@ -189,7 +190,7 @@ export const Join = props => {
               onPress={() => setSignUpModal(SIGNIN)}
             >
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'log-in-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with username</Words>
+              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with number</Words>
             </TouchableOpacity>
 
             <TouchableOpacity

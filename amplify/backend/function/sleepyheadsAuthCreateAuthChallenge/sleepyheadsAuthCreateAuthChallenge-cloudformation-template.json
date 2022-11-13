@@ -197,7 +197,11 @@
             {
               "Sid": "VisualEditor1",
               "Effect": "Allow",
-              "Action": "sns:Publish",
+              "Action": [
+                "sns:Publish",
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+              ],
               "Resource": "*"
             }
           ]

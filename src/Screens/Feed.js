@@ -9,7 +9,7 @@ import TopBar from '../Components/Navigation/TopBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
-import { UserContext } from '../Providers/UserProvider';
+import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import { Auth } from 'aws-amplify';
 
 // this is fine to call every time, it'll only bring up the prompt if you add more permissions
@@ -30,8 +30,9 @@ export const Feed = props => {
   useEffect(() => {
     // yes, this definitely is called when the app opens due to background delivery. You can assume providers do too.
     SplashScreen.hide();
+    console.log('feed use effect called')
 
-    if (!username)
+    if (username === NOT_SIGNED_IN)
       navigation.navigate('auth');
 
   }, [username]);

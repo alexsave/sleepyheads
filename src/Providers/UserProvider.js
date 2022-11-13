@@ -8,6 +8,10 @@ export const UserContext = React.createContext();
 
 // Let them try out the rings and stuff, with no network access.
 export const ANONYMOUS = 'ANONYMOUS';
+// null will be the state before auth is checked, then this will be the state if not signed in
+// we need this because navigation
+export const NOT_SIGNED_IN = 'NOT_SIGNED_IN';
+
 
 const UserProvider = props => {
     //is this legal
@@ -22,11 +26,11 @@ const UserProvider = props => {
             setUsername(user.username);
         }).catch(() => {
             console.log('not signed in');
-            setUsername('')
+            setUsername(NOT_SIGNED_IN)
         })
 
         return Hub.listen("auth", ({ payload: { event, data } }) => {
-            //console.log(event);//, JSON.stringify(data));
+            console.log(event);//, JSON.stringify(data));
             switch (event) {
                 case "signIn":
                     //console.log(data);
@@ -34,10 +38,11 @@ const UserProvider = props => {
                     break;
                 case "signOut":
                     //console.log(null);
-                    setUsername(null)
+                    setUsername(NOT_SIGNED_IN)
                     break;
                 case "customOAuthState":
                     console.log(data);
+                    //next up, phone number and OTP
             }
         });
     }, []);

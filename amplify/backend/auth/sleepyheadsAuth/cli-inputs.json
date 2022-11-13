@@ -6,6 +6,7 @@
     "resourceNameTruncated": "sleepy8ada7554",
     "userPoolName": "sleepyheads8ada7554_userpool_8ada7554",
     "autoVerifiedAttributes": [
+      "email",
       "phone_number"
     ],
     "mfaConfiguration": "OFF",

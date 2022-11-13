@@ -12,42 +12,43 @@ exports.handler = async event => {
       event.response.privateChallengeParameters.answer = event.userName;
       event.response.privateChallengeParameters.challenge = 'SIWA_CHALLENGE';
       event.response.challengeMetadata = 'SIWA_CHALLENGE';
-
-    } else if (event.request.userAttributes.hasOwnProperty('phone_number')) {
-      const phoneNumber = event.request.userAttributes.phone_number;
+    } else if (event.request.userAttributes.hasOwnProperty('email')){
+      const email = event.request.userAttributes.email;
       const challengeAnswer = Math.random().toString(10).substring(2, 6);
 
-      const sns = new AWS.SNS({region: 'us-west-1'});
-      sns.publish({
-          Message: 'Your otp: ' + challengeAnswer,
-          PhoneNumber: phoneNumber,
-          MessageStructure: 'string',
-          MessageAttributes: {
-            'AWS.SNS.SMS.SenderID': {
-              DataType: 'String',
-              StringValue: 'AMPLIFY'
-            },
-            'AWS.SNS.SMS.SMSType': {
-              DataType: 'String',
-              StringValue: 'Transactional'
-            }
-          }
 
-
-        }, (err, data) => {
-          if (err) {
-            console.log(err.stack);
-            console.log(data);
-            return;
+      const ses = new AWS.SES({region: 'us-west-1'});
+      const params = {
+        Destination: {
+          ToAddresses: [email]
+        },
+        Message: {
+          Body: {
+            Text: { Data: 'Your Sleepyheads otp is: ' + challengeAnswer}
+          },
+          Subject: {
+            Data: 'Sleepyheads Verification Code'
           }
-          console.log(`SMS sent to ${phoneNumber} and otp = ${challengeAnswer}`);
-          return data;
-        }
-      )
+        },
+        Source: 'verify@sleepyheads.app'
+
+      };
+
+      try {
+        let key = await ses.sendEmail(params).promise();
+        console.log(`Email sent to ${email} and otp = ${challengeAnswer}`);
+      } catch (e) {
+        console.log("Failed sending mail", e);
+      }
+
       event.response.privateChallengeParameters = {};
       event.response.privateChallengeParameters.answer = challengeAnswer;
       event.response.privateChallengeParameters.challenge = 'OTP_CHALLENGE';
       event.response.challengeMetadata = 'OTP_CHALLENGE';
+
+    } else if (event.request.userAttributes.hasOwnProperty('phone_number')) {
+      // Setting up SMS is too much for now, skipping
+      return event;
     }
   }
   console.log(event);
