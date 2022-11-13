@@ -1,0 +1,1 @@
+export const CUSTOM_CHALLENGE = 'CUSTOM_CHALLENGE';
