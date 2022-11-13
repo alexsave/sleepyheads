@@ -91,6 +91,69 @@ export const SignUpModal = ({type=SIGNUP, close}) => {
       })
   }
 
+  useEffect(() => {
+    // if we set waitingForOtp to true, we assume
+    if(waitingForOtp)
+      passwordRef.current.focus()
+
+  }, [waitingForOtp]);
+
+
+  const phoneSignIn = () => {
+    setWaitingForOtp(true);
+    Auth.signIn(phone)
+      .then(result => {
+        setSession(result);
+        console.log(result);
+        if(result.challengeName === CUSTOM_CHALLENGE){
+          // nothign we can do here, we need to wait for user input
+          setSession(res);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        if (err.code === 'UserNotFoundException'){
+          Auth.signUp({
+            username: phone,
+            password, phone,
+            attributes: {
+              'custom:siwa': 'false'
+            }
+          })
+            .then(result => {
+              Auth.signIn(phone)
+                .then(res => {
+                  if(res.challengeName === CUSTOM_CHALLENGE) {
+                    //also just wait
+                    setSession(res);
+                  }
+                })
+            }).catch(e => console.log(e))
+
+        } else if (err.code === 'UsernameExistsException') {
+          console.log('need verification')
+        }
+      })
+
+  }
+
+  const verifyPhone = () => {
+    //better hope this is called after setSession lol
+    if (!session)
+      console.log('try again in like a second');
+
+    Auth.sendCustomChallengeAnswer(session, otp)
+      .then(res => {
+        //this should sign us in
+        console.log(res)
+      })
+      .catch(e => {
+        //probably wrong code, clear otp field
+        setOtp('');
+        console.log(e)
+      })
+  }
+
   return <Modal animationType={'slide'} transparent={true} visible={!!type}>
     <TouchableOpacity
       onPress={close}
