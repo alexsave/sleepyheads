@@ -1,144 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
-import { Auth, Hub } from 'aws-amplify';
-import { Linking, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { BACKGROUND, DARKER, LIGHTER, PRIMARY, TEXT_COLOR } from '../Values/Colors';
+import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { BACKGROUND, PRIMARY, TEXT_COLOR } from '../Values/Colors';
 import { Words } from '../Components/Basic/Words';
-import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { ANONYMOUS, UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
 import { SIGNIN, SIGNUP, SignUpModal } from '../Components/Profile/SignUpModal';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
-import { Authenticator, Greetings, SignUp } from 'aws-amplify-react-native/src/Auth';
-import appleAuth from '@invertase/react-native-apple-authentication';
-import jwtDecode from 'jwt-decode';
-
+import { appleSignIn } from '../Network/Login';
 
 // the login/signup screen
 export const Join = props => {
   const {username, setUsername} = useContext(UserContext);
   const [backgroundText, setBackgroundText] = useState('');
 
-  const [signUpModal, setSignUpModal] = useState(null);
-
-  const [session, setSession] = useState(null);
-  const [appleToken, setAppleToken] = useState(null);
-
-  const signOut = () => {};
-  const signIn = (cred) => {
-    Auth.signIn(cred)
-      .then(result => {
-        setSession(result)
-        console.log(result);
-      })
-      .catch(err => {
-        console.log(err)
-        if (err.code === 'UserNotFoundException') {
-          signUp(cred);
-        } else if (err.code === 'UsernameExistsException') {
-          console.log('need verification')
-        }
-
-      })
-
-  };
-  const signUp = async (cred) => {
-    const result = await Auth.signUp({
-      username: cred,
-      password: cred,
-      attributes: {
-        //phone_number:
-      }
-
-    })
-
-  };
-  const verifyApple = (session, token) => {
-    // no, this isn't it, the user is empty for some reason
-    Auth.sendCustomChallengeAnswer(session, token).then(idk => {
-      console.log(idk)
-
-    }).catch(e => console.log('61', e))
-
-  };
-  const verifyAuth = () => {};
-
-
-  const appleSignIn = async () => {
-    let appleAuthRequestResponse;
-    try {
-
-      appleAuthRequestResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL]
-      })
-      //console.log('apple auth response', appleAuthRequestResponse);
-
-      const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-
-      if (credentialState === appleAuth.State.AUTHORIZED) {
-        setAppleToken(appleAuthRequestResponse.identityToken);
-
-        const decoded = jwtDecode(appleAuthRequestResponse.identityToken);
-        const {email, email_verified, is_private_email, sub} = decoded
-        //console.log(decoded);
-        //signIn(email);
-        Auth.signIn(email)
-          .then(result => {
-            setSession(result)
-            console.log(result);
-            if(result.challengeName === 'CUSTOM_CHALLENGE'){
-              verifyApple(result, appleAuthRequestResponse.identityToken);
-
-            }
-              console.log('we got em 96')
-          })
-          .catch(err => {
-            console.log(err)
-            if (err.code === 'UserNotFoundException') {
-              Auth.signUp({
-                username: email,
-                password: email,
-                attributes: {
-                  email: email,
-                  'custom:siwa': 'true'
-                }
-              })
-                .then(result => {
-                  if(result.challengeName === 'CUSTOM_CHALLENGE')
-                    console.log('we got em 104')
-                  Auth.signIn(email )
-                    .then(res=> {
-                      if(res.challengeName === 'CUSTOM_CHALLENGE')
-                        console.log('we got em 106')
-
-                      console.log(res)
-                      verifyApple(res, appleAuthRequestResponse.identityToken);
-                    })
-                    .catch(e => console.log(e));
-                  console.log(result);
-                })
-                .catch(err => console.log(err))
-              //signUp(cred);
-            } else if (err.code === 'UsernameExistsException') {
-              console.log('need verification')
-            }
-
-          })
-
-        // Try to sign in
-
-
-      } else {
-        console.log(credentialState);
-      }
-
-    } catch (e) {
-
-    }
-  };
-
-
+  const [signUpModal, setSignUpModal] = useState(false);
 
   useEffect(() =>  {
     setBackgroundText([...Array(120)].fill('😴 '))
@@ -178,20 +53,12 @@ export const Join = props => {
 
             <TouchableOpacity
               style={{shadowColor: 'black', shadowRadius: 5, shadowOpacity: 1.0, flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
-              onPress={() => setSignUpModal(SIGNUP)}
+              onPress={() => setSignUpModal(true)}
             >
               <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'call-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign up with number</Words>
+              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with email status</Words>
             </TouchableOpacity>
 
-
-            <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
-              onPress={() => setSignUpModal(SIGNIN)}
-            >
-              <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'log-in-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with number</Words>
-            </TouchableOpacity>
 
             <TouchableOpacity
               style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '95%', height: 100, }}
@@ -204,7 +71,7 @@ export const Join = props => {
           </View>
         </View>
 
-        <SignUpModal type={signUpModal} close={() => setSignUpModal(null)}/>
+        <SignUpModal visible={signUpModal} close={() => setSignUpModal(false)}/>
 
 
       </SafeAreaView>

@@ -22,7 +22,7 @@ const UserProvider = props => {
     useEffect(() => {
         //hopefully this doesn't take long lol
         Auth.currentAuthenticatedUser().then(user => {
-            console.log('signed in as ' + JSON.stringify(user))
+            console.log('signed in as ' + JSON.stringify(user.username))
             setUsername(user.username);
         }).catch(() => {
             console.log('not signed in');
@@ -34,7 +34,7 @@ const UserProvider = props => {
             switch (event) {
                 case "signIn":
                     //console.log(data);
-                    setUsername(data);
+                    setUsername(data.username);
                     break;
                 case "signOut":
                     //console.log(null);
