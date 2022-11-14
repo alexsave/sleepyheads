@@ -6,7 +6,6 @@ import { Words } from '../Basic/Words';
 import { Auth } from 'aws-amplify';
 import { emailSignIn } from '../../Network/Login';
 
-
 // for signing up and signing in
 export const SignUpModal = ({visible, close}) => {
 

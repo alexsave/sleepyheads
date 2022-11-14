@@ -5,7 +5,7 @@ import { Words } from '../Components/Basic/Words';
 import { ANONYMOUS, UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
-import { SIGNIN, SIGNUP, SignUpModal } from '../Components/Profile/SignUpModal';
+import { SignUpModal } from '../Components/Profile/SignUpModal';
 import { appleSignIn } from '../Network/Login';
 
 // the login/signup screen
