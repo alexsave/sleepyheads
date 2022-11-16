@@ -8,6 +8,7 @@ import { BlurView } from '@react-native-community/blur';
 import { SignUpModal } from '../Components/Profile/SignUpModal';
 import { appleSignIn } from '../Network/Login';
 import { BACKGROUND_ZZZ } from '../Values/Styles';
+import { useNavigation } from '@react-navigation/native';
 
 // the login/signup screen
 export const Join = props => {

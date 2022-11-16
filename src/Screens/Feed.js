@@ -42,8 +42,6 @@ export const Feed = props => {
     <TopBar
       rightText={<Ionicons name='server-outline' size={40}/>}
       onPressRight={() => navigation.navigate('upload')}
-      leftText={'Leave'}
-      onPressLeft={() => {Auth.signOut()}}
     />
     <FlatList
       data={inHealth}

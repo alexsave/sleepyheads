@@ -31,17 +31,15 @@ export const Profile = props => {
     //fuck it, we'll just do it straight from this without using the context
     // This could be something like longest sleep streak, longest sleep
     const [records, setRecords] = useState({
-        Bench: {weight: 0},
-        Squat: {weight: 0},
-        Press: {weight: 0},
-        Deadlift: {weight: 0},
+        'Earliest Wakeup': {weight: 0},
+        'Latest Wakeup': {weight: 0},
+        'Longest Sleep': {weight: 0},
     });
 
     //post loading bs part
     const signedInUser = useContext(UserContext).username;
 
     //this is useful, but only when viewing yourself
-    const {location} = useContext(UserContext);
 
     let profileUser = signedInUser;
     if(props.route.params)
@@ -275,9 +273,7 @@ export const Profile = props => {
                           </Animated.View>
 
                           <TouchableOpacity onPress={handleGymPress}>{
-                              //no, you can't use location, you need to load the users location
-                              //should add more stuff here that isn't visible on close
-                              (viewingSelf && !location[3]) ?
+                              (viewingSelf) ?
                                 <Words>Set Gym</Words>
                                 :
                                 <Words>{gym.name}</Words>

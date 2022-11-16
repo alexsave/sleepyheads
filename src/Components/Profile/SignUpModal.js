@@ -30,7 +30,7 @@ export const SignUpModal = ({visible, close}) => {
     if (text.length === 4) {
       // Turn off keyboard
       otpRef.current.blur();
-      Auth.sendCustomChallengeAnswer(session, val)
+      Auth.sendCustomChallengeAnswer(session, text)
         .then(res => {
           close();
         })
