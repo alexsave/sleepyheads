@@ -33,7 +33,7 @@ export const Feed = props => {
     console.log('feed use effect called')
 
     if (username === NOT_SIGNED_IN)
-      navigation.navigate('auth');
+      navigation.navigate('join');
 
   }, [username]);
 

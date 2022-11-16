@@ -50,3 +50,5 @@ export const STYLES = StyleSheet.create({
     },
 
 });
+
+export const BACKGROUND_ZZZ = [...Array(120)].fill('😴 ')

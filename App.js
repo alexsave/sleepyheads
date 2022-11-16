@@ -72,7 +72,7 @@ const App: () => Node = () => {
           <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
           <Stack.Screen name="group" component={Group}/>
 
-          <Stack.Screen name="auth" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
+          <Stack.Screen name="join" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SleepProvider>

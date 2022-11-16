@@ -37,8 +37,8 @@ type Sleep
 ])
 {
   id: ID!
-  type: String!
-  userID: ID! @index(name: "byUser") #@auth(rules: [{allow: owner, operations: [read, delete]}])
+  type: String! @index(name: "byTimestamp", sortKeyFields: ["createdAt"])
+  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"]) #@auth(rules: [{allow: owner, operations: [read, delete]}])
   title: String
   description: String
   likes: [Like] @hasMany(indexName: "bySleep", fields: ["id"])

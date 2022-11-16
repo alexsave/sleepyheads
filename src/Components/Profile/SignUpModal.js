@@ -1,5 +1,5 @@
 import { Modal, TextInput, TouchableOpacity, View } from 'react-native';
-import { BACKGROUND, DARKER, LIGHTER } from '../../Values/Colors';
+import { BACKGROUND, DARKER, LIGHTER, TEXT_COLOR } from '../../Values/Colors';
 import Write from '../Basic/Write';
 import { useEffect, useRef, useState } from 'react';
 import { Words } from '../Basic/Words';
@@ -25,6 +25,23 @@ export const SignUpModal = ({visible, close}) => {
 
   const [session, setSession] = useState(null);
 
+  const handleOTPChange = text => {
+    setOtp(text);
+    if (text.length === 4) {
+      // Turn off keyboard
+      otpRef.current.blur();
+      Auth.sendCustomChallengeAnswer(session, val)
+        .then(res => {
+          close();
+        })
+        .catch(e => {
+          otpRef.current.focus();
+          //probably wrong code, clear otp field
+          setOtp('');
+        })
+    }
+  };
+
   return <Modal animationType={'slide'} transparent={true} visible={visible}>
     <TouchableOpacity
       onPress={close}
@@ -37,7 +54,7 @@ export const SignUpModal = ({visible, close}) => {
         <Write
           value={email}
           onChange={setEmail}
-          style={{height: 50, width: '75%', fontSize: 25, backgroundColor: BACKGROUND, padding: 10}}
+          style={{height: 50, width: '80%', fontSize: 25, backgroundColor: BACKGROUND, padding: 10}}
           placeholder='email address'
           autoCapitalize='none'
           autoFocus={true}
@@ -56,38 +73,13 @@ export const SignUpModal = ({visible, close}) => {
           // this doesn't have to be a textInput, it could be 4 cool boxes
           ref={otpRef}
           value={otp}
-          onChangeText={val => {
-            setOtp(val);
-            if (val.length === 4) {
-              Auth.sendCustomChallengeAnswer(session, otp)
-                .then(res => {
-                  console.log(res)
-                  otpRef.current.blur();
-                })
-                .catch(e => {
-                  //probably wrong code, clear otp field
-                  setOtp('');
-                  console.log(e);
-                })
-
-            }
-          }}
-          style={{/*display: waitingForOtp? 'inline':'none', */height: 50, width: '75%', fontSize: 25, backgroundColor: BACKGROUND, padding: 10}}
+          onChangeText={handleOTPChange}
+          style={{display: waitingForOtp? 'inline':'none', color: TEXT_COLOR, height: 50, width: '80%', fontSize: 25, backgroundColor: BACKGROUND, padding: 10}}
           placeholder='OTP code'
           autoCapitalize='none'
           password={true}
           secureTextEntry={true}
           textContentType={'oneTimeCode'}
-          //returnKeyType={'done'}
-          onSubmitEditing={() => {
-            Auth.sendCustomChallengeAnswer(session, otp)
-              .then(res => console.log(res))
-              .catch(e => {
-                //probably wrong code, clear otp field
-                setOtp('');
-                console.log(e)
-              })
-          }}
           keyboardType={'number-pad'}
         />
       </View>

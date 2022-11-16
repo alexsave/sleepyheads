@@ -2,27 +2,29 @@ import { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { BACKGROUND, PRIMARY, TEXT_COLOR } from '../Values/Colors';
 import { Words } from '../Components/Basic/Words';
-import { ANONYMOUS, UserContext } from '../Providers/UserProvider';
+import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
 import { SignUpModal } from '../Components/Profile/SignUpModal';
 import { appleSignIn } from '../Network/Login';
+import { BACKGROUND_ZZZ } from '../Values/Styles';
 
 // the login/signup screen
 export const Join = props => {
   const {username, setUsername} = useContext(UserContext);
-  const [backgroundText, setBackgroundText] = useState('');
+  const navigation = useNavigation();
 
   const [signUpModal, setSignUpModal] = useState(false);
 
   useEffect(() =>  {
-    setBackgroundText([...Array(120)].fill('😴 '))
+    if (username && username !== NOT_SIGNED_IN)
+      navigation.goBack();
   }, [username]);
 
   return <View style={{flex: 1, backgroundColor: PRIMARY}}>
     <View style={{flex: 1}}>
 
-      <Words style={{position: 'absolute', width: '200%', textAlign: 'center', fontSize: 65}}>{backgroundText}</Words>
+      <Words style={{position: 'absolute', width: '200%', textAlign: 'center', fontSize: 65}}>{BACKGROUND_ZZZ}</Words>
       <BlurView
         style={{position: 'absolute',/*has to match svg*/ height: '100%', width: '100%'}}
         blurType='dark'//dark not bad
@@ -55,8 +57,8 @@ export const Join = props => {
               style={{shadowColor: 'black', shadowRadius: 5, shadowOpacity: 1.0, flexDirection: 'row', alignItems: 'center', width: '95%', height: 100, backgroundColor: TEXT_COLOR}}
               onPress={() => setSignUpModal(true)}
             >
-              <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'call-outline'} size={40}/></Words>
-              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with email status</Words>
+              <Words style={{flex: 1, textAlign: 'center', color: BACKGROUND}}><Ionicons name={'mail-outline'} size={40}/></Words>
+              <Words style={{flex: 3, textAlign: 'center', color: BACKGROUND}}>Sign in with email</Words>
             </TouchableOpacity>
 
 
