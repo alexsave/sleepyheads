@@ -1,0 +1,329 @@
+type UserRecord @model
+@key(fields: ["userID", "exercise"])
+@auth(rules: [
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read, update, create, delete]}
+])
+#sneaky feeling we don't even need all these keys, just use filters
+@key(name: "byUser", fields: ["userID", "orm"], queryField: "listRecordsByUser")
+@key(name: "byExercise", fields: ["exercise", "orm"], queryField: "listRecordsByExercise")
+{
+  userID: ID!
+  #seems random, but actually is nice for showing records
+  userImage: UserImage @connection(fields: ["userID"])
+  postID: ID! #useful for seeing detail of records
+  orm: String!
+  exercise: String!
+  countryID: ID!#it's bs but these change
+  stateID: ID!
+  cityID: ID!
+  gymID: ID!
+  male: Boolean!
+}
+
+type UserStats @model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations:[read, update, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}
+])
+@key(fields: ["userID"])
+{
+  userID: ID!
+  birthday: String!
+  weight: Int#lb
+  height: Int#inches
+  male: Boolean#lol
+}
+
+type UserLocation @model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations:[read, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [create, read, delete]}
+])
+@key(fields: ["userID"])
+@key(name: "byGym", fields: ["gymID"])
+{
+  userID: ID!
+  gymID: ID!
+  gym: Gym @connection(fields: ["gymID"])
+}
+
+type UserImage @model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations:[read, update, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}
+])
+@key(fields: ["userID"])
+{
+  userID: ID!
+  uri: String!
+}
+
+#might rename these to be more generic later idk
+type Gym @model @searchable
+@auth(rules: [
+  {allow: private, provider: userPools, operations: [read, create]}
+  {allow: private, provider: iam, operations: [read, create]}
+])
+@key(name: "byCity", fields: ["cityID"], queryField: "listGymsByCity")
+{
+  id: ID!
+  name: String!
+  location: Coordinates
+  countryID: ID!
+  stateID: ID!
+  cityID: ID!
+  country: Region @connection(fields: ["countryID"])
+  state: Region @connection(fields: ["stateID"])
+  city: Region @connection(fields: ["cityID"])
+}
+
+#essentially this is groups of gyms
+#right now i dont care about dover belongs to nh belongs to usa
+#a gym will belong to dover, belong to nh, and belong to usa
+type Region @model
+@auth(rules: [
+  {allow: private, provider: userPools, operations: [read, create]}
+  {allow: private, provider: iam, operations: [read, update, create]}
+])
+@key(name: "bySuperRegion", fields: ["superRegionID"], queryField: "listRegionsBySuperRegions")
+{
+  id: ID!
+  superRegionID: ID!
+  name: String!
+}
+
+type Coordinates {
+  lat: Float
+  lon: Float
+}
+
+input LocationInput{
+  lat: Float!
+  lon: Float!
+}
+
+type GymConnection {
+  items: [Gym]
+  total: Int
+  nextToken: String
+}
+
+type Query {
+  nearbyGyms(location: LocationInput!, km: Int): GymConnection
+}
+
+type Post
+@model (subscriptions: {level: public})#, timestamps: {createdAt: "createdOn", updatedAt: "updatedOn"})
+@auth(rules:[
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [create]}
+])
+@key(name: "byUser", fields: ["userID"])
+@key(name: "SortByTimestamp", fields: ["type", "createdAt"], queryField: "listPostsSortedByTimestamp")
+@key(name: "SortByUserAndTimestamp", fields: ["userID", "createdAt"], queryField: "listPostsSortedByUserAndTimestamp")
+@searchable
+{
+  type: String!#this is annoying but its the only way to get all sorted
+  id: ID!
+  media: [PostMedia] @connection(keyName: "byPost", fields: ["id"])
+  title: String
+  description: String
+  data: String
+  userID: ID!
+  gymID: ID!
+  gym: Gym @connection(fields: ["gymID"])
+  userImage: UserImage @connection(fields: ["userID"])
+  likes: [Like] @connection(keyName: "byParent", fields: ["id"])
+  comments: [Comment] @connection(keyName: "byParent", fields: ["id"])
+  efforts: [Effort] @connection(keyName: "byPost", fields: ["id"])
+  createdAt: String!
+}
+
+type Effort
+@model
+@auth(rules: [
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read, create]}
+])
+#is this the best way to do it?
+@key(name: "byPost", fields: ["postID"])
+@key(name: "byExerciseAndUser", fields: ["userID", "exercise", "orm"], queryField: "listEffortsByExerciseAndUser")
+{
+  id: ID!
+  postID: ID!
+  userID: ID!
+  exercise: String!
+  weight: Int!
+  reps: Int!
+  orm: String!
+  createdAt: String!
+  trophies: [Trophy] @connection(keyName: "byEffort", fields: ["id"])
+}
+
+#these are kinda like trophies
+#if you get a 3rd place trophy, you dont get it taken away when someone else gets 3rd
+#its like at the time of the effort, you got 3rd in whereever
+#I wonder if theres a way to scan all three by efforts
+
+#personal top 10 effort, at the time
+type Trophy
+@model
+@auth(rules: [
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read, create]}
+])
+@key(name: "byEffort", fields: ["effortID", "createdAt"])
+{
+  id: ID!
+  effortID: ID!
+  type: String!#user, gym, or region
+  name: String! #actual name of location
+  targetID: ID!#the id of the user, gym, or region
+  rank: Int!
+  createdAt: String!
+}
+
+type Comment
+@model
+@key(name: "byParent", fields: ["postID", "createdAt"])
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations:[read, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}
+])
+{
+  id: ID!
+  userID: ID!
+  postID: ID!
+  content: String!
+  likes: [Like] @connection(keyName: "byParent", fields: ["id"])
+  userImage: UserImage @connection(fields: ["userID"])
+  createdAt: String!
+}
+
+type Routine
+@model(subscriptions: null)
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, update, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read, update, create]}
+])
+@key(name: "byUser", fields: ["userID"], queryField: "listRoutinesByUser")
+@key(name: "byUserAndCurrent", fields: ["userID", "current"], queryField: "listCurrentRoutinesByUser")
+{
+  id: ID!
+  userID: ID!
+  title: String!#do we really need this
+  current: Int!#this is dumb but we need to sort on this so its not bool
+  routine: String!#json, useful info
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Like
+@model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations:[read, create, delete]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}
+])
+@key(name: "byParent", fields: ["parentID"])
+{
+  id: ID!
+  parentID: ID!
+  userID: ID!
+}
+
+type PostMedia
+@model
+@auth(rules: [
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [create, read]}
+])
+@key(name: "byPost", fields: ["postID"])
+{
+  id: ID!
+  postID: ID!
+  uri: String!
+}
+
+#redoing these soon
+type FollowRelationship
+@model
+@auth(rules: [
+  {allow: owner, ownerField:"followerID", provider: userPools, operations:[read, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}
+])
+@key(fields: ["followeeID", "followerID"])
+{
+  followeeID: ID!
+  followerID: ID!
+}
+
+type Timeline
+@model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create]},
+  {allow: private, provider: iam, operations:[create]}
+])
+@key(fields: ["userID", "createdAt"])
+{
+  userID: ID!
+  postID: ID!
+  post: Post @connection(fields: ["postID"])
+  createdAt: String!
+}
+
+type Mutation{
+  createPostAndTimeline(
+    title: String!
+    description: String!
+    workoutData: String!
+    imageUrls: String!
+    #more shit
+  ): Post
+  @function(name: "createPostAndTimeline-${env}")
+  @auth(rules:[
+    {allow: private, provider: userPools},
+  ])
+
+  addNewGym(
+    coordinates: LocationInput!
+    name: String!
+  ): Gym!
+  @function(name: "addNewGym-${env}")
+  @auth(rules:[
+    {allow: private, provider: userPools},
+  ])
+
+  changeUserGym(
+    gymChangeInput: GymChangeInput!
+  ): String#idk this just needs success or failure
+  @function(name: "changeUserGym-${env}")
+  @auth(rules:[
+    {allow: private, provider: userPools},
+  ])
+
+  generateWorkout: AWSJSON
+  @function(name: "generateWorkout-${env}")
+  @auth(rules:[
+    {allow: private, provider: userPools},
+  ])
+}
+
+input GymChangeInput{
+  id: ID!
+  countryID: ID!
+  stateID: ID!
+  cityID: ID!
+}
+
+type Subscription {
+  onChangeRoutine(userID: String!): Routine @aws_subscribe(mutations: ["createRoutine", "updateRoutine", "deleteRoutine"])
+}

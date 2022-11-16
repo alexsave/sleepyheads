@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "sleepyheadsApi",
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authsleepyheadsAuth"
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 30,
+        "apiKeyExpirationDate": "2022-12-14T16:46:27.657Z",
+        "keyDescription": "sleepyheads api key"
+      },
+      {
+        "mode": "AWS_IAM"
+      }
+    ]
+  }
+}

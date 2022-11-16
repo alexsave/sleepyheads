@@ -53,16 +53,32 @@ export const SignUpModal = ({visible, close}) => {
 
         />
         <TextInput
+          // this doesn't have to be a textInput, it could be 4 cool boxes
           ref={otpRef}
           value={otp}
-          onChange={setOtp}
-          style={{display: waitingForOtp? 'inline':'none', height: 50, width: '75%', fontSize: 25, backgroundColor: BACKGROUND, padding: 10}}
+          onChangeText={val => {
+            setOtp(val);
+            if (val.length === 4) {
+              Auth.sendCustomChallengeAnswer(session, otp)
+                .then(res => {
+                  console.log(res)
+                  otpRef.current.blur();
+                })
+                .catch(e => {
+                  //probably wrong code, clear otp field
+                  setOtp('');
+                  console.log(e);
+                })
+
+            }
+          }}
+          style={{/*display: waitingForOtp? 'inline':'none', */height: 50, width: '75%', fontSize: 25, backgroundColor: BACKGROUND, padding: 10}}
           placeholder='OTP code'
           autoCapitalize='none'
           password={true}
           secureTextEntry={true}
           textContentType={'oneTimeCode'}
-          returnKeyType={'go'}
+          //returnKeyType={'done'}
           onSubmitEditing={() => {
             Auth.sendCustomChallengeAnswer(session, otp)
               .then(res => console.log(res))

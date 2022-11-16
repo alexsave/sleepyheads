@@ -33,6 +33,9 @@
       },
       "auth": {
         "sleepyheadsAuth": {}
+      },
+      "api": {
+        "sleepyheadsApi": {}
       }
     }
   }

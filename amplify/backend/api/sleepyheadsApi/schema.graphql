@@ -1,0 +1,153 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+#input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+
+# This is where it really gets fun. Let's think of the things we need to load
+# Query
+# Sleeps By Timeline, like a feed
+# Sleeps By user, on a profile
+# Sleeps By Group, for the group page
+# Some kind of sleep ranking by group (most sleep this week, earliest riser, latest riser, least sleep)
+# User info like image, name, bio
+# Maybe an image with the post
+# Search for users and groups
+
+# Mutators
+# Change user info
+# Join group
+# Leave group
+# Upload images and stuff
+# Upload sleep (custom and most important labmda for sure)
+# Upsleep sleep
+# Downsleep a sleep
+# Comment a sleep
+# (sharing will be handled entirely in app)
+
+# it's a lot, but get these checked and we can honestly submit the app at that point
+
+type Sleep
+@model (
+  mutations: {create: "createPost", delete: "deletePost", update:null }
+  subscriptions: {level: public}
+)
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations:[read,create,update,delete]}
+  {allow: private, provider: userPools, operations:[read]} #might be more interesting than that
+])
+{
+  id: ID!
+  type: String!
+  userID: ID! @index(name: "byUser") #@auth(rules: [{allow: owner, operations: [read, delete]}])
+  title: String
+  description: String
+  likes: [Like] @hasMany(indexName: "bySleep", fields: ["id"])
+  comments: [Comment] @hasMany(indexName: "bySleep", fields: ["id"])
+  media: String
+  data: SleepData
+  createdAt: String!
+}
+
+enum SleepSampleType {
+  AWAKE
+  INBED
+  CORE
+  REM
+  DEEP
+  ASLEEP
+}
+
+type SleepSample {
+  type: SleepSampleType
+  startOffset: Int
+  endOffset: Int
+}
+
+type SleepData {
+  bedStart: AWSDateTime!
+  bedEnd: AWSDateTime!
+  duration: Int!
+  samples: [SleepSampleType!]
+}
+
+type Comment
+@model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}# why
+])
+{
+  id: ID!
+  sleepID: ID! @index(name: "bySleep", sortKeyFields: ["createdAt"])
+  content: String!
+  userID: ID! #@index(name: "byUser")
+  createdAt: String!
+}
+
+enum LikeType {
+  SNOOZE
+  ALARM
+}
+
+type Like @model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create, delete]} #consider removing create, delete
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read, create, delete]}
+]) {
+  id: ID!
+  sleepID: ID! @index(name: "bySleep", sortKeyFields: ["createdAt"])
+  type: LikeType
+  userID: ID!
+  createdAt: String!
+}
+
+type User
+@model(
+  subscriptions: {level: off}
+)
+@auth(rules: [
+  {allow: owner, ownerField: "id", provider: userPools, operations: [read, update, create]}
+  {allow: private, provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations: [read]}
+]) {
+  id: ID! @primaryKey
+  sleeps: [Sleep] @hasMany(indexName: "byUser", fields: ["id"])
+  image: String
+  name: String
+  groups: [Group] @manyToMany(relationName: "GroupUser")
+  # this ones tricky. To keep track of user statistics, we make a secret singleton group for each user inaccessible
+  #to the users and put all their own sleep records in it
+  sleepRecords: [SleepRecord] @hasMany(indexName: "byGroup", fields: ["id"])
+}
+
+# kinda dumb, but if we copy SleepRecords to all the groups a user is in, we also need to copy it to a group of [user]
+# in order to do user stats
+
+#this should ideally go into a SQL table
+type SleepRecord @model
+@auth(rules: [
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create]}
+  {allow: private, provider: iam, operations:[create]}
+])
+{
+  id: ID!
+  sleep: Sleep @hasOne
+  groupID: ID! @index(name: "byGroup")
+  rankBedStart: Int
+  rankBedEnd: Int
+  rankSleepTime: Int
+  userID: ID! @index(name: "byUser")
+}
+
+type Group @model
+@auth(rules: [
+  {allow: groups, groupsField: "users"}
+])
+{
+  id: ID!
+  name: String!
+  sleepRecords: [SleepRecord] @hasMany(indexName: "byGroup", fields: ["id"])
+  users: [User] @manyToMany(relationName: "GroupUser")
+}
