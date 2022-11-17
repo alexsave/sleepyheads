@@ -37,8 +37,8 @@ type Sleep
 ])
 {
   id: ID!
-  type: String! @index(name: "byTimestamp", sortKeyFields: ["createdAt"])
-  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"]) #@auth(rules: [{allow: owner, operations: [read, delete]}])
+  type: String! @index(name: "byTimestamp", sortKeyFields: ["createdAt"], queryField: "sleepsByTimestamp")
+  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "sleepsByUser") #@auth(rules: [{allow: owner, operations: [read, delete]}])
   title: String
   description: String
   likes: [Like] @hasMany(indexName: "bySleep", fields: ["id"])
@@ -134,11 +134,12 @@ type SleepRecord @model
 {
   id: ID!
   sleep: Sleep @hasOne
-  groupID: ID! @index(name: "byGroup")
+  groupID: ID! @index(name: "byGroup", sortKeyFields: ["createdAt"], queryField: "recordsByGroup")
   rankBedStart: Int
   rankBedEnd: Int
   rankSleepTime: Int
-  userID: ID! @index(name: "byUser")
+  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "recordsByUser")
+  createdAt: String!
 }
 
 type Group @model

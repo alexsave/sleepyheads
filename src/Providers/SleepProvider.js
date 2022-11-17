@@ -20,6 +20,8 @@ export const makeSleepKey = sleep => {
 // this does rely on username btw
 // or we just delete everything on signout lol
 // then on signin, make one call to get post ids
+// This one's more for uploading and editing sleeps,
+// Group provider will be more for showing the feed and such
 const SleepProvider = props => {
 
   const {username} = useContext(UserContext);
@@ -36,6 +38,7 @@ const SleepProvider = props => {
   //should probably go in settings honestly
   const [autoImport, setAutoImport] = useState(true);
 
+  // best to only call this in the settings screen
   const [imported, setImported] = useState(new Set());
   // what's better, to store all the sleep sessions in a single AsyncStorage object,
   // or to split them up?
@@ -114,14 +117,11 @@ const SleepProvider = props => {
     };
 
     console.log(JSON.stringify(input.data));
-
-
     const res = await API.graphql(graphqlOperation(createSleep, { input }));
 
     console.log(res)
     //hmmmmmmm
-    setUploaded(prev => new Set(prev).add(key));
-
+    setUploaded(new Set([...uploaded]).add(key));//prev => new Set(prev).add(key));
   }
 
   const clearCache = async () => {
@@ -151,7 +151,7 @@ const SleepProvider = props => {
       uploadSleep,
       uploaded,
 
-      clearCache
+      clearCache,
     }}>
       {props.children}
     </SleepContext.Provider>

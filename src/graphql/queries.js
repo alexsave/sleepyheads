@@ -204,6 +204,174 @@ export const listGroups = /* GraphQL */ `
     }
   }
 `;
+export const sleepsByTimestamp = /* GraphQL */ `
+  query SleepsByTimestamp(
+    $type: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSleepFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    sleepsByTimestamp(
+      type: $type
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const sleepsByUser = /* GraphQL */ `
+  query SleepsByUser(
+    $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSleepFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    sleepsByUser(
+      userID: $userID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const recordsByGroup = /* GraphQL */ `
+  query RecordsByGroup(
+    $groupID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSleepRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    recordsByGroup(
+      groupID: $groupID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        sleep {
+          id
+          type
+          userID
+          title
+          description
+          media
+          createdAt
+          updatedAt
+        }
+        groupID
+        rankBedStart
+        rankBedEnd
+        rankSleepTime
+        userID
+        createdAt
+        updatedAt
+        sleepRecordSleepId
+      }
+      nextToken
+    }
+  }
+`;
+export const recordsByUser = /* GraphQL */ `
+  query RecordsByUser(
+    $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSleepRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    recordsByUser(
+      userID: $userID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        sleep {
+          id
+          type
+          userID
+          title
+          description
+          media
+          createdAt
+          updatedAt
+        }
+        groupID
+        rankBedStart
+        rankBedEnd
+        rankSleepTime
+        userID
+        createdAt
+        updatedAt
+        sleepRecordSleepId
+      }
+      nextToken
+    }
+  }
+`;
 export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {

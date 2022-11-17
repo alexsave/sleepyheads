@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, useColorScheme, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
 import { useContext, useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
@@ -11,13 +11,14 @@ import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
 import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import { Auth } from 'aws-amplify';
-
-// this is fine to call every time, it'll only bring up the prompt if you add more permissions
+import { GroupContext } from '../Providers/GroupProvider';
+import { Words } from '../Components/Basic/Words';
 
 export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
   const {username} = useContext(UserContext);
-  const {inHealth} = useContext(SleepContext);
+  //const {inHealth} = useContext(SleepContext);
+  const {posts, loadFeed, getAdditionalPosts, isLoading} = useContext(GroupContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
@@ -34,6 +35,8 @@ export const Feed = props => {
 
     if (username === NOT_SIGNED_IN)
       navigation.navigate('join');
+    //else
+      //loadFeed();
 
   }, [username]);
 
@@ -47,10 +50,14 @@ export const Feed = props => {
       //rightText={<Ionicons name='server-outline' size={40}/>}
       //onPressRight={() => navigation.navigate('upload')}
     />
+    <Words>{isLoading}</Words>
     <FlatList
-      data={inHealth}
+      data={posts}
       renderItem={({item}) => <Post sleepSession={item}/>}
     />
+    <TouchableOpacity onPress={getAdditionalPosts}>
+      <Words>More</Words>
+    </TouchableOpacity>
     <NavBar current='feed'/>
   </View></SafeAreaView>
 }
