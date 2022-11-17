@@ -36,7 +36,57 @@ export const onCreateSleep = /* GraphQL */ `
         bedStart
         bedEnd
         duration
-        samples
+        samples {
+          type
+          startOffset
+          endOffset
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSleep = /* GraphQL */ `
+  subscription OnUpdateSleep($filter: ModelSubscriptionSleepFilterInput) {
+    onUpdateSleep(filter: $filter) {
+      id
+      type
+      userID
+      title
+      description
+      likes {
+        items {
+          id
+          sleepID
+          type
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      media
+      data {
+        bedStart
+        bedEnd
+        duration
+        samples {
+          type
+          startOffset
+          endOffset
+        }
       }
       createdAt
       updatedAt
@@ -78,7 +128,11 @@ export const onDeleteSleep = /* GraphQL */ `
         bedStart
         bedEnd
         duration
-        samples
+        samples {
+          type
+          startOffset
+          endOffset
+        }
       }
       createdAt
       updatedAt
@@ -109,7 +163,6 @@ export const onCreateSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt
@@ -149,7 +202,6 @@ export const onUpdateSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt
@@ -189,7 +241,6 @@ export const onDeleteSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt

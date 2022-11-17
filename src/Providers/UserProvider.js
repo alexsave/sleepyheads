@@ -51,7 +51,7 @@ const UserProvider = props => {
         <UserContext.Provider value={{
             username,
             setUsername,
-            profileURI: profileURI
+            profileURI
         }}>
             {props.children}
         </UserContext.Provider>

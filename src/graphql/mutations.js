@@ -1,12 +1,12 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createPost = /* GraphQL */ `
-  mutation CreatePost(
+export const createSleep = /* GraphQL */ `
+  mutation CreateSleep(
     $input: CreateSleepInput!
     $condition: ModelSleepConditionInput
   ) {
-    createPost(input: $input, condition: $condition) {
+    createSleep(input: $input, condition: $condition) {
       id
       type
       userID
@@ -39,19 +39,23 @@ export const createPost = /* GraphQL */ `
         bedStart
         bedEnd
         duration
-        samples
+        samples {
+          type
+          startOffset
+          endOffset
+        }
       }
       createdAt
       updatedAt
     }
   }
 `;
-export const deletePost = /* GraphQL */ `
-  mutation DeletePost(
+export const deleteSleep = /* GraphQL */ `
+  mutation DeleteSleep(
     $input: DeleteSleepInput!
     $condition: ModelSleepConditionInput
   ) {
-    deletePost(input: $input, condition: $condition) {
+    deleteSleep(input: $input, condition: $condition) {
       id
       type
       userID
@@ -84,7 +88,60 @@ export const deletePost = /* GraphQL */ `
         bedStart
         bedEnd
         duration
-        samples
+        samples {
+          type
+          startOffset
+          endOffset
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateSleep = /* GraphQL */ `
+  mutation UpdateSleep(
+    $input: UpdateSleepInput!
+    $condition: ModelSleepConditionInput
+  ) {
+    updateSleep(input: $input, condition: $condition) {
+      id
+      type
+      userID
+      title
+      description
+      likes {
+        items {
+          id
+          sleepID
+          type
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      media
+      data {
+        bedStart
+        bedEnd
+        duration
+        samples {
+          type
+          startOffset
+          endOffset
+        }
       }
       createdAt
       updatedAt
@@ -328,7 +385,6 @@ export const updateSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt
@@ -368,7 +424,6 @@ export const deleteSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt
@@ -675,7 +730,6 @@ export const createSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt

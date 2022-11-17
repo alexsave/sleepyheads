@@ -28,7 +28,7 @@
 
 type Sleep
 @model (
-  mutations: {create: "createPost", delete: "deletePost", update:null }
+  mutations: {create: "createSleep", delete: "deleteSleep", update:"updateSleep" }
   subscriptions: {level: public}
 )
 @auth(rules: [
@@ -43,7 +43,7 @@ type Sleep
   description: String
   likes: [Like] @hasMany(indexName: "bySleep", fields: ["id"])
   comments: [Comment] @hasMany(indexName: "bySleep", fields: ["id"])
-  media: String
+  media: [String]
   data: SleepData
   createdAt: String!
 }
@@ -59,15 +59,15 @@ enum SleepSampleType {
 
 type SleepSample {
   type: SleepSampleType
-  startOffset: Int
-  endOffset: Int
+  startOffset: Int!
+  endOffset: Int!
 }
 
 type SleepData {
-  bedStart: AWSDateTime!
-  bedEnd: AWSDateTime!
+  bedStart: String!
+  bedEnd: String!
   duration: Int!
-  samples: [SleepSampleType!]
+  samples: [SleepSample!]
 }
 
 type Comment

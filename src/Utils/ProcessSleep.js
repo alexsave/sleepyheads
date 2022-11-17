@@ -32,7 +32,6 @@ export const processSleep = raw => {
     //LOG  {"endDate": "2022-10-15T06:45:32.797-0700", "startDate": "2022-10-15T06:45:02.797-0700", "value": "AWAKE"}
     // so it's now sorted by startDate ascending
 
-
     // another finding: older data is not super compatible.
     // there is only INBED, then a bunch of ASLEEP. There is no AWAKE value
     // for newer types of data, there is awake 10-11, core 11-12, awake 12-1, core 1-5, and so on
@@ -72,10 +71,12 @@ export const processSleep = raw => {
     groupings.map(group => {
         const start = new Date(group.bedStart);
         group.samples = group.samples.map(sample => ({
-            start: new Date(sample.startDate) - start,
-            end: new Date(sample.endDate) - start,
-            value: sample.value
+            startOffset: new Date(sample.startDate) - start,
+            endOffset: new Date(sample.endDate) - start,
+            type: sample.value
         }));
+        // should this be end - start or total asleep time? both?
+        group.duration = new Date(group.bedEnd) - new Date(group.bedStart);
 
         return group;
     });

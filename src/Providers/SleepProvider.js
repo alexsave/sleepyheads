@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadFromHealth } from '../Network/PostLoad';
+import { API, graphqlOperation } from 'aws-amplify';
+import { Sleep } from '../models';
+import { UserContext } from './UserProvider';
+import { createSleep } from '../graphql/mutations';
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
 
@@ -13,7 +17,12 @@ export const makeSleepKey = sleep => {
   return x;
 }
 
+// this does rely on username btw
+// or we just delete everything on signout lol
+// then on signin, make one call to get post ids
 const SleepProvider = props => {
+
+  const {username} = useContext(UserContext);
 
   // there are three "levels" of getting sleep
   // ONE: only exists in health "inHealth"
@@ -31,6 +40,9 @@ const SleepProvider = props => {
   // what's better, to store all the sleep sessions in a single AsyncStorage object,
   // or to split them up?
 
+  const [autoUpload, setAutoUpload] = useState(false);
+  const [uploaded, setUploaded] = useState(new Set());
+
   // check which workouts are backedup in async storage
   // this needs to be called on wake, literally
   useEffect(() => {
@@ -46,15 +58,15 @@ const SleepProvider = props => {
 
   useEffect(() => {
     tryImportDiff();
-  }, [autoImport, imported])
+  }, [autoImport, imported, inHealth])
 
   const tryImportDiff = async () => {
     if (!autoImport)
       return;
 
     // kind of a base case
-    if (imported.size >= inHealth.length)
-      return;
+    //if (imported.size >= inHealth.length)
+      //return;
 
     /*let diff = new Set(inHealth.map(makeSleepKey));
     console.log(imported);
@@ -64,9 +76,9 @@ const SleepProvider = props => {
     console.log(diff.size);*/
 
     let diff = [...inHealth];
-    diff.filter(d => {
-      !imported.has(makeSleepKey(d))
-    })
+    diff = diff.filter(d => !imported.has(makeSleepKey(d)));
+    if (diff.length === 0)
+      return;
 
     await Promise.all(
       diff.map(sleep =>
@@ -88,9 +100,28 @@ const SleepProvider = props => {
 
   // this one's going to be a bit more interesting
   const uploadSleep = async sleep => {
-    const id = makeSleepKey(sleep);
+    const key = makeSleepKey(sleep);
     //convert to proper post object, with comments and shit
     // then upload to AWS
+
+    // we'll do this for now
+    const input = {
+      type: 'sleep',
+      userID: username,
+      title: '',
+      description: '',
+      data: sleep
+    };
+
+    console.log(JSON.stringify(input.data));
+
+
+    const res = await API.graphql(graphqlOperation(createSleep, { input }));
+
+    console.log(res)
+    //hmmmmmmm
+    setUploaded(prev => new Set(prev).add(key));
+
   }
 
   const clearCache = async () => {
@@ -111,10 +142,14 @@ const SleepProvider = props => {
       autoImport,
       setAutoImport,
 
+      autoUpload,
+      setAutoUpload,
+
       importSleep,
       imported,
 
       uploadSleep,
+      uploaded,
 
       clearCache
     }}>

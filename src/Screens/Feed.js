@@ -37,11 +37,15 @@ export const Feed = props => {
 
   }, [username]);
 
+  // How do I want to do this?
+  // When they open the feed, they'll see all the usual posts of the timeline, but on top of every group timeline,
+  // they will see their latest sleep, If auto upload is not enabled.
+  // If it is enabled, it'll just upload automatically and they can find it in
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
 
     <TopBar
-      rightText={<Ionicons name='server-outline' size={40}/>}
-      onPressRight={() => navigation.navigate('upload')}
+      //rightText={<Ionicons name='server-outline' size={40}/>}
+      //onPressRight={() => navigation.navigate('upload')}
     />
     <FlatList
       data={inHealth}
@@ -51,21 +55,3 @@ export const Feed = props => {
   </View></SafeAreaView>
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});

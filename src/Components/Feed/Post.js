@@ -1,12 +1,13 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Words } from "../Basic/Words";
 import { Row } from "../Basic/Row";
-import { PRIMARY } from "../../Values/Colors";
+import { BACKGROUND, DARKER, PRIMARY } from '../../Values/Colors';
 import { Sample } from "./Sample";
 import UserImage from '../Profile/UserImage';
-import { makeSleepKey } from '../../Providers/SleepProvider';
+import { makeSleepKey, SleepContext } from '../../Providers/SleepProvider';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useContext, useEffect, useState } from 'react';
 
 
 const formatDuration = ms => {
@@ -39,10 +40,20 @@ const formatDuration = ms => {
 export const Post = props => {
   const {sleepSession} = props;
   const navigation = useNavigation();
+  const {imported, uploaded, uploadSleep} = useContext(SleepContext);
 
-  const duration =
-    new Date(sleepSession.bedEnd) -
-    new Date(sleepSession.bedStart);
+  const [postUploaded, setPostUploaded] = useState(false);
+
+  useEffect(() => {
+    setPostUploaded(uploaded.has(makeSleepKey(sleepSession)));
+
+  }, [uploaded, sleepSession])
+
+  const highlight = postUploaded ? PRIMARY : DARKER;
+
+  const {duration} = sleepSession;
+    //new Date(sleepSession.bedEnd) -
+    //new Date(sleepSession.bedStart);
 
   return <View
     style={{
@@ -51,28 +62,45 @@ export const Post = props => {
       //height: 200,
       borderWidth: 3,
       borderRadius: 10,
-      borderColor: PRIMARY,
-      backgroundColor: PRIMARY,
+      borderColor: highlight,
       margin: 5,
       //backgroundColor: sample.value === 'UNKNOWN' ? 'black' : sample.value === 'ASLEEP' ? 'blue': 'green',
       //zIndex: sample.value === 'INBED' ? -1: 1,
       //height: something,
     }}>
-    <View style={{backgroundColor: 'black'}}>
-      <UserImage size={50}/>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('post', {id: makeSleepKey(sleepSession)})}
-      >
-        <Words><Ionicons size={30} name='pencil-outline'/></Words>
-      </TouchableOpacity>
+    <View style={{borderRadius: 10, backgroundColor: BACKGROUND}}>
+
+
+      <Row style={{justifyContent: 'space-between'}}>
+
+        <UserImage size={50}/>
+
+        <Row style={{paddingLeft: 3, alignItems: 'center', backgroundColor: highlight, borderBottomLeftRadius: 10}}>
+          {
+            !postUploaded &&
+
+            <TouchableOpacity
+              style={{width: 50, alignItems: 'center', borderRightWidth: StyleSheet.hairlineWidth}}
+              onPress={() => uploadSleep(sleepSession)}
+            >
+              <Words><Ionicons size={30} name='cloud-upload-outline'/></Words>
+            </TouchableOpacity>
+          }
+          <TouchableOpacity
+            style={{width: 50, alignItems: 'center'}}
+            onPress={() => navigation.navigate('post', {id: makeSleepKey(sleepSession)})}
+          >
+            <Words><Ionicons size={30} name='pencil-outline'/></Words>
+          </TouchableOpacity>
+        </Row>
+      </Row>
+
       <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
-      <Words>{new Date(sleepSession.bedStart).toTimeString()}</Words>
-      <Words>{new Date(sleepSession.bedEnd).toTimeString()}</Words>
       <Sample duration={duration} session={sleepSession}/>
     </View>
 
-    <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: PRIMARY}}>
+    <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
       <View style={{flex:1, alignItems: 'center'}}>
         <Words> 😴</Words>
       </View>

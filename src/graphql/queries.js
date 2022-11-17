@@ -36,7 +36,11 @@ export const getSleep = /* GraphQL */ `
         bedStart
         bedEnd
         duration
-        samples
+        samples {
+          type
+          startOffset
+          endOffset
+        }
       }
       createdAt
       updatedAt
@@ -67,7 +71,6 @@ export const listSleeps = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt
@@ -97,7 +100,6 @@ export const getSleepRecord = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples
         }
         createdAt
         updatedAt
