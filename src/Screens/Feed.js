@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
 import { useContext, useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
 import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
-import { Auth } from 'aws-amplify';
+import { Auth, graphqlOperation } from 'aws-amplify';
 import { GroupContext } from '../Providers/GroupProvider';
 import { Words } from '../Components/Basic/Words';
 
@@ -18,7 +18,7 @@ export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
   const {username} = useContext(UserContext);
   //const {inHealth} = useContext(SleepContext);
-  const {posts, loadFeed, getAdditionalPosts, isLoading} = useContext(GroupContext);
+  const {posts, getPosts, postsByGroup, setGroupID, getAdditionalPosts, isLoading} = useContext(GroupContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
@@ -35,8 +35,8 @@ export const Feed = props => {
 
     if (username === NOT_SIGNED_IN)
       navigation.navigate('join');
-    //else
-      //loadFeed();
+    else
+      setGroupID(''); //global
 
   }, [username]);
 
@@ -51,6 +51,10 @@ export const Feed = props => {
       //onPressRight={() => navigation.navigate('upload')}
     />
     <Words>{isLoading}</Words>
+    <ScrollView style={{height: 200}}>
+
+      <Words>{JSON.stringify(Object.keys(postsByGroup))}</Words>
+    </ScrollView>
     <FlatList
       data={posts}
       // rename this from sleepSession to postData or smth

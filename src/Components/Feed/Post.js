@@ -8,6 +8,7 @@ import { makeSleepKey, SleepContext } from '../../Providers/SleepProvider';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useContext, useEffect, useState } from 'react';
+import { GroupContext } from '../../Providers/GroupProvider';
 
 
 const formatDuration = ms => {
@@ -42,11 +43,13 @@ export const Post = props => {
   const sleepSession = props.sleepSession.data;
   const navigation = useNavigation();
   const {imported, uploaded, uploadSleep} = useContext(SleepContext);
+  const {posts} = useContext(GroupContext);
 
   const [postUploaded, setPostUploaded] = useState(false);
 
   useEffect(() => {
-    setPostUploaded(uploaded.has(makeSleepKey(sleepSession)));
+    const u = posts.some(p => p.id === props.sleepSession.id);
+    setPostUploaded(u);
 
   }, [uploaded, sleepSession])
 

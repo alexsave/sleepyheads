@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { v4 as uuidv4 } from 'uuid';
 import NavBar from '../Components/Navigation/NavBar';
@@ -22,6 +22,7 @@ import { BACKGROUND, DARKER } from '../Values/Colors';
 import SplashScreen from 'react-native-splash-screen';
 import { Post } from '../Components/Feed/Post';
 import { SleepContext } from '../Providers/SleepProvider';
+import { GroupContext } from '../Providers/GroupProvider';
 
 export const Profile = props => {
     useEffect(() => {
@@ -39,11 +40,19 @@ export const Profile = props => {
     //post loading bs part
     const signedInUser = useContext(UserContext).username;
 
+    const {posts, setGroupID} = useContext(GroupContext);
+
+
     //this is useful, but only when viewing yourself
 
     let profileUser = signedInUser;
     if(props.route.params)
         profileUser = props.route.params.userID;
+
+    useEffect(() => {
+        if(profileUser)
+            setGroupID(profileUser);
+    }, [profileUser])
 
     const [gym, setGym] = useState({name: '', id: ''});
     const [imageKey, setImageKey] = useState('');
@@ -298,7 +307,7 @@ export const Profile = props => {
                               )
                           }</View>
 
-                          {inHealth.map(sleepSession => <Post key={sleepSession.bedStart} sleepSession={sleepSession} />)}
+                          {posts.map(sleepSession => <Post key={sleepSession.data.bedStart} sleepSession={sleepSession} />)}
                           <PostList
                             listOperation={''/*listPostsSortedByUserAndTimestamp*/}
                             sortKey={'userID'}
