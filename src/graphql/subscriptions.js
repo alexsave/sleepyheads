@@ -256,6 +256,96 @@ export const onDeleteSleepRecord = /* GraphQL */ `
     }
   }
 `;
+export const onCreateComment = /* GraphQL */ `
+  subscription OnCreateComment(
+    $filter: ModelSubscriptionCommentFilterInput
+    $userID: String
+  ) {
+    onCreateComment(filter: $filter, userID: $userID) {
+      id
+      sleepID
+      content
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateComment = /* GraphQL */ `
+  subscription OnUpdateComment(
+    $filter: ModelSubscriptionCommentFilterInput
+    $userID: String
+  ) {
+    onUpdateComment(filter: $filter, userID: $userID) {
+      id
+      sleepID
+      content
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteComment = /* GraphQL */ `
+  subscription OnDeleteComment(
+    $filter: ModelSubscriptionCommentFilterInput
+    $userID: String
+  ) {
+    onDeleteComment(filter: $filter, userID: $userID) {
+      id
+      sleepID
+      content
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateLike = /* GraphQL */ `
+  subscription OnCreateLike(
+    $filter: ModelSubscriptionLikeFilterInput
+    $userID: String
+  ) {
+    onCreateLike(filter: $filter, userID: $userID) {
+      id
+      sleepID
+      type
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateLike = /* GraphQL */ `
+  subscription OnUpdateLike(
+    $filter: ModelSubscriptionLikeFilterInput
+    $userID: String
+  ) {
+    onUpdateLike(filter: $filter, userID: $userID) {
+      id
+      sleepID
+      type
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteLike = /* GraphQL */ `
+  subscription OnDeleteLike(
+    $filter: ModelSubscriptionLikeFilterInput
+    $userID: String
+  ) {
+    onDeleteLike(filter: $filter, userID: $userID) {
+      id
+      sleepID
+      type
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateGroup = /* GraphQL */ `
   subscription OnCreateGroup($filter: ModelSubscriptionGroupFilterInput) {
     onCreateGroup(filter: $filter) {
@@ -353,96 +443,6 @@ export const onDeleteGroup = /* GraphQL */ `
         }
         nextToken
       }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateComment = /* GraphQL */ `
-  subscription OnCreateComment(
-    $filter: ModelSubscriptionCommentFilterInput
-    $userID: String
-  ) {
-    onCreateComment(filter: $filter, userID: $userID) {
-      id
-      sleepID
-      content
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateComment = /* GraphQL */ `
-  subscription OnUpdateComment(
-    $filter: ModelSubscriptionCommentFilterInput
-    $userID: String
-  ) {
-    onUpdateComment(filter: $filter, userID: $userID) {
-      id
-      sleepID
-      content
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteComment = /* GraphQL */ `
-  subscription OnDeleteComment(
-    $filter: ModelSubscriptionCommentFilterInput
-    $userID: String
-  ) {
-    onDeleteComment(filter: $filter, userID: $userID) {
-      id
-      sleepID
-      content
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateLike = /* GraphQL */ `
-  subscription OnCreateLike(
-    $filter: ModelSubscriptionLikeFilterInput
-    $userID: String
-  ) {
-    onCreateLike(filter: $filter, userID: $userID) {
-      id
-      sleepID
-      type
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateLike = /* GraphQL */ `
-  subscription OnUpdateLike(
-    $filter: ModelSubscriptionLikeFilterInput
-    $userID: String
-  ) {
-    onUpdateLike(filter: $filter, userID: $userID) {
-      id
-      sleepID
-      type
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteLike = /* GraphQL */ `
-  subscription OnDeleteLike(
-    $filter: ModelSubscriptionLikeFilterInput
-    $userID: String
-  ) {
-    onDeleteLike(filter: $filter, userID: $userID) {
-      id
-      sleepID
-      type
-      userID
       createdAt
       updatedAt
     }

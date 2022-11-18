@@ -142,6 +142,8 @@ type SleepRecord @model
   createdAt: String!
 }
 
+#need groupsByUser, but then again getUser should take care of it
+# and usersByGroup is taken care of with getGroup
 type Group @model
 @auth(rules: [
   {allow: groups, groupsField: "users"}

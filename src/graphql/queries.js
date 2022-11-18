@@ -147,63 +147,6 @@ export const listSleepRecords = /* GraphQL */ `
     }
   }
 `;
-export const getGroup = /* GraphQL */ `
-  query GetGroup($id: ID!) {
-    getGroup(id: $id) {
-      id
-      name
-      sleepRecords {
-        items {
-          id
-          groupID
-          rankBedStart
-          rankBedEnd
-          rankSleepTime
-          userID
-          createdAt
-          updatedAt
-          sleepRecordSleepId
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          userID
-          groupID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listGroups = /* GraphQL */ `
-  query ListGroups(
-    $filter: ModelGroupFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        sleepRecords {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const sleepsByTimestamp = /* GraphQL */ `
   query SleepsByTimestamp(
     $type: String!
@@ -238,11 +181,6 @@ export const sleepsByTimestamp = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples {
-            type
-            startOffset
-            endOffset
-          }
         }
         createdAt
         updatedAt
@@ -285,11 +223,6 @@ export const sleepsByUser = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples {
-            type
-            startOffset
-            endOffset
-          }
         }
         createdAt
         updatedAt
@@ -518,6 +451,63 @@ export const listUsers = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getGroup = /* GraphQL */ `
+  query GetGroup($id: ID!) {
+    getGroup(id: $id) {
+      id
+      name
+      sleepRecords {
+        items {
+          id
+          groupID
+          rankBedStart
+          rankBedEnd
+          rankSleepTime
+          userID
+          createdAt
+          updatedAt
+          sleepRecordSleepId
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userID
+          groupID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listGroups = /* GraphQL */ `
+  query ListGroups(
+    $filter: ModelGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        sleepRecords {
+          nextToken
+        }
+        users {
           nextToken
         }
         createdAt
