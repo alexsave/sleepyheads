@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Auth, Hub } from 'aws-amplify';
+import { API, Auth, graphqlOperation, Hub } from 'aws-amplify';
+import { getUser } from '../graphql/queries';
 
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
@@ -17,6 +18,24 @@ const UserProvider = props => {
     //is this legal
     const [username, setUsername] = useState(null);
     const [profileURI, setProfileURI] = useState('');
+
+    useEffect(() => {
+        if(!username || username === ANONYMOUS || username === NOT_SIGNED_IN)
+            return;
+        //issue user info query
+
+
+        (async () => {
+
+            const res = await API.graphql(graphqlOperation(getUser, {
+                id: username
+
+            }));
+            console.log(res.data.getUser);
+        })();
+
+
+    }, [username]);
 
 
     useEffect(() => {
@@ -42,19 +61,19 @@ const UserProvider = props => {
                     break;
                 case "customOAuthState":
                     console.log(data);
-                    //next up, phone number and OTP
+              //next up, phone number and OTP
             }
         });
     }, []);
 
     return (
-        <UserContext.Provider value={{
-            username,
-            setUsername,
-            profileURI
-        }}>
-            {props.children}
-        </UserContext.Provider>
+      <UserContext.Provider value={{
+          username,
+          setUsername,
+          profileURI
+      }}>
+          {props.children}
+      </UserContext.Provider>
     );
 }
 

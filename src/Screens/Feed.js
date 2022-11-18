@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
-import { BACKGROUND } from '../Values/Colors';
+import { BACKGROUND, DARKER, PRIMARY } from '../Values/Colors';
 import TopBar from '../Components/Navigation/TopBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -46,10 +46,15 @@ export const Feed = props => {
   // If it is enabled, it'll just upload automatically and they can find it in
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
 
-    <TopBar
-      //rightText={<Ionicons name='server-outline' size={40}/>}
-      //onPressRight={() => navigation.navigate('upload')}
-    />
+    <View style={{ zIndex: 5, alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}}>
+
+      <TouchableOpacity onPress={() => {
+        //open group view
+      }}>
+        <Words style={{fontSize: 30, fontWeight: 'bold'}}>{'Global Feed'}</Words>
+      </TouchableOpacity>
+    </View>
+
     <Words>{isLoading}</Words>
     <ScrollView style={{height: 200}}>
 
@@ -67,3 +72,19 @@ export const Feed = props => {
   </View></SafeAreaView>
 }
 
+const styles = StyleSheet.create({
+  top: {
+    height: 120,
+    width: '100%',
+    flexDirection: 'row',
+    backgroundColor: PRIMARY,
+    alignItems: 'center',
+    justifyContent: 'center'
+
+  },
+  topButton: {
+    alignItems: 'center',
+    width: 100,
+    paddingHorizontal: 15,
+  },
+});

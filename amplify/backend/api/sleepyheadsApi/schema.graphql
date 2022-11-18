@@ -145,6 +145,7 @@ type SleepRecord @model
 type Group @model
 @auth(rules: [
   {allow: groups, groupsField: "users"}
+  {allow: private, provider: iam, operations:[read,create]}
 ])
 {
   id: ID!
