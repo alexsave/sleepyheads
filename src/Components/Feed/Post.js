@@ -38,7 +38,8 @@ const formatDuration = ms => {
 };
 
 export const Post = props => {
-  const {sleepSession} = props;
+  // ew
+  const sleepSession = props.sleepSession.data;
   const navigation = useNavigation();
   const {imported, uploaded, uploadSleep} = useContext(SleepContext);
 

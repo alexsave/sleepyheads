@@ -238,6 +238,11 @@ export const sleepsByTimestamp = /* GraphQL */ `
           bedStart
           bedEnd
           duration
+          samples {
+            type
+            startOffset
+            endOffset
+          }
         }
         createdAt
         updatedAt
@@ -280,6 +285,11 @@ export const sleepsByUser = /* GraphQL */ `
           bedStart
           bedEnd
           duration
+          samples {
+            type
+            startOffset
+            endOffset
+          }
         }
         createdAt
         updatedAt

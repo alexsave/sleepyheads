@@ -53,6 +53,7 @@ export const Feed = props => {
     <Words>{isLoading}</Words>
     <FlatList
       data={posts}
+      // rename this from sleepSession to postData or smth
       renderItem={({item}) => <Post sleepSession={item}/>}
     />
     <TouchableOpacity onPress={getAdditionalPosts}>
