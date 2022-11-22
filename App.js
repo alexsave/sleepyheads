@@ -19,6 +19,7 @@ import { PostScreen } from './src/Screens/PostScreen';
 import { Join } from './src/Screens/Join';
 import { Settings } from './src/Screens/Settings';
 import GroupProvider from './src/Providers/GroupProvider';
+import { SignUp } from './src/Screens/SignUp';
 
 /*
 adding chagnes from
@@ -76,6 +77,7 @@ const App: () => Node = () => {
             <Stack.Screen name="group" component={Group}/>
 
             <Stack.Screen name="join" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
+            <Stack.Screen name="signup" component={SignUp}/>
           </Stack.Navigator>
         </NavigationContainer>
       </GroupProvider>

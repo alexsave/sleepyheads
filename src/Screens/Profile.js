@@ -307,7 +307,11 @@ export const Profile = props => {
                               )
                           }</View>
 
-                          {posts.map(sleepSession => <Post key={sleepSession.data.bedStart} sleepSession={sleepSession} />)}
+
+                          {
+                            posts &&
+                            posts.map(sleepSession => <Post key={sleepSession.data.bedStart} sleepSession={sleepSession} />)
+                          }
                           <PostList
                             listOperation={''/*listPostsSortedByUserAndTimestamp*/}
                             sortKey={'userID'}

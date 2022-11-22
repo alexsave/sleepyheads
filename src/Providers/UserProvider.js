@@ -18,6 +18,7 @@ const UserProvider = props => {
     //is this legal
     const [username, setUsername] = useState(null);
     const [profileURI, setProfileURI] = useState('');
+    const [newSignUp, setNewSignUp] = useState(false);
 
     useEffect(() => {
         if(!username || username === ANONYMOUS || username === NOT_SIGNED_IN)
@@ -55,6 +56,10 @@ const UserProvider = props => {
                     //console.log(data);
                     setUsername(data.username);
                     break;
+                case 'signUp': //ffs, just do this lol
+                    setNewSignUp(true);
+                    setUsername(data.username);
+                    break;
                 case "signOut":
                     //console.log(null);
                     setUsername(NOT_SIGNED_IN)
@@ -70,6 +75,7 @@ const UserProvider = props => {
       <UserContext.Provider value={{
           username,
           setUsername,
+          newSignUp,
           profileURI
       }}>
           {props.children}

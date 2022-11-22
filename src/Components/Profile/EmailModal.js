@@ -7,7 +7,7 @@ import { Auth } from 'aws-amplify';
 import { emailSignIn } from '../../Network/Login';
 
 // for signing up and signing in
-export const SignUpModal = ({visible, close}) => {
+export const EmailModal = ({visible, close}) => {
 
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');

@@ -5,22 +5,31 @@ import { Words } from '../Components/Basic/Words';
 import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BlurView } from '@react-native-community/blur';
-import { SignUpModal } from '../Components/Profile/SignUpModal';
+import { EmailModal } from '../Components/Profile/EmailModal';
 import { appleSignIn } from '../Network/Login';
 import { BACKGROUND_ZZZ } from '../Values/Styles';
 import { useNavigation } from '@react-navigation/native';
 
 // the login/signup screen
 export const Join = props => {
-  const {username, setUsername} = useContext(UserContext);
+  const {username, setUsername, newSignUp} = useContext(UserContext);
   const navigation = useNavigation();
 
   const [signUpModal, setSignUpModal] = useState(false);
 
+  // these two will clash
   useEffect(() =>  {
-    if (username && username !== NOT_SIGNED_IN)
+    console.log('join useffect', username, newSignUp )
+    //hope this gets called even in email modal
+    if (newSignUp)
+      navigation.navigate('signup');
+    else if (username && username !== NOT_SIGNED_IN)
       navigation.goBack();
-  }, [username]);
+  }, [username, newSignUp]);
+
+  // same for SIWA and email. This makes things a bit messy, not sure where to put it
+
+  // Nah, fuck callbacks, SIWA and email will just have to return isNewSignUp
 
   return <View style={{flex: 1, backgroundColor: PRIMARY}}>
     <View style={{flex: 1}}>
@@ -46,7 +55,7 @@ export const Join = props => {
 
             <TouchableOpacity
               style={{shadowColor: 'black', shadowRadius: 5, shadowOpacity: 1.0,flexDirection: 'row', alignItems: 'center', marginBottom: 20, width: '95%', height: 100, backgroundColor: BACKGROUND}}
-              onPress={appleSignIn}//Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Apple})}
+              onPress={appleSignIn}
             >
 
               <Words style={{flex: 1, textAlign: 'center'}}><Ionicons name={'logo-apple'} size={40}/></Words>
@@ -74,7 +83,7 @@ export const Join = props => {
           </View>
         </View>
 
-        <SignUpModal visible={signUpModal} close={() => setSignUpModal(false)}/>
+        <EmailModal visible={signUpModal} close={() => setSignUpModal(false)}/>
 
 
       </SafeAreaView>

@@ -58,7 +58,7 @@ export const Feed = props => {
     <Words>{isLoading}</Words>
     <ScrollView style={{height: 200}}>
 
-      <Words>{JSON.stringify(Object.keys(postsByGroup))}</Words>
+      <Words>{JSON.stringify(postsByGroup)}</Words>
     </ScrollView>
     <FlatList
       data={posts}
