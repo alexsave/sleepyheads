@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { API, Auth, graphqlOperation, Hub } from 'aws-amplify';
 import { getUser } from '../graphql/queries';
+import { createUser } from '../graphql/mutations';
 
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
@@ -17,6 +18,7 @@ export const NOT_SIGNED_IN = 'NOT_SIGNED_IN';
 const UserProvider = props => {
     //is this legal
     const [username, setUsername] = useState(null);
+    const [displayName, setDisplayName] = useState('');
     const [profileURI, setProfileURI] = useState('');
     const [newSignUp, setNewSignUp] = useState(false);
 
@@ -32,7 +34,8 @@ const UserProvider = props => {
                 id: username
 
             }));
-            console.log(res.data.getUser);
+            //console.log(res.data.getUser);
+            setDisplayName(res.data.getUser.name);
         })();
 
 
@@ -71,11 +74,27 @@ const UserProvider = props => {
         });
     }, []);
 
+    // username = id, name = name
+    // I'd call this createUser but ya know
+    const makeUser = async name => {
+        if(!username || username === ANONYMOUS || username === NOT_SIGNED_IN)
+            return false;
+
+        const input = {
+            id: username,
+            name,
+        };
+        const res = await API.graphql(graphqlOperation(createUser, { input }));
+        console.log(res);
+        return true;
+    }
+
     return (
       <UserContext.Provider value={{
           username,
           setUsername,
           newSignUp,
+          makeUser,
           profileURI
       }}>
           {props.children}
