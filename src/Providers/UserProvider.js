@@ -22,6 +22,8 @@ const UserProvider = props => {
     const [profileURI, setProfileURI] = useState('');
     const [newSignUp, setNewSignUp] = useState(false);
 
+    const [groups, setGroups] = useState([]);
+
     useEffect(() => {
         if(!username || username === ANONYMOUS || username === NOT_SIGNED_IN)
             return;
@@ -36,6 +38,9 @@ const UserProvider = props => {
             }));
             //console.log(res.data.getUser);
             setDisplayName(res.data.getUser.name);
+
+            // Migth need more
+            setGroups(res.data.getUser.groups.items.map(x => x.id))
         })();
 
 
@@ -95,7 +100,9 @@ const UserProvider = props => {
           setUsername,
           newSignUp,
           makeUser,
-          profileURI
+          profileURI,
+          groups
+
       }}>
           {props.children}
       </UserContext.Provider>

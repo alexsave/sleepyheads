@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify';
 import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
-import { NOT_SIGNED_IN, UserContext } from './UserProvider';
+import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from './UserProvider';
 import { sleepByTimestamp, sleepsByTimestamp } from '../graphql/queries';
 
 export const GroupContext = React.createContext();
@@ -84,8 +84,9 @@ const GroupProvider = props => {
   };
 
   useEffect(() => {
-    if (username && !username === NOT_SIGNED_IN)
+    if (!username || username === NOT_SIGNED_IN || username === ANONYMOUS)
       return;
+
     loadFeed(INITIAL_QUERY);
 
     /*const subscription = API.graphql(onCreateSleep)
@@ -98,9 +99,6 @@ const GroupProvider = props => {
     return () => subscription.unsubscribe();*/
   }, [username, groupID])
 
-  //const getPosts = () => {
-    //return postMap[groupID];
-  //}
   const posts = useMemo(() => postsByGroup[groupID], [postsByGroup, groupID]);
 
   return (

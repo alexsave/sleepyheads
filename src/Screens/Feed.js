@@ -1,6 +1,6 @@
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
@@ -13,6 +13,7 @@ import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import { Auth, graphqlOperation } from 'aws-amplify';
 import { GroupContext } from '../Providers/GroupProvider';
 import { Words } from '../Components/Basic/Words';
+import { GroupModal } from '../Components/Feed/GroupModal';
 
 export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
@@ -39,6 +40,7 @@ export const Feed = props => {
       setGroupID(''); //global
 
   }, [username]);
+  const [groupModalVisible, setGroupModalVisible] = useState(false);
 
   // How do I want to do this?
   // When they open the feed, they'll see all the usual posts of the timeline, but on top of every group timeline,
@@ -49,6 +51,7 @@ export const Feed = props => {
     <View style={{ zIndex: 5, alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}}>
 
       <TouchableOpacity onPress={() => {
+        setGroupModalVisible(true);
         //open group view
       }}>
         <Words style={{fontSize: 30, fontWeight: 'bold'}}>{'Global Feed'}</Words>
@@ -69,6 +72,10 @@ export const Feed = props => {
       <Words>More</Words>
     </TouchableOpacity>
     <NavBar current='feed'/>
+
+    <GroupModal visible={groupModalVisible} close={() => setGroupModalVisible(false)}/>
+
+
   </View></SafeAreaView>
 }
 
