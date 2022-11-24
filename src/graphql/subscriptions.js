@@ -347,8 +347,11 @@ export const onDeleteLike = /* GraphQL */ `
   }
 `;
 export const onCreateGroup = /* GraphQL */ `
-  subscription OnCreateGroup($filter: ModelSubscriptionGroupFilterInput) {
-    onCreateGroup(filter: $filter) {
+  subscription OnCreateGroup(
+    $filter: ModelSubscriptionGroupFilterInput
+    $owner: String
+  ) {
+    onCreateGroup(filter: $filter, owner: $owner) {
       id
       name
       sleepRecords {
@@ -377,12 +380,16 @@ export const onCreateGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateGroup = /* GraphQL */ `
-  subscription OnUpdateGroup($filter: ModelSubscriptionGroupFilterInput) {
-    onUpdateGroup(filter: $filter) {
+  subscription OnUpdateGroup(
+    $filter: ModelSubscriptionGroupFilterInput
+    $owner: String
+  ) {
+    onUpdateGroup(filter: $filter, owner: $owner) {
       id
       name
       sleepRecords {
@@ -411,12 +418,16 @@ export const onUpdateGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteGroup = /* GraphQL */ `
-  subscription OnDeleteGroup($filter: ModelSubscriptionGroupFilterInput) {
-    onDeleteGroup(filter: $filter) {
+  subscription OnDeleteGroup(
+    $filter: ModelSubscriptionGroupFilterInput
+    $owner: String
+  ) {
+    onDeleteGroup(filter: $filter, owner: $owner) {
       id
       name
       sleepRecords {
@@ -445,6 +456,7 @@ export const onDeleteGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -484,6 +496,7 @@ export const onCreateGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
@@ -526,6 +539,7 @@ export const onUpdateGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
@@ -568,6 +582,7 @@ export const onDeleteGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt

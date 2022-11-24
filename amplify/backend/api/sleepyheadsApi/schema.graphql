@@ -146,12 +146,13 @@ type SleepRecord @model
 # and usersByGroup is taken care of with getGroup
 type Group @model
 @auth(rules: [
-  {allow: groups, groupsField: "users"}
-  {allow: private, provider: iam, operations:[read,create]}
+  #{allow: groups, groupsField: "users"} this doesn't work the way you think it do
+  {allow: private, provider: userPools, operations: [read, create]}
+  {allow: private, provider: iam, operations:[read,create]} #lambda maybe
 ])
 {
   id: ID!
   name: String!
   sleepRecords: [SleepRecord] @hasMany(indexName: "byGroup", fields: ["id"])
-  users: [User] @manyToMany(relationName: "GroupUser")
+  users: [User] @manyToMany(relationName: "GroupUser") @auth(rules: [{allow: owner}]) #plz tell me this works how I expect
 }

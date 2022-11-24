@@ -59,7 +59,6 @@ export const EmailModal = ({visible, close}) => {
           autoCapitalize='none'
           autoFocus={true}
           autoCorrect={false}
-          //returnKeyType={'done'}
           blurOnSubmit={false}
           onSubmitEditing={() => {
             setWaitingForOtp(true);

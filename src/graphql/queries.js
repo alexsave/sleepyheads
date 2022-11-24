@@ -411,6 +411,13 @@ export const getUser = /* GraphQL */ `
           id
           userID
           groupID
+          group {
+            id
+            name
+            createdAt
+            updatedAt
+            owner
+          }
           createdAt
           updatedAt
         }
@@ -501,6 +508,7 @@ export const getGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -522,6 +530,7 @@ export const listGroups = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -560,6 +569,7 @@ export const getGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
@@ -589,6 +599,7 @@ export const listGroupUsers = /* GraphQL */ `
           name
           createdAt
           updatedAt
+          owner
         }
         createdAt
         updatedAt

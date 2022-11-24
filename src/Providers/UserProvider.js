@@ -34,11 +34,11 @@ const UserProvider = props => {
 
             const res = await loadUser(username);
 
-            console.log(res);
+            console.log(JSON.stringify(res));
             setDisplayName(res.name);
 
             // Migth need more
-            setGroups(res.groups.items.map(x => x.id))
+            setGroups(res.groups.items.map(x => x.group))
         })();
 
 

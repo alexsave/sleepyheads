@@ -473,6 +473,7 @@ export const updateGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -510,6 +511,7 @@ export const deleteGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -549,6 +551,7 @@ export const updateGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
@@ -591,6 +594,7 @@ export const deleteGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
@@ -700,6 +704,7 @@ export const createGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -739,6 +744,7 @@ export const createGroupUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
