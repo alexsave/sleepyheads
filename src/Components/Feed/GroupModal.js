@@ -1,15 +1,18 @@
-import { Modal, SafeAreaView, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Modal, SafeAreaView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Words } from '../Basic/Words';
 import { useContext, useState } from 'react';
 import { BACKGROUND, DARKER, LIGHTER, TEXT_COLOR } from '../../Values/Colors';
 import { UserContext } from '../../Providers/UserProvider';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createGroup, createGroupUser } from '../../graphql/mutations';
+import { GroupContext } from '../../Providers/GroupProvider';
 
 export const GroupModal = ({visible, close}) => {
 
     //const [groups, setGroups] = useState(['the boyz', 'the sleepyheads', 'jim']);
     const {groups, username} = useContext(UserContext);
+
+    const {setGroupID} = useContext(GroupContext);
 
     const [name, setName] = useState('');
     const [groupCreating, setGroupCreating] = useState(false);
@@ -53,13 +56,21 @@ export const GroupModal = ({visible, close}) => {
                   style={{top: 60, width: '75%', backgroundColor: BACKGROUND, borderWidth: 1, borderColor: DARKER, alignItems: 'center', justifyContent: 'space-around', padding: 10}}
                 >
                     {
+                        //next, make this switch the groupid
                         groups.map(g =>
-                          <View style={{height: 50}}>
+                          <TouchableOpacity
+                            style={{backgroundColor: DARKER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
+                            onPress={() => {
+                                setGroupID(g.id);
+                                close();
+                            }}
+                          >
                               <Words>{g.name}</Words>
 
-                          </View>
+                          </TouchableOpacity>
                         )
                     }
+                    <View style={{borderColor: TEXT_COLOR, borderWidth: StyleSheet.hairlineWidth, width: '80%'}}/>
                     <View
                       style={{backgroundColor: LIGHTER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
                     >
