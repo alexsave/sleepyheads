@@ -61,6 +61,13 @@ const GroupProvider = props => {
   // later this will be used to load "sleeprecords"
   const loadFeed = async (type = INITIAL_QUERY, nextToken = null) => {
     // this could be more intricate, maybe we don't NEED to reload
+
+    // NOW we can change this based on groupID
+    /*
+    groupID = '', global query on sleepsByTimestamp or recordsByTimestamp
+    gropuID = username, sleepsByUser
+    groupID = group, recordsByGroup
+     */
     const res = await API.graphql(graphqlOperation(sleepsByTimestamp, {
       type: 'sleep',
       sortDirection: 'DESC',
