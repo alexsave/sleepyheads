@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "sleepyheadsApi": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

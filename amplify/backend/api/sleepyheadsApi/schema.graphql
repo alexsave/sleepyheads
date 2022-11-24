@@ -34,6 +34,7 @@ type Sleep
 @auth(rules: [
   {allow: owner, ownerField: "userID", provider: userPools, operations:[read,create,update,delete]}
   {allow: private, provider: userPools, operations:[read]} #might be more interesting than that
+  {allow: private, provider: iam, operations: [create]}
 ])
 {
   id: ID!
@@ -128,17 +129,18 @@ type User
 #this should ideally go into a SQL table
 type SleepRecord @model
 @auth(rules: [
-  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create]}
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read]}
   {allow: private, provider: iam, operations:[create]}
 ])
 {
   id: ID!
-  sleep: Sleep @hasOne
+  sleep: Sleep @hasOne#assuming this adds sleepID on backend
   groupID: ID! @index(name: "byGroup", sortKeyFields: ["createdAt"], queryField: "recordsByGroup")
   rankBedStart: Int
   rankBedEnd: Int
   rankSleepTime: Int
-  userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "recordsByUser")
+  #handled by singleton [user] group
+  #userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "recordsByUser")
   createdAt: String!
 }
 
@@ -154,5 +156,17 @@ type Group @model
   id: ID!
   name: String!
   sleepRecords: [SleepRecord] @hasMany(indexName: "byGroup", fields: ["id"])
-  users: [User] @manyToMany(relationName: "GroupUser") @auth(rules: [{allow: owner}]) #plz tell me this works how I expect
+  users: [User] @manyToMany(relationName: "GroupUser") @auth(rules: [{allow: owner}, {allow: private, provider: iam, operations:[read]}]) #plz tell me this works how I expect
+}
+
+type Mutation
+{
+  createSleepAndRecords(
+    title: String
+    description: String
+    media: [String]
+    data: SleepData!
+  ): SleepRecord
+  @function(name: "createSleepAndRecords-${env}")
+  @auth(rules: [{allow: private, provider: userPools}])
 }

@@ -29,6 +29,10 @@
         "sleepyheadsAuthVerifyAuthChallengeResponse": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
           "s3Key": "amplify-builds/sleepyheadsAuthVerifyAuthChallengeResponse-4f685172756868434630-build.zip"
+        },
+        "createSleepAndRecords": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/createSleepAndRecords-36784933395333796645-build.zip"
         }
       },
       "auth": {
