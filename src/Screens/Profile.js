@@ -39,6 +39,9 @@ export const Profile = props => {
 
     //post loading bs part
     const signedInUser = useContext(UserContext).username;
+    const {loadUser} = useContext(UserContext);
+
+    const [name, setName] = useState('');
 
     const {posts, setGroupID} = useContext(GroupContext);
 
@@ -50,8 +53,10 @@ export const Profile = props => {
         profileUser = props.route.params.userID;
 
     useEffect(() => {
-        if(profileUser)
-            setGroupID(profileUser);
+        if(!profileUser)
+            return;
+        setGroupID(profileUser);
+        loadUser(profileUser).then(d => setName(d.name));
     }, [profileUser])
 
     const [gym, setGym] = useState({name: '', id: ''});
@@ -263,7 +268,7 @@ export const Profile = props => {
 
 
                   <Animated.View style={[{ alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}, simpleHeaderStyle]}>
-                      <Words style={{fontSize: 30, fontWeight: 'bold'}}>{profileUser}</Words>
+                      <Words style={{fontSize: 30, fontWeight: 'bold'}}>{name}</Words>
                   </Animated.View>
 
 
@@ -278,7 +283,7 @@ export const Profile = props => {
                       >
 
                           <Animated.View style={[{paddingHorizontal: 10, borderRadius: 10, position: 'absolute', right: 0, top: -70, zIndex: 20, backgroundColor: 'rgba(93,93,93,0.37)'},coolText]}>
-                              <Words style={{fontSize: 60, fontWeight: 'bold'}}>{profileUser}</Words>
+                              <Words style={{fontSize: 60, fontWeight: 'bold'}}>{name}</Words>
                           </Animated.View>
 
                           <TouchableOpacity onPress={handleGymPress}>{

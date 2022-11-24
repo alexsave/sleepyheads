@@ -54,15 +54,11 @@ export const Feed = props => {
         setGroupModalVisible(true);
         //open group view
       }}>
-        <Words style={{fontSize: 30, fontWeight: 'bold'}}>{'Global Feed'}</Words>
+        <Words style={{fontSize: 30, fontWeight: 'bold'}}>{'Global Feed'}<Ionicons size={30} name={'chevron-down-outline'}/></Words>
       </TouchableOpacity>
     </View>
 
     <Words>{isLoading}</Words>
-    <ScrollView style={{height: 200}}>
-
-      <Words>{JSON.stringify(postsByGroup)}</Words>
-    </ScrollView>
     <FlatList
       data={posts}
       // rename this from sleepSession to postData or smth

@@ -1,37 +1,62 @@
-import { Modal, TouchableOpacity, View } from 'react-native';
+import { Modal, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Words } from '../Basic/Words';
 import { useContext, useState } from 'react';
-import { DARKER, LIGHTER } from '../../Values/Colors';
+import { BACKGROUND, DARKER, LIGHTER } from '../../Values/Colors';
 import { UserContext } from '../../Providers/UserProvider';
+import { API, graphqlOperation } from 'aws-amplify';
+import { createGroup, createGroupUser } from '../../graphql/mutations';
 
 export const GroupModal = ({visible, close}) => {
 
     //const [groups, setGroups] = useState(['the boyz', 'the sleepyheads', 'jim']);
     const {groups} = useContext(UserContext);
 
+    const [name, setName] = useState('');
+
+    const newGroupPress = () => {
+        //open a keyboard to set the name
+    }
+    const makeGroup = async () => {
+        //... just give it a name, and off you go
+        const res = await API.graphql(graphqlOperation(createGroup, {input: {name}}))
+        console.log(res);
+        // of course, the user joins the gropu immediately
+        const res2 = await API.graphql(graphqlOperation(createGroupUser, {input: {}/*???*/}));
+
+
+
+    }
+
     return <Modal animationType={'slide'} transparent={true} visible={visible}>
-        <TouchableOpacity
-          onPress={close}
-          style={{alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}
-        >
-            <View
-              style={{height: 200, width: '95%', backgroundColor: LIGHTER, borderWidth: 1, borderColor: DARKER, borderRadius: 10, alignItems: 'center', justifyContent: 'space-around', padding: 10}}
+        <SafeAreaView>
+
+            <TouchableOpacity
+              onPress={close}
+              style={{alignItems: 'center', width: '100%', height: '100%'}}
             >
-                <Words>{JSON.stringify(groups)}</Words>
-                {
-                    groups.map(g =>
-                      <View>
-                          <Words>{g}</Words>
+                <View
+                  //top:60 is a hack, it depends on the Feed header height
+                  style={{top: 60, width: '75%', backgroundColor: BACKGROUND, borderWidth: 1, borderColor: DARKER, alignItems: 'center', justifyContent: 'space-around', padding: 10}}
+                >
+                    <Words>{JSON.stringify(groups)}</Words>
+                    {
+                        groups.map(g =>
+                          <View style={{height: 50}}>
+                              <Words>{g}</Words>
 
-                      </View>
-                    )
-                }
-                <TouchableOpacity>
-                    <Words>New group</Words>
+                          </View>
+                        )
+                    }
+                    <TouchableOpacity
+                      style={{backgroundColor: LIGHTER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
+                      onPress={newGroupPress}
+                    >
+                        <Words>Create new group</Words>
 
-                </TouchableOpacity>
-            </View>
-        </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
+        </SafeAreaView>
 
     </Modal>
 

@@ -32,15 +32,13 @@ const UserProvider = props => {
 
         (async () => {
 
-            const res = await API.graphql(graphqlOperation(getUser, {
-                id: username
+            const res = await loadUser(username);
 
-            }));
-            //console.log(res.data.getUser);
-            setDisplayName(res.data.getUser.name);
+            console.log(res);
+            setDisplayName(res.name);
 
             // Migth need more
-            setGroups(res.data.getUser.groups.items.map(x => x.id))
+            setGroups(res.groups.items.map(x => x.id))
         })();
 
 
@@ -94,6 +92,16 @@ const UserProvider = props => {
         return true;
     }
 
+    const loadUser = async id => {
+
+        const res = await API.graphql(graphqlOperation(getUser, { id }));
+        return res.data.getUser;
+    }
+        //const res = await
+
+
+    //}
+
     return (
       <UserContext.Provider value={{
           username,
@@ -101,7 +109,10 @@ const UserProvider = props => {
           newSignUp,
           makeUser,
           profileURI,
-          groups
+          groups,
+
+          //more generic, for loading any user
+          loadUser
 
       }}>
           {props.children}
