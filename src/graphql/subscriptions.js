@@ -139,123 +139,6 @@ export const onDeleteSleep = /* GraphQL */ `
     }
   }
 `;
-export const onCreateSleepRecord = /* GraphQL */ `
-  subscription OnCreateSleepRecord(
-    $filter: ModelSubscriptionSleepRecordFilterInput
-    $userID: String
-  ) {
-    onCreateSleepRecord(filter: $filter, userID: $userID) {
-      id
-      sleep {
-        id
-        type
-        userID
-        title
-        description
-        likes {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        media
-        data {
-          bedStart
-          bedEnd
-          duration
-        }
-        createdAt
-        updatedAt
-      }
-      groupID
-      rankBedStart
-      rankBedEnd
-      rankSleepTime
-      userID
-      createdAt
-      updatedAt
-      sleepRecordSleepId
-    }
-  }
-`;
-export const onUpdateSleepRecord = /* GraphQL */ `
-  subscription OnUpdateSleepRecord(
-    $filter: ModelSubscriptionSleepRecordFilterInput
-    $userID: String
-  ) {
-    onUpdateSleepRecord(filter: $filter, userID: $userID) {
-      id
-      sleep {
-        id
-        type
-        userID
-        title
-        description
-        likes {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        media
-        data {
-          bedStart
-          bedEnd
-          duration
-        }
-        createdAt
-        updatedAt
-      }
-      groupID
-      rankBedStart
-      rankBedEnd
-      rankSleepTime
-      userID
-      createdAt
-      updatedAt
-      sleepRecordSleepId
-    }
-  }
-`;
-export const onDeleteSleepRecord = /* GraphQL */ `
-  subscription OnDeleteSleepRecord(
-    $filter: ModelSubscriptionSleepRecordFilterInput
-    $userID: String
-  ) {
-    onDeleteSleepRecord(filter: $filter, userID: $userID) {
-      id
-      sleep {
-        id
-        type
-        userID
-        title
-        description
-        likes {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        media
-        data {
-          bedStart
-          bedEnd
-          duration
-        }
-        createdAt
-        updatedAt
-      }
-      groupID
-      rankBedStart
-      rankBedEnd
-      rankSleepTime
-      userID
-      createdAt
-      updatedAt
-      sleepRecordSleepId
-    }
-  }
-`;
 export const onCreateComment = /* GraphQL */ `
   subscription OnCreateComment(
     $filter: ModelSubscriptionCommentFilterInput
@@ -346,6 +229,123 @@ export const onDeleteLike = /* GraphQL */ `
     }
   }
 `;
+export const onCreateSleepRecord = /* GraphQL */ `
+  subscription OnCreateSleepRecord(
+    $filter: ModelSubscriptionSleepRecordFilterInput
+    $userID: String
+  ) {
+    onCreateSleepRecord(filter: $filter, userID: $userID) {
+      id
+      sleep {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      groupID
+      rankBedStart
+      rankBedEnd
+      rankSleepTime
+      createdAt
+      updatedAt
+      sleepRecordSleepId
+      userID
+    }
+  }
+`;
+export const onUpdateSleepRecord = /* GraphQL */ `
+  subscription OnUpdateSleepRecord(
+    $filter: ModelSubscriptionSleepRecordFilterInput
+    $userID: String
+  ) {
+    onUpdateSleepRecord(filter: $filter, userID: $userID) {
+      id
+      sleep {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      groupID
+      rankBedStart
+      rankBedEnd
+      rankSleepTime
+      createdAt
+      updatedAt
+      sleepRecordSleepId
+      userID
+    }
+  }
+`;
+export const onDeleteSleepRecord = /* GraphQL */ `
+  subscription OnDeleteSleepRecord(
+    $filter: ModelSubscriptionSleepRecordFilterInput
+    $userID: String
+  ) {
+    onDeleteSleepRecord(filter: $filter, userID: $userID) {
+      id
+      sleep {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      groupID
+      rankBedStart
+      rankBedEnd
+      rankSleepTime
+      createdAt
+      updatedAt
+      sleepRecordSleepId
+      userID
+    }
+  }
+`;
 export const onCreateGroup = /* GraphQL */ `
   subscription OnCreateGroup(
     $filter: ModelSubscriptionGroupFilterInput
@@ -361,10 +361,10 @@ export const onCreateGroup = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -399,10 +399,10 @@ export const onUpdateGroup = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -437,10 +437,10 @@ export const onDeleteGroup = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }

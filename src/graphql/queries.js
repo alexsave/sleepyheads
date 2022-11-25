@@ -79,74 +79,6 @@ export const listSleeps = /* GraphQL */ `
     }
   }
 `;
-export const getSleepRecord = /* GraphQL */ `
-  query GetSleepRecord($id: ID!) {
-    getSleepRecord(id: $id) {
-      id
-      sleep {
-        id
-        type
-        userID
-        title
-        description
-        likes {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        media
-        data {
-          bedStart
-          bedEnd
-          duration
-        }
-        createdAt
-        updatedAt
-      }
-      groupID
-      rankBedStart
-      rankBedEnd
-      rankSleepTime
-      userID
-      createdAt
-      updatedAt
-      sleepRecordSleepId
-    }
-  }
-`;
-export const listSleepRecords = /* GraphQL */ `
-  query ListSleepRecords(
-    $filter: ModelSleepRecordFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listSleepRecords(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        sleep {
-          id
-          type
-          userID
-          title
-          description
-          media
-          createdAt
-          updatedAt
-        }
-        groupID
-        rankBedStart
-        rankBedEnd
-        rankSleepTime
-        userID
-        createdAt
-        updatedAt
-        sleepRecordSleepId
-      }
-      nextToken
-    }
-  }
-`;
 export const sleepsByTimestamp = /* GraphQL */ `
   query SleepsByTimestamp(
     $type: String!
@@ -228,98 +160,9 @@ export const sleepsByUser = /* GraphQL */ `
           bedStart
           bedEnd
           duration
-          samples {
-            startOffset
-            endOffset
-            type
-          }
         }
         createdAt
         updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const recordsByGroup = /* GraphQL */ `
-  query RecordsByGroup(
-    $groupID: ID!
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelSleepRecordFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    recordsByGroup(
-      groupID: $groupID
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        sleep {
-          id
-          type
-          userID
-          title
-          description
-          media
-          createdAt
-          updatedAt
-        }
-        groupID
-        rankBedStart
-        rankBedEnd
-        rankSleepTime
-        userID
-        createdAt
-        updatedAt
-        sleepRecordSleepId
-      }
-      nextToken
-    }
-  }
-`;
-export const recordsByUser = /* GraphQL */ `
-  query RecordsByUser(
-    $userID: ID!
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelSleepRecordFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    recordsByUser(
-      userID: $userID
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        sleep {
-          id
-          type
-          userID
-          title
-          description
-          media
-          createdAt
-          updatedAt
-        }
-        groupID
-        rankBedStart
-        rankBedEnd
-        rankSleepTime
-        userID
-        createdAt
-        updatedAt
-        sleepRecordSleepId
       }
       nextToken
     }
@@ -430,10 +273,10 @@ export const getUser = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -477,6 +320,116 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
+export const getSleepRecord = /* GraphQL */ `
+  query GetSleepRecord($id: ID!) {
+    getSleepRecord(id: $id) {
+      id
+      sleep {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      groupID
+      rankBedStart
+      rankBedEnd
+      rankSleepTime
+      createdAt
+      updatedAt
+      sleepRecordSleepId
+      userID
+    }
+  }
+`;
+export const listSleepRecords = /* GraphQL */ `
+  query ListSleepRecords(
+    $filter: ModelSleepRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSleepRecords(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        sleep {
+          id
+          type
+          userID
+          title
+          description
+          media
+          createdAt
+          updatedAt
+        }
+        groupID
+        rankBedStart
+        rankBedEnd
+        rankSleepTime
+        createdAt
+        updatedAt
+        sleepRecordSleepId
+        userID
+      }
+      nextToken
+    }
+  }
+`;
+export const recordsByGroup = /* GraphQL */ `
+  query RecordsByGroup(
+    $groupID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSleepRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    recordsByGroup(
+      groupID: $groupID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        sleep {
+          id
+          type
+          userID
+          title
+          description
+          media
+          createdAt
+          updatedAt
+        }
+        groupID
+        rankBedStart
+        rankBedEnd
+        rankSleepTime
+        createdAt
+        updatedAt
+        sleepRecordSleepId
+        userID
+      }
+      nextToken
+    }
+  }
+`;
 export const getGroup = /* GraphQL */ `
   query GetGroup($id: ID!) {
     getGroup(id: $id) {
@@ -489,10 +442,10 @@ export const getGroup = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }

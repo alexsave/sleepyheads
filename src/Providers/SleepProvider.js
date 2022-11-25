@@ -4,7 +4,7 @@ import { loadFromHealth } from '../Network/PostLoad';
 import { API, graphqlOperation } from 'aws-amplify';
 import { Sleep } from '../models';
 import { UserContext } from './UserProvider';
-import { createSleep } from '../graphql/mutations';
+import { createSleep, createSleepAndRecords } from '../graphql/mutations';
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
 
@@ -117,7 +117,8 @@ const SleepProvider = props => {
     };
 
     console.log(JSON.stringify(input.data));
-    const res = await API.graphql(graphqlOperation(createSleep, { input }));
+    //const res = await API.graphql(graphqlOperation(createSleep, { input }));
+    const res = await API.graphql(graphqlOperation(createSleepAndRecords, { input }));
 
     console.log(res)
     //hmmmmmmm

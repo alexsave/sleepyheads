@@ -159,13 +159,34 @@ type Group @model
   users: [User] @manyToMany(relationName: "GroupUser") @auth(rules: [{allow: owner}, {allow: private, provider: iam, operations:[read]}]) #plz tell me this works how I expect
 }
 
+input SleepSampleInput {
+  type: SleepSampleType
+  startOffset: Int!
+  endOffset: Int!
+}
+
+input SleepDataInput {
+  bedStart: String!
+  bedEnd: String!
+  duration: Int!
+  samples: [SleepSampleInput!]
+}
+
+input CreateSleepInput {
+  id: ID
+  type: String!
+  userID: ID!
+  title: String
+  description: String
+  media: [String]
+  data: SleepDataInput
+  createdAt: String
+}
+
 type Mutation
 {
   createSleepAndRecords(
-    title: String
-    description: String
-    media: [String]
-    data: SleepData!
+    csi: CreateSleepInput
   ): SleepRecord
   @function(name: "createSleepAndRecords-${env}")
   @auth(rules: [{allow: private, provider: userPools}])

@@ -74,17 +74,17 @@ exports.handler = async (event, context, callback) => {
 
     const userID = event.identity.username;
 
-    const sleepData = JSON.parse(event.arguments.data);
+    const sleepData = event.arguments.csi.data;
 
 
     console.log('sleepData', sleepData);
 
     //sleeprecord is KINDA similar to the old report
-    let start = secondsFromDayStart(event.arguments.data.bedStart);
-    let end = secondsFromDayStart(event.arguments.data.bedEnd);
+    let start = secondsFromDayStart(event.arguments.csi.data.bedStart);
+    let end = secondsFromDayStart(event.arguments.csi.data.bedEnd);
 
     // this is a whole class in itself
-    const asleep = event.arguments.data.samples
+    const asleep = event.arguments.csi.data.samples
       .filter(x => !['INBED', 'AWAKE'].includes(x.type) )
       .reduce((acc, cur) => acc + cur.endOffset - cur.startOffset, 0);
 
@@ -93,10 +93,10 @@ exports.handler = async (event, context, callback) => {
         variables: {
             input: {
                 type: 'sleep',
-                title: event.arguments.title,
-                description: event.arguments.description,
-                data: event.arguments.data,
-                media: event.arguments.media,
+                title: event.arguments.csi.title,
+                description: event.arguments.csi.description,
+                data: event.arguments.csi.data,
+                media: event.arguments.csi.media,
                 userID,
             }
         }

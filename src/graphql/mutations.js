@@ -50,12 +50,12 @@ export const createSleep = /* GraphQL */ `
     }
   }
 `;
-export const deleteSleep = /* GraphQL */ `
-  mutation DeleteSleep(
-    $input: DeleteSleepInput!
+export const updateSleep = /* GraphQL */ `
+  mutation UpdateSleep(
+    $input: UpdateSleepInput!
     $condition: ModelSleepConditionInput
   ) {
-    deleteSleep(input: $input, condition: $condition) {
+    updateSleep(input: $input, condition: $condition) {
       id
       type
       userID
@@ -99,12 +99,12 @@ export const deleteSleep = /* GraphQL */ `
     }
   }
 `;
-export const updateSleep = /* GraphQL */ `
-  mutation UpdateSleep(
-    $input: UpdateSleepInput!
+export const deleteSleep = /* GraphQL */ `
+  mutation DeleteSleep(
+    $input: DeleteSleepInput!
     $condition: ModelSleepConditionInput
   ) {
-    updateSleep(input: $input, condition: $condition) {
+    deleteSleep(input: $input, condition: $condition) {
       id
       type
       userID
@@ -193,12 +193,42 @@ export const deleteComment = /* GraphQL */ `
     }
   }
 `;
+export const createLike = /* GraphQL */ `
+  mutation CreateLike(
+    $input: CreateLikeInput!
+    $condition: ModelLikeConditionInput
+  ) {
+    createLike(input: $input, condition: $condition) {
+      id
+      sleepID
+      type
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const updateLike = /* GraphQL */ `
   mutation UpdateLike(
     $input: UpdateLikeInput!
     $condition: ModelLikeConditionInput
   ) {
     updateLike(input: $input, condition: $condition) {
+      id
+      sleepID
+      type
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteLike = /* GraphQL */ `
+  mutation DeleteLike(
+    $input: DeleteLikeInput!
+    $condition: ModelLikeConditionInput
+  ) {
+    deleteLike(input: $input, condition: $condition) {
       id
       sleepID
       type
@@ -247,10 +277,10 @@ export const createUser = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -298,10 +328,10 @@ export const updateUser = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -349,15 +379,54 @@ export const deleteUser = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
       createdAt
       updatedAt
+    }
+  }
+`;
+export const createSleepRecord = /* GraphQL */ `
+  mutation CreateSleepRecord(
+    $input: CreateSleepRecordInput!
+    $condition: ModelSleepRecordConditionInput
+  ) {
+    createSleepRecord(input: $input, condition: $condition) {
+      id
+      sleep {
+        id
+        type
+        userID
+        title
+        description
+        likes {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        media
+        data {
+          bedStart
+          bedEnd
+          duration
+        }
+        createdAt
+        updatedAt
+      }
+      groupID
+      rankBedStart
+      rankBedEnd
+      rankSleepTime
+      createdAt
+      updatedAt
+      sleepRecordSleepId
+      userID
     }
   }
 `;
@@ -393,10 +462,10 @@ export const updateSleepRecord = /* GraphQL */ `
       rankBedStart
       rankBedEnd
       rankSleepTime
-      userID
       createdAt
       updatedAt
       sleepRecordSleepId
+      userID
     }
   }
 `;
@@ -432,10 +501,48 @@ export const deleteSleepRecord = /* GraphQL */ `
       rankBedStart
       rankBedEnd
       rankSleepTime
-      userID
       createdAt
       updatedAt
       sleepRecordSleepId
+      userID
+    }
+  }
+`;
+export const createGroup = /* GraphQL */ `
+  mutation CreateGroup(
+    $input: CreateGroupInput!
+    $condition: ModelGroupConditionInput
+  ) {
+    createGroup(input: $input, condition: $condition) {
+      id
+      name
+      sleepRecords {
+        items {
+          id
+          groupID
+          rankBedStart
+          rankBedEnd
+          rankSleepTime
+          createdAt
+          updatedAt
+          sleepRecordSleepId
+          userID
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userID
+          groupID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      owner
     }
   }
 `;
@@ -454,10 +561,10 @@ export const updateGroup = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -492,10 +599,10 @@ export const deleteGroup = /* GraphQL */ `
           rankBedStart
           rankBedEnd
           rankSleepTime
-          userID
           createdAt
           updatedAt
           sleepRecordSleepId
+          userID
         }
         nextToken
       }
@@ -512,6 +619,49 @@ export const deleteGroup = /* GraphQL */ `
       createdAt
       updatedAt
       owner
+    }
+  }
+`;
+export const createGroupUser = /* GraphQL */ `
+  mutation CreateGroupUser(
+    $input: CreateGroupUserInput!
+    $condition: ModelGroupUserConditionInput
+  ) {
+    createGroupUser(input: $input, condition: $condition) {
+      id
+      userID
+      groupID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      group {
+        id
+        name
+        sleepRecords {
+          nextToken
+        }
+        users {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -601,42 +751,9 @@ export const deleteGroupUser = /* GraphQL */ `
     }
   }
 `;
-export const createLike = /* GraphQL */ `
-  mutation CreateLike(
-    $input: CreateLikeInput!
-    $condition: ModelLikeConditionInput
-  ) {
-    createLike(input: $input, condition: $condition) {
-      id
-      sleepID
-      type
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteLike = /* GraphQL */ `
-  mutation DeleteLike(
-    $input: DeleteLikeInput!
-    $condition: ModelLikeConditionInput
-  ) {
-    deleteLike(input: $input, condition: $condition) {
-      id
-      sleepID
-      type
-      userID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createSleepRecord = /* GraphQL */ `
-  mutation CreateSleepRecord(
-    $input: CreateSleepRecordInput!
-    $condition: ModelSleepRecordConditionInput
-  ) {
-    createSleepRecord(input: $input, condition: $condition) {
+export const createSleepAndRecords = /* GraphQL */ `
+  mutation CreateSleepAndRecords($csi: CreateSleepInput) {
+    createSleepAndRecords(csi: $csi) {
       id
       sleep {
         id
@@ -663,91 +780,10 @@ export const createSleepRecord = /* GraphQL */ `
       rankBedStart
       rankBedEnd
       rankSleepTime
-      userID
       createdAt
       updatedAt
       sleepRecordSleepId
-    }
-  }
-`;
-export const createGroup = /* GraphQL */ `
-  mutation CreateGroup(
-    $input: CreateGroupInput!
-    $condition: ModelGroupConditionInput
-  ) {
-    createGroup(input: $input, condition: $condition) {
-      id
-      name
-      sleepRecords {
-        items {
-          id
-          groupID
-          rankBedStart
-          rankBedEnd
-          rankSleepTime
-          userID
-          createdAt
-          updatedAt
-          sleepRecordSleepId
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          userID
-          groupID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const createGroupUser = /* GraphQL */ `
-  mutation CreateGroupUser(
-    $input: CreateGroupUserInput!
-    $condition: ModelGroupUserConditionInput
-  ) {
-    createGroupUser(input: $input, condition: $condition) {
-      id
       userID
-      groupID
-      user {
-        id
-        sleeps {
-          nextToken
-        }
-        image
-        name
-        groups {
-          nextToken
-        }
-        sleepRecords {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      group {
-        id
-        name
-        sleepRecords {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-        owner
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
