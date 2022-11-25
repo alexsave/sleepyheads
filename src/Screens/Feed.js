@@ -11,15 +11,15 @@ import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
 import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import { Auth, graphqlOperation } from 'aws-amplify';
-import { GroupContext } from '../Providers/GroupProvider';
+import { GroupContext, GLOBAL } from '../Providers/GroupProvider';
 import { Words } from '../Components/Basic/Words';
 import { GroupModal } from '../Components/Feed/GroupModal';
 
 export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
   const {username} = useContext(UserContext);
-  //const {inHealth} = useContext(SleepContext);
-  const {posts, getPosts, postsByGroup, setGroupID, getAdditionalPosts, isLoading} = useContext(GroupContext);
+  const {recentSleep} = useContext(SleepContext);
+  const {posts, setGroupID, getAdditionalPosts, isLoading} = useContext(GroupContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
@@ -37,7 +37,7 @@ export const Feed = props => {
     if (username === NOT_SIGNED_IN)
       navigation.navigate('join');
     else
-      setGroupID(''); //global
+      setGroupID(GLOBAL); //global
 
   }, [username]);
   const [groupModalVisible, setGroupModalVisible] = useState(false);
@@ -60,7 +60,8 @@ export const Feed = props => {
 
     <Words>{isLoading}</Words>
     <FlatList
-      data={posts}
+      data={[{data: recentSleep}, ...posts]}
+      //data={posts}
       // rename this from sleepSession to postData or smth
       renderItem={({item}) => <Post sleepSession={item}/>}
     />

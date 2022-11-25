@@ -5,6 +5,8 @@ import { sleepByTimestamp, sleepsByTimestamp } from '../graphql/queries';
 
 export const GroupContext = React.createContext();
 
+export const GLOBAL = 'GLOBAL';
+
 const INITIAL_QUERY = 'INITIAL_QUERY';
 const ADDITIONAL_QUERY = 'ADDITIONAL_QUERY';
 const SUBSCRIPTION = 'SUBSCRIPTION';
@@ -106,7 +108,7 @@ const GroupProvider = props => {
     return () => subscription.unsubscribe();*/
   }, [username, groupID])
 
-  const posts = useMemo(() => postsByGroup[groupID], [postsByGroup, groupID]);
+  const posts = useMemo(() => postsByGroup[groupID] || [], [postsByGroup, groupID]);
 
   return (
     <GroupContext.Provider value={{
@@ -116,7 +118,6 @@ const GroupProvider = props => {
       getAdditionalPosts,
       setGroupID,
 
-      postsByGroup// don't directly show this
     }}>
       {props.children}
     </GroupContext.Provider>

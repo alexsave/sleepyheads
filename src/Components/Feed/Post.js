@@ -55,9 +55,13 @@ export const Post = props => {
 
   const highlight = postUploaded ? PRIMARY : DARKER;
 
+  if (!sleepSession)
+    return <View></View>
+
   const {duration} = sleepSession;
     //new Date(sleepSession.bedEnd) -
     //new Date(sleepSession.bedStart);
+
 
   return <View
     style={{

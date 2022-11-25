@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadFromHealth } from '../Network/PostLoad';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -135,6 +135,23 @@ const SleepProvider = props => {
     }
   }
 
+  // most recent unuploaded sleep, as long as sleepEnd is today
+  const recentSleep = useMemo(() => {
+    const today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+
+    let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
+      .filter(x => !uploaded.has(makeSleepKey(x)))
+    if (candidate.length === 0)
+      return null;
+
+    // most recent first
+    return candidate[0];
+
+  }, [inHealth, uploaded]);
+
   return (
     <SleepContext.Provider value={{
       inHealth,
@@ -148,6 +165,8 @@ const SleepProvider = props => {
 
       importSleep,
       imported,
+
+      recentSleep,
 
       uploadSleep,
       uploaded,
