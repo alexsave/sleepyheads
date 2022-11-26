@@ -6,10 +6,10 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-//import AWSAppSyncClient from "aws-appsync";
-import gql from 'graphql-tag';
-import fetch from 'node-fetch';
-import { AWSAppSyncClient } from 'aws-appsync';
+// Annoying but saves a lot of space in lambdas
+import gql from '/opt/nodejs/node_modules/graphql-tag/main.js';
+import fetch from '/opt/nodejs/node_modules/node-fetch/src/index.js';
+import { AWSAppSyncClient } from '/opt/nodejs/node_modules/aws-appsync/lib/index.js';
 global.fetch = fetch;
 
 

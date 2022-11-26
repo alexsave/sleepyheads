@@ -32,7 +32,11 @@
         },
         "createSleepAndRecords": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
-          "s3Key": "amplify-builds/createSleepAndRecords-45307042696b6f6c3742-build.zip"
+          "s3Key": "amplify-builds/createSleepAndRecords-754762504d455171674f-build.zip"
+        },
+        "sleepyheadscommonLib": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/sleepyheadscommonLib-LambdaLayerVersiond73aeed2-build.zip"
         }
       },
       "auth": {

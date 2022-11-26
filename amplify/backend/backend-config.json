@@ -87,6 +87,13 @@
       "service": "Lambda",
       "dependsOn": [
         {
+          "category": "function",
+          "resourceName": "sleepyheadscommonLib",
+          "attributes": [
+            "Arn"
+          ]
+        },
+        {
           "category": "api",
           "resourceName": "sleepyheadsApi",
           "attributes": [
@@ -96,6 +103,11 @@
           ]
         }
       ]
+    },
+    "sleepyheadscommonLib": {
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer",
+      "build": true
     }
   },
   "api": {
