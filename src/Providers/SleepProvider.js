@@ -4,7 +4,7 @@ import { loadFromHealth } from '../Network/PostLoad';
 import { API, graphqlOperation } from 'aws-amplify';
 import { Sleep } from '../models';
 import { UserContext } from './UserProvider';
-import { createSleep, createSleepAndRecords } from '../graphql/mutations';
+import { createSleep, createSleepAndRecords, updateSleep } from '../graphql/mutations';
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
 
@@ -16,6 +16,8 @@ export const makeSleepKey = sleep => {
   let x =  SLEEP_PREFIX + new Date(sleep.bedStart).getTime();
   return x;
 }
+
+export const RECENT = 'RECENT';
 
 // this does rely on username btw
 // or we just delete everything on signout lol
@@ -102,27 +104,54 @@ const SleepProvider = props => {
   }
 
   // this one's going to be a bit more interesting
+
+  // two uses: manually uploading recentSleep object
+  // auto upload, no title
   const uploadSleep = async sleep => {
-    const key = makeSleepKey(sleep);
+    const key = makeSleepKey(sleep.data);
     //convert to proper post object, with comments and shit
     // then upload to AWS
 
-    // we'll do this for now
-    const csi = {
-      type: 'sleep',
-      userID: username,
-      title: '',
-      description: '',
-      data: sleep
-    };
+    //1
+    if (sleep.id === RECENT){
 
-    //console.log(JSON.stringify(input.data));
-    //const res = await API.graphql(graphqlOperation(createSleep, { input }));
-    const res = await API.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
 
-    console.log(res)
-    //hmmmmmmm
-    setUploaded(new Set([...uploaded]).add(key));//prev => new Set(prev).add(key));
+      // we'll do this for now
+      const csi = {...sleep,
+        type: 'sleep',
+        userID: username,
+        //title: '',
+        //description: '',
+        //data: sleep
+      };
+
+      //console.log(JSON.stringify(input.data));
+      //const res = await API.graphql(graphqlOperation(createSleep, { input }));
+      const res = await API.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
+
+      console.log(res)
+      //hmmmmmmm
+      setUploaded(new Set([...uploaded]).add(key));//prev => new Set(prev).add(key));
+    } else { //2
+      console.log(Object.keys(sleep))
+      delete sleep.likes;
+      delete sleep.comments;
+      delete sleep.updatedAt;
+      delete sleep.createdAt;//hmm
+      /*const usi = {
+        ...sleep,
+        likes: undefined,
+        comments: undefined,
+        updatedAt: undefined
+
+      }
+      return;*/
+
+      const res = await API.graphql(graphqlOperation(updateSleep, {input: sleep}));
+      console.log(res);
+
+
+    }
   }
 
   const clearCache = async () => {
@@ -136,7 +165,7 @@ const SleepProvider = props => {
   }
 
   // most recent unuploaded sleep, as long as sleepEnd is today
-  const recentSleep = useMemo(() => {
+  useEffect(() => {
     const today = new Date();
     today.setHours(0);
     today.setMinutes(0);
@@ -144,13 +173,19 @@ const SleepProvider = props => {
 
     let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
       .filter(x => !uploaded.has(makeSleepKey(x)))
-    if (candidate.length === 0)
-      return null;
+    if (candidate.length === 0){
+      setRecentSleep({id: 'RECENT', data: null});
+    } else {
+      setRecentSleep({id: 'RECENT', data: candidate[0]});
+    }
 
     // most recent first
-    return candidate[0];
 
   }, [inHealth, uploaded]);
+
+
+  // this is a state so that we have a little "staging" post thing
+  const [recentSleep, setRecentSleep] = useState({data:null});
 
   return (
     <SleepContext.Provider value={{

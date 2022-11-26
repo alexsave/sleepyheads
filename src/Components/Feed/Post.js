@@ -4,11 +4,12 @@ import { Row } from "../Basic/Row";
 import { BACKGROUND, DARKER, PRIMARY } from '../../Values/Colors';
 import { Sample } from "./Sample";
 import UserImage from '../Profile/UserImage';
-import { makeSleepKey, SleepContext } from '../../Providers/SleepProvider';
+import { makeSleepKey, RECENT, SleepContext } from '../../Providers/SleepProvider';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useContext, useEffect, useState } from 'react';
 import { GroupContext } from '../../Providers/GroupProvider';
+import { UserContext } from '../../Providers/UserProvider';
 
 
 const formatDuration = ms => {
@@ -40,25 +41,25 @@ const formatDuration = ms => {
 
 export const Post = props => {
   // ew
-  const sleepSession = props.sleepSession.data;
+  //const sleepSession = props.sleepSession.data;
+  const {sleepSession} = props;
+  const {data} = sleepSession;
   const navigation = useNavigation();
+  const {username} = useContext(UserContext);
   const {imported, uploaded, uploadSleep} = useContext(SleepContext);
   const {posts} = useContext(GroupContext);
 
-  const [postUploaded, setPostUploaded] = useState(false);
-
-  useEffect(() => {
-    const u = posts.some(p => p.id === props.sleepSession.id);
-    setPostUploaded(u);
-
-  }, [uploaded, sleepSession])
+  const postUploaded = sleepSession.id !== RECENT;
 
   const highlight = postUploaded ? PRIMARY : DARKER;
 
-  if (!sleepSession)
+  // !sleepSession.userID is possible for the "recentSleep", which we own
+  const ownPost = sleepSession && (username === sleepSession.userID || !sleepSession.userID);
+
+  if (!data)
     return <View></View>
 
-  const {duration} = sleepSession;
+  const {duration} = data;
     //new Date(sleepSession.bedEnd) -
     //new Date(sleepSession.bedStart);
 
@@ -70,6 +71,7 @@ export const Post = props => {
       //height: 200,
       borderWidth: 3,
       borderRadius: 10,
+      borderStyle: postUploaded ? 'solid': 'dashed',
       borderColor: highlight,
       margin: 5,
       //backgroundColor: sample.value === 'UNKNOWN' ? 'black' : sample.value === 'ASLEEP' ? 'blue': 'green',
@@ -83,46 +85,53 @@ export const Post = props => {
 
         <UserImage size={50}/>
 
-        <Row style={{paddingLeft: 3, alignItems: 'center', backgroundColor: highlight, borderBottomLeftRadius: 10}}>
-          {
-            !postUploaded &&
+        {
+          ownPost &&
+          <Row style={{paddingLeft: 3, alignItems: 'center', backgroundColor: highlight, borderBottomLeftRadius: 10}}>
+            {
+              !postUploaded &&
 
+              <TouchableOpacity
+                style={{width: 50, alignItems: 'center', borderRightWidth: StyleSheet.hairlineWidth}}
+                onPress={() => uploadSleep(sleepSession)}
+              >
+                <Words><Ionicons size={30} name='cloud-upload-outline'/></Words>
+              </TouchableOpacity>
+            }
             <TouchableOpacity
-              style={{width: 50, alignItems: 'center', borderRightWidth: StyleSheet.hairlineWidth}}
-              onPress={() => uploadSleep(sleepSession)}
+              style={{width: 50, alignItems: 'center'}}
+              onPress={() => navigation.navigate('post', {sleepSession})}
             >
-              <Words><Ionicons size={30} name='cloud-upload-outline'/></Words>
+              <Words><Ionicons size={30} name='pencil-outline'/></Words>
             </TouchableOpacity>
-          }
-          <TouchableOpacity
-            style={{width: 50, alignItems: 'center'}}
-            onPress={() => navigation.navigate('post', {id: makeSleepKey(sleepSession)})}
-          >
-            <Words><Ionicons size={30} name='pencil-outline'/></Words>
-          </TouchableOpacity>
-        </Row>
+          </Row>
+        }
       </Row>
 
-      <Words style={{fontSize: 30}}>{new Date(sleepSession.bedStart).toDateString()}</Words>
+      <Words style={{fontSize: 30}}>{new Date(data.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
-      <Sample duration={duration} session={sleepSession}/>
+      <Sample duration={duration} session={data}/>
     </View>
 
-    <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
-      <View style={{flex:1, alignItems: 'center'}}>
-        <Words> 😴</Words>
-      </View>
-      <View style={{
-        borderLeftWidth: StyleSheet.hairlineWidth,
-        borderRightWidth: StyleSheet.hairlineWidth,
-        flex:1, alignItems: 'center'}}>
-        <Words>😳</Words>
-      </View>
-      <View style={{flex:1, alignItems: 'center'}}>
-        <Words>⬆️</Words>
-      </View>
+    {
+      postUploaded &&
 
-    </Row>
+      <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
+        <View style={{flex:1, alignItems: 'center'}}>
+          <Words> 😴</Words>
+        </View>
+        <View style={{
+          borderLeftWidth: StyleSheet.hairlineWidth,
+          borderRightWidth: StyleSheet.hairlineWidth,
+          flex:1, alignItems: 'center'}}>
+          <Words>😳</Words>
+        </View>
+        <View style={{flex:1, alignItems: 'center'}}>
+          <Words>⬆️</Words>
+        </View>
+
+      </Row>
+    }
   </View>;
 }
 

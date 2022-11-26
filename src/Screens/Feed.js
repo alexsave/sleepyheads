@@ -60,7 +60,7 @@ export const Feed = props => {
 
     <Words>{isLoading}</Words>
     <FlatList
-      data={[{data: recentSleep}, ...posts]}
+      data={[recentSleep, ...posts]}
       //data={posts}
       // rename this from sleepSession to postData or smth
       renderItem={({item}) => <Post sleepSession={item}/>}
