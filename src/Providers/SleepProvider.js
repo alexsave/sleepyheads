@@ -108,7 +108,7 @@ const SleepProvider = props => {
     // then upload to AWS
 
     // we'll do this for now
-    const input = {
+    const csi = {
       type: 'sleep',
       userID: username,
       title: '',
@@ -116,9 +116,9 @@ const SleepProvider = props => {
       data: sleep
     };
 
-    console.log(JSON.stringify(input.data));
+    //console.log(JSON.stringify(input.data));
     //const res = await API.graphql(graphqlOperation(createSleep, { input }));
-    const res = await API.graphql(graphqlOperation(createSleepAndRecords, { input }));
+    const res = await API.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
 
     console.log(res)
     //hmmmmmmm

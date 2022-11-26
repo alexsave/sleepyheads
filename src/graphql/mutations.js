@@ -752,38 +752,48 @@ export const deleteGroupUser = /* GraphQL */ `
   }
 `;
 export const createSleepAndRecords = /* GraphQL */ `
-  mutation CreateSleepAndRecords($csi: CreateSleepInput) {
+  mutation CreateSleepAndRecords($csi: CreateSleepInput!) {
     createSleepAndRecords(csi: $csi) {
       id
-      sleep {
-        id
-        type
-        userID
-        title
-        description
-        likes {
-          nextToken
+      type
+      userID
+      title
+      description
+      likes {
+        items {
+          id
+          sleepID
+          type
+          userID
+          createdAt
+          updatedAt
         }
-        comments {
-          nextToken
-        }
-        media
-        data {
-          bedStart
-          bedEnd
-          duration
-        }
-        createdAt
-        updatedAt
+        nextToken
       }
-      groupID
-      rankBedStart
-      rankBedEnd
-      rankSleepTime
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      media
+      data {
+        bedStart
+        bedEnd
+        duration
+        samples {
+          type
+          startOffset
+          endOffset
+        }
+      }
       createdAt
       updatedAt
-      sleepRecordSleepId
-      userID
     }
   }
 `;

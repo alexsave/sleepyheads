@@ -186,8 +186,8 @@ input CreateSleepInput {
 type Mutation
 {
   createSleepAndRecords(
-    csi: CreateSleepInput
-  ): SleepRecord
+    csi: CreateSleepInput!
+  ): Sleep
   @function(name: "createSleepAndRecords-${env}")
   @auth(rules: [{allow: private, provider: userPools}])
 }

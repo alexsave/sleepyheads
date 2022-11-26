@@ -6,9 +6,11 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-const AWSAppSyncClient = require('aws-appsync').default;
-const gql = require('graphql-tag');
-global.fetch = require('node-fetch');
+//import AWSAppSyncClient from "aws-appsync";
+import gql from 'graphql-tag';
+import fetch from 'node-fetch';
+import { AWSAppSyncClient } from 'aws-appsync';
+global.fetch = fetch;
 
 
 /*exports.handler = async (event) => {
@@ -29,7 +31,7 @@ let graphqlClient;
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event, context, callback) => {
+export async function handler(event, context, callback){
 
     if (!graphqlClient) {
         let env;
@@ -60,6 +62,9 @@ exports.handler = async (event, context, callback) => {
                 }
             };
         }
+        console.log(JSON.stringify({url: env.API_SLEEPYHEADSAPI_GRAPHQLAPIENDPOINTOUTPUT,
+              region: env.REGION,
+              auth: graphql_auth,}));
         graphqlClient = new AWSAppSyncClient({
             //i think this is the problem
             url: env.API_SLEEPYHEADSAPI_GRAPHQLAPIENDPOINTOUTPUT,
@@ -74,14 +79,16 @@ exports.handler = async (event, context, callback) => {
 
     const userID = event.identity.username;
 
+    console.log(JSON.stringify(event));
+
     const sleepData = event.arguments.csi.data;
 
 
     console.log('sleepData', sleepData);
 
     //sleeprecord is KINDA similar to the old report
-    let start = secondsFromDayStart(event.arguments.csi.data.bedStart);
-    let end = secondsFromDayStart(event.arguments.csi.data.bedEnd);
+    let start = secondsFromDayStart(sleepData.bedStart);
+    let end = secondsFromDayStart(sleepData.bedEnd);
 
     // this is a whole class in itself
     const asleep = event.arguments.csi.data.samples
@@ -95,7 +102,7 @@ exports.handler = async (event, context, callback) => {
                 type: 'sleep',
                 title: event.arguments.csi.title,
                 description: event.arguments.csi.description,
-                data: event.arguments.csi.data,
+                data: sleepData,
                 media: event.arguments.csi.media,
                 userID,
             }
@@ -110,7 +117,7 @@ exports.handler = async (event, context, callback) => {
     //we now split into 4 independent processing paths
     console.log('creating timelines');
     const input = {
-        sleepID,
+        sleepRecordSleepId: sleepID,
         rankBedStart: start,
         rankBedEnd: end,
         rankSleepTime: asleep
