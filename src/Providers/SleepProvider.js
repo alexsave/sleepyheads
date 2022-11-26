@@ -5,6 +5,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { Sleep } from '../models';
 import { UserContext } from './UserProvider';
 import { createSleep, createSleepAndRecords, updateSleep } from '../graphql/mutations';
+import { listSleeps } from '../graphql/queries';
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
 
@@ -45,7 +46,8 @@ const SleepProvider = props => {
   // what's better, to store all the sleep sessions in a single AsyncStorage object,
   // or to split them up?
 
-  const [autoUpload, setAutoUpload] = useState(false);
+  // really should be UserDefault
+  const [autoUpload, setAutoUpload] = useState(true);
   const [uploaded, setUploaded] = useState(new Set());
 
   // check which workouts are backedup in async storage
@@ -62,6 +64,31 @@ const SleepProvider = props => {
   }, []);
 
   useEffect(() => {
+    if(!username)
+      return;
+
+    (async () => {
+
+      const now = new Date();
+
+      const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+      //more important, what have we uploaded
+      const res = await API.graphql(graphqlOperation(listSleeps, {
+        //this filter is crucial
+        filter: {
+          userID: {eq: username},
+          createdAt: {ge: weekAgo.toISOString()}
+        }
+      }))
+      console.log(JSON.stringify(res));
+      setUploaded(new Set(res.data.listSleeps.items.map(s => makeSleepKey(s.data))));
+
+
+    })();
+
+  }, [username])
+
+  useEffect(() => {
     tryImportDiff();
   }, [autoImport, imported, inHealth])
 
@@ -71,7 +98,7 @@ const SleepProvider = props => {
 
     // kind of a base case
     //if (imported.size >= inHealth.length)
-      //return;
+    //return;
 
     /*let diff = new Set(inHealth.map(makeSleepKey));
     console.log(imported);
@@ -166,6 +193,9 @@ const SleepProvider = props => {
 
   // most recent unuploaded sleep, as long as sleepEnd is today
   useEffect(() => {
+    if (!username)
+      return;
+
     const today = new Date();
     today.setHours(0);
     today.setMinutes(0);
@@ -173,15 +203,25 @@ const SleepProvider = props => {
 
     let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
       .filter(x => !uploaded.has(makeSleepKey(x)))
-    if (candidate.length === 0){
-      setRecentSleep({id: 'RECENT', data: null});
+
+    if (candidate.length !== 0){
+      if (autoUpload) {
+        uploadSleep({
+          id: RECENT,
+          description: `uploaded from useEffect at ${new Date().toLocaleString()}`,
+          data: candidate[0]
+        });
+      } else  {
+        setRecentSleep({id: RECENT, data: candidate[0]});
+
+      }
     } else {
-      setRecentSleep({id: 'RECENT', data: candidate[0]});
+      setRecentSleep({id: RECENT, data: null});
     }
 
     // most recent first
 
-  }, [inHealth, uploaded]);
+  }, [inHealth, uploaded, username]);
 
 
   // this is a state so that we have a little "staging" post thing
