@@ -315,7 +315,7 @@ export const Profile = props => {
 
                           {
                             posts &&
-                            posts.map(sleepSession => <Post key={sleepSession.data.bedStart} sleepSession={sleepSession} />)
+                            posts.map(sleepSession => <Post key={sleepSession.id} sleepSession={sleepSession} />)
                           }
                           <PostList
                             listOperation={''/*listPostsSortedByUserAndTimestamp*/}

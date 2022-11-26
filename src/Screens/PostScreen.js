@@ -7,11 +7,13 @@ import { RECENT, SleepContext } from '../Providers/SleepProvider';
 import { Row } from '../Components/Basic/Row';
 import { Words } from '../Components/Basic/Words';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { UserContext } from '../Providers/UserProvider';
 
 // look up shared transitions, that's the ideal behavior for this
 export const PostScreen = props => {
   const {sleepSession} = props.route.params;
   const {id} = sleepSession;
+  const {username} = useContext(UserContext);
   const {uploadSleep} = useContext(SleepContext);
 
   const [title, setTitle] = useState(sleepSession.title);
@@ -32,6 +34,8 @@ export const PostScreen = props => {
 
   }, [id]);
 
+  //use this a bit more
+  const ownPost = id === RECENT || username === sleepSession.userID;
 
   const navigation = useNavigation();
   return <SafeAreaView style={{flex: 1, backgroundColor: BACKGROUND}}>
@@ -68,6 +72,8 @@ export const PostScreen = props => {
 
       <TextInput
         onChangeText={t => {
+          if(!ownPost)
+            return;
           setDirty(true);
           setTitle(t);
         }}
@@ -80,6 +86,8 @@ export const PostScreen = props => {
 
       <TextInput
         onChangeText={t => {
+          if(!ownPost)
+            return;
           setDirty(true);
           setDesc(t);
         }}

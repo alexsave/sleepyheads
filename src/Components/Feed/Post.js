@@ -81,9 +81,13 @@ export const Post = props => {
     <View style={{borderRadius: 10, backgroundColor: BACKGROUND}}>
 
 
-      <Row style={{justifyContent: 'space-between'}}>
+      <Row style={{height: 50, justifyContent: 'flex-end'}}>
 
-        <UserImage size={50}/>
+        { postUploaded &&
+          <View style={{flex: 1}}>
+            <UserImage size={50} />
+          </View>
+        }
 
         {
           ownPost &&
@@ -108,6 +112,7 @@ export const Post = props => {
         }
       </Row>
 
+      <Words style={{fontSize: 30}}>{sleepSession.title}</Words>
       <Words style={{fontSize: 30}}>{new Date(data.bedStart).toDateString()}</Words>
       <Words>{formatDuration(duration)}</Words>
       <Sample duration={duration} session={data}/>
