@@ -93,14 +93,15 @@ enum LikeType {
 
 type Like @model
 @auth(rules: [
-  {allow: owner, ownerField: "userID", provider: userPools, operations: [read, create, delete]} #consider removing create, delete
+  {allow: owner, ownerField: "userID", provider: userPools, operations: [read]}#, create, delete]} #consider removing create, delete
   {allow: private, provider: userPools, operations: [read]}
   {allow: private, provider: iam, operations: [read, create, delete]}
 ]) {
   id: ID!
   sleepID: ID! @index(name: "bySleep", sortKeyFields: ["createdAt"])
   type: LikeType
-  userID: ID!
+  userID: ID! @index(name: "byUserAndSleep", sortKeyFields: ["sleepID"], queryField: "likeByUserAndPost")
+  #userID: ID! @index(name: "byUserAndSleep", sortKeyFields: ["sleepID", "createdAt"], queryField: "likeByUserAndPost")
   createdAt: String!
 }
 
@@ -184,11 +185,23 @@ input CreateSleepInput {
   createdAt: String
 }
 
+input LikeSleepInput {
+  sleepID: ID!
+  type: LikeType!
+  userID: ID!
+}
+
 type Mutation
 {
   createSleepAndRecords(
     csi: CreateSleepInput!
   ): Sleep
   @function(name: "createSleepAndRecords-${env}")
+  @auth(rules: [{allow: private, provider: userPools}])
+
+  likeSleep(
+    lsi: LikeSleepInput!
+  ): Like
+  @function(name: "likeSleep-${env}")
   @auth(rules: [{allow: private, provider: userPools}])
 }

@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "api": {
+      "sleepyheadsApi": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "sleepyheadscommonLib",
+      "env": "production",
+      "version": "Always choose latest version",
+      "isLatestVersionSelected": true
+    }
+  ]
+}

@@ -10,8 +10,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useContext, useEffect, useState } from 'react';
 import { GroupContext } from '../../Providers/GroupProvider';
 import { UserContext } from '../../Providers/UserProvider';
-import { LikeType } from '../../models';
-import { graphqlOperation } from 'aws-amplify';
+import { Like, LikeType } from '../../models';
+import { API, graphqlOperation } from 'aws-amplify';
+import { likeSleep } from '../../graphql/mutations';
 
 
 const formatDuration = ms => {
@@ -68,17 +69,19 @@ export const Post = props => {
   //new Date(sleepSession.bedStart);
 
   const likes = sleepSession.likes.items || [];
-  const zzz = likes.filter(l => l.type === LikeType.SNOOZE).length;
-  const alarm = likes.length - zzz;
+  const zzz = likes.filter(l => l.type === LikeType.SNOOZE);//.length;
+  const alarm = likes.filter(l => l.type === LikeType.ALARM);//.length;
 
   // might be good to have a lambda for this
-  const snoozeOnEm = async () => {
 
-
-  }
-
-  const realShitQuestionMark = async () => {
-
+  const likeAction = async type => {
+    const lsi = {
+      sleepID: sleepSession.id,
+      userID: username,
+      type
+    };
+    const res = await API.graphql(graphqlOperation(likeSleep,  {lsi} ));
+    console.log(res);
   }
 
   return <View
@@ -128,7 +131,6 @@ export const Post = props => {
           </Row>
         }
       </Row>
-      <Words>{JSON.stringify(likes)}</Words>
 
       <Words style={{fontSize: 30}}>{sleepSession.title}</Words>
       <Words style={{fontSize: 30}}>{new Date(data.bedStart).toDateString()}</Words>
@@ -142,18 +144,18 @@ export const Post = props => {
       <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
         <TouchableOpacity
           style={{flex:1, alignItems: 'center'}}
-          onPress={snoozeOnEm}
+          onPress={() => likeAction(LikeType.SNOOZE)}
         >
-          <Words> 😴{zzz}</Words>
+          <Words style={{fontWeight: zzz.some(l => l.userID === username)? 'bold': 'normal'}}> 😴{zzz.length}</Words>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
             borderLeftWidth: StyleSheet.hairlineWidth,
             borderRightWidth: StyleSheet.hairlineWidth,
             flex:1, alignItems: 'center'}}
-          onPress={realShitQuestionMark}
+          onPress={() => likeAction(LikeType.ALARM)}
         >
-          <Words>😳{alarm}</Words>
+          <Words style={{fontWeight: alarm.some(l => l.userID === username)? 'bold': 'normal'}}> 😳{alarm.length}</Words>
         </TouchableOpacity>
         <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
           <Words>⬆️</Words>

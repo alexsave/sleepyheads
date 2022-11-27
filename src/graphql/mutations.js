@@ -788,3 +788,15 @@ export const createSleepAndRecords = /* GraphQL */ `
     }
   }
 `;
+export const likeSleep = /* GraphQL */ `
+  mutation LikeSleep($lsi: LikeSleepInput!) {
+    likeSleep(lsi: $lsi) {
+      id
+      sleepID
+      type
+      userID
+      createdAt
+      updatedAt
+    }
+  }
+`;

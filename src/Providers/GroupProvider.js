@@ -63,7 +63,7 @@ const GroupProvider = props => {
         limit: 20,
         nextToken: nextToken
       }));
-      console.log(res);
+      console.log(JSON.stringify(res));
 
       //dispatch({ type: type, posts: res.data.sleepsByTimestamp.items });
       dispatch({ type: type, groupID, posts: res.data.sleepsByTimestamp.items });

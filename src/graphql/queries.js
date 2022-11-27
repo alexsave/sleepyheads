@@ -103,6 +103,14 @@ export const sleepsByTimestamp = /* GraphQL */ `
         title
         description
         likes {
+          items {
+            id
+            sleepID
+            type
+            userID
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         comments {
@@ -218,6 +226,35 @@ export const listLikes = /* GraphQL */ `
     $nextToken: String
   ) {
     listLikes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        sleepID
+        type
+        userID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const likeByUserAndPost = /* GraphQL */ `
+  query LikeByUserAndPost(
+    $userID: ID!
+    $sleepID: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelLikeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    likeByUserAndPost(
+      userID: $userID
+      sleepID: $sleepID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         sleepID
@@ -414,6 +451,14 @@ export const recordsByGroup = /* GraphQL */ `
           createdAt
           updatedAt
           likes {
+            items {
+              id
+              sleepID
+              type
+              userID
+              createdAt
+              updatedAt
+            }
             nextToken
           }
           comments {

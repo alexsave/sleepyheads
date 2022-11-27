@@ -32,11 +32,15 @@
         },
         "createSleepAndRecords": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
-          "s3Key": "amplify-builds/createSleepAndRecords-754762504d455171674f-build.zip"
+          "s3Key": "amplify-builds/createSleepAndRecords-623378374b41724a6549-build.zip"
         },
         "sleepyheadscommonLib": {
           "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
           "s3Key": "amplify-builds/sleepyheadscommonLib-LambdaLayerVersiond73aeed2-build.zip"
+        },
+        "likeSleep": {
+          "deploymentBucketName": "amplify-sleepyheads-production-221855-deployment",
+          "s3Key": "amplify-builds/likeSleep-564966796b4a6336714e-build.zip"
         }
       },
       "auth": {

@@ -44,6 +44,12 @@ export type AmplifyDependentResourcesAttributes = {
         },
         "sleepyheadscommonLib": {
             "Arn": "string"
+        },
+        "likeSleep": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     },
     "api": {
