@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from 'react';
 import { GroupContext } from '../../Providers/GroupProvider';
 import { UserContext } from '../../Providers/UserProvider';
 import { LikeType } from '../../models';
+import { graphqlOperation } from 'aws-amplify';
 
 
 const formatDuration = ms => {
@@ -63,12 +64,22 @@ export const Post = props => {
     return <View></View>
 
   const {duration} = data;
-    //new Date(sleepSession.bedEnd) -
-    //new Date(sleepSession.bedStart);
+  //new Date(sleepSession.bedEnd) -
+  //new Date(sleepSession.bedStart);
 
   const likes = sleepSession.likes.items || [];
   const zzz = likes.filter(l => l.type === LikeType.SNOOZE).length;
   const alarm = likes.length - zzz;
+
+  // might be good to have a lambda for this
+  const snoozeOnEm = async () => {
+
+
+  }
+
+  const realShitQuestionMark = async () => {
+
+  }
 
   return <View
     style={{
@@ -117,6 +128,7 @@ export const Post = props => {
           </Row>
         }
       </Row>
+      <Words>{JSON.stringify(likes)}</Words>
 
       <Words style={{fontSize: 30}}>{sleepSession.title}</Words>
       <Words style={{fontSize: 30}}>{new Date(data.bedStart).toDateString()}</Words>
@@ -128,14 +140,20 @@ export const Post = props => {
       postUploaded &&
 
       <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
-        <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
-          <Words> 😴{likes.length}</Words>
+        <TouchableOpacity
+          style={{flex:1, alignItems: 'center'}}
+          onPress={snoozeOnEm}
+        >
+          <Words> 😴{zzz}</Words>
         </TouchableOpacity>
-        <TouchableOpacity style={{
-          borderLeftWidth: StyleSheet.hairlineWidth,
-          borderRightWidth: StyleSheet.hairlineWidth,
-          flex:1, alignItems: 'center'}}>
-          <Words>😳{likes.length}</Words>
+        <TouchableOpacity
+          style={{
+            borderLeftWidth: StyleSheet.hairlineWidth,
+            borderRightWidth: StyleSheet.hairlineWidth,
+            flex:1, alignItems: 'center'}}
+          onPress={realShitQuestionMark}
+        >
+          <Words>😳{alarm}</Words>
         </TouchableOpacity>
         <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
           <Words>⬆️</Words>
