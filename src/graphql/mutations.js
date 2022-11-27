@@ -280,7 +280,6 @@ export const createUser = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -331,7 +330,6 @@ export const updateUser = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -382,7 +380,6 @@ export const deleteUser = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -426,7 +423,6 @@ export const createSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
@@ -465,7 +461,6 @@ export const updateSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
@@ -504,7 +499,6 @@ export const deleteSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
@@ -526,7 +520,6 @@ export const createGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -564,7 +557,6 @@ export const updateGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -602,7 +594,6 @@ export const deleteGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }

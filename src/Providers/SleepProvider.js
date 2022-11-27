@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadFromHealth } from '../Network/PostLoad';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -212,11 +212,11 @@ const SleepProvider = props => {
           data: candidate[0]
         });
       } else  {
-        setRecentSleep({id: RECENT, data: candidate[0]});
+        setRecentSleepData(candidate[0]);
 
       }
     } else {
-      setRecentSleep({id: RECENT, data: null});
+      setRecentSleepData(null);
     }
 
     // most recent first
@@ -225,7 +225,14 @@ const SleepProvider = props => {
 
 
   // this is a state so that we have a little "staging" post thing
-  const [recentSleep, setRecentSleep] = useState({data:null});
+  //const [recentSleep, setRecentSleep] = useState({data:null});
+  const [recentSleepData, setRecentSleepData] = useState(null);
+
+  const recentSleep = useCallback(() => {
+    return {id: RECENT, data: recentSleep()}
+  }, [recentSleepData]);
+
+
 
   return (
     <SleepContext.Provider value={{

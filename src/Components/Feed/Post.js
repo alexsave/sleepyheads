@@ -10,6 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useContext, useEffect, useState } from 'react';
 import { GroupContext } from '../../Providers/GroupProvider';
 import { UserContext } from '../../Providers/UserProvider';
+import { LikeType } from '../../models';
 
 
 const formatDuration = ms => {
@@ -43,6 +44,8 @@ export const Post = props => {
   // ew
   //const sleepSession = props.sleepSession.data;
   const {sleepSession} = props;
+  if (!sleepSession)
+    return <View></View>
   const {data} = sleepSession;
   const navigation = useNavigation();
   const {username} = useContext(UserContext);
@@ -63,6 +66,9 @@ export const Post = props => {
     //new Date(sleepSession.bedEnd) -
     //new Date(sleepSession.bedStart);
 
+  const likes = sleepSession.likes.items || [];
+  const zzz = likes.filter(l => l.type === LikeType.SNOOZE).length;
+  const alarm = likes.length - zzz;
 
   return <View
     style={{
@@ -122,18 +128,18 @@ export const Post = props => {
       postUploaded &&
 
       <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
-        <View style={{flex:1, alignItems: 'center'}}>
-          <Words> 😴</Words>
-        </View>
-        <View style={{
+        <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
+          <Words> 😴{likes.length}</Words>
+        </TouchableOpacity>
+        <TouchableOpacity style={{
           borderLeftWidth: StyleSheet.hairlineWidth,
           borderRightWidth: StyleSheet.hairlineWidth,
           flex:1, alignItems: 'center'}}>
-          <Words>😳</Words>
-        </View>
-        <View style={{flex:1, alignItems: 'center'}}>
+          <Words>😳{likes.length}</Words>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
           <Words>⬆️</Words>
-        </View>
+        </TouchableOpacity>
 
       </Row>
     }

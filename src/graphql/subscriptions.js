@@ -232,9 +232,8 @@ export const onDeleteLike = /* GraphQL */ `
 export const onCreateSleepRecord = /* GraphQL */ `
   subscription OnCreateSleepRecord(
     $filter: ModelSubscriptionSleepRecordFilterInput
-    $userID: String
   ) {
-    onCreateSleepRecord(filter: $filter, userID: $userID) {
+    onCreateSleepRecord(filter: $filter) {
       id
       sleep {
         id
@@ -264,16 +263,14 @@ export const onCreateSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
 export const onUpdateSleepRecord = /* GraphQL */ `
   subscription OnUpdateSleepRecord(
     $filter: ModelSubscriptionSleepRecordFilterInput
-    $userID: String
   ) {
-    onUpdateSleepRecord(filter: $filter, userID: $userID) {
+    onUpdateSleepRecord(filter: $filter) {
       id
       sleep {
         id
@@ -303,16 +300,14 @@ export const onUpdateSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
 export const onDeleteSleepRecord = /* GraphQL */ `
   subscription OnDeleteSleepRecord(
     $filter: ModelSubscriptionSleepRecordFilterInput
-    $userID: String
   ) {
-    onDeleteSleepRecord(filter: $filter, userID: $userID) {
+    onDeleteSleepRecord(filter: $filter) {
       id
       sleep {
         id
@@ -342,7 +337,6 @@ export const onDeleteSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
@@ -364,7 +358,6 @@ export const onCreateGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -402,7 +395,6 @@ export const onUpdateGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -440,7 +432,6 @@ export const onDeleteGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }

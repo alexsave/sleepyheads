@@ -1,7 +1,7 @@
 import { API, graphqlOperation } from 'aws-amplify';
 import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from './UserProvider';
-import { sleepByTimestamp, sleepsByTimestamp } from '../graphql/queries';
+import { recordsByGroup, sleepsByTimestamp } from '../graphql/queries';
 
 export const GroupContext = React.createContext();
 
@@ -11,19 +11,6 @@ const INITIAL_QUERY = 'INITIAL_QUERY';
 const ADDITIONAL_QUERY = 'ADDITIONAL_QUERY';
 const SUBSCRIPTION = 'SUBSCRIPTION';
 const LOGOUT = 'LOGOUT';
-
-/*const reducer = (state, action) => {
-  switch(action.type){
-    case INITIAL_QUERY:
-      return action.posts;
-    case ADDITIONAL_QUERY:
-      return [...state, ...action.posts];
-    case SUBSCRIPTION:
-      return [action.post, ...state];
-    default:
-      return state;
-  }
-};*/
 
 // hmm I already don't like this, there's going to be a lot of copying
 // we maybe just handle it in the methods themselves
@@ -44,7 +31,6 @@ const groupReducer = (state, action) => {
   }
 }
 
-
 const GroupProvider = props => {
 
   const {username} = useContext(UserContext);
@@ -58,8 +44,6 @@ const GroupProvider = props => {
   const [isLoading, setIsLoading] = useState(true);
   const [nextToken, setNextToken] = useState(null);
 
-
-
   // later this will be used to load "sleeprecords"
   const loadFeed = async (type = INITIAL_QUERY, nextToken = null) => {
     // this could be more intricate, maybe we don't NEED to reload
@@ -70,20 +54,42 @@ const GroupProvider = props => {
     gropuID = username, sleepsByUser
     groupID = group, recordsByGroup
      */
-    const res = await API.graphql(graphqlOperation(sleepsByTimestamp, {
-      type: 'sleep',
-      sortDirection: 'DESC',
-      limit: 20,
-      nextToken: nextToken
-    }));
-    console.log(res);
+    console.log(groupID);
 
-    //dispatch({ type: type, posts: res.data.sleepsByTimestamp.items });
-    dispatch({ type: type, groupID, posts: res.data.sleepsByTimestamp.items });
+    if (groupID === GLOBAL) {
+      const res = await API.graphql(graphqlOperation(sleepsByTimestamp, {
+        type: 'sleep',
+        sortDirection: 'DESC',
+        limit: 20,
+        nextToken: nextToken
+      }));
+      console.log(res);
 
-    setNextToken(res.data.sleepsByTimestamp.nextToken);
-    setIsLoading(false);
+      //dispatch({ type: type, posts: res.data.sleepsByTimestamp.items });
+      dispatch({ type: type, groupID, posts: res.data.sleepsByTimestamp.items });
 
+      setNextToken(res.data.sleepsByTimestamp.nextToken);
+      setIsLoading(false);
+    } else {
+      if (groupID === ''){
+        console.log("OHHHH BUDDDDDY")
+        return;
+      }
+
+      const res = await API.graphql(graphqlOperation(recordsByGroup, {
+        groupID: groupID,
+        sortDirection: 'DESC',
+        limit: 20,
+        nextToken: nextToken
+      }));
+      //console.log(JSON.stringify(res));
+
+      //dispatch({ type: type, posts: res.data.sleepsByTimestamp.items });
+      dispatch({ type: type, groupID, posts: res.data.recordsByGroup.items });
+
+      setNextToken(res.data.recordsByGroup.nextToken);
+      setIsLoading(false);
+    }
 
   };
 

@@ -43,6 +43,7 @@ export const Profile = props => {
 
     const [name, setName] = useState('');
 
+    // posts is a bit different from the feed here, as we get records
     const {posts, setGroupID} = useContext(GroupContext);
 
 
@@ -312,10 +313,9 @@ export const Profile = props => {
                               )
                           }</View>
 
-
                           {
                             posts &&
-                            posts.map(sleepSession => <Post key={sleepSession.id} sleepSession={sleepSession} />)
+                            posts.map(sleepSession => <Post key={sleepSession.id} sleepSession={sleepSession.sleep} />)
                           }
                           <PostList
                             listOperation={''/*listPostsSortedByUserAndTimestamp*/}

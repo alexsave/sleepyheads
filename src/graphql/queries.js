@@ -276,7 +276,6 @@ export const getUser = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }
@@ -352,7 +351,6 @@ export const getSleepRecord = /* GraphQL */ `
       createdAt
       updatedAt
       sleepRecordSleepId
-      userID
     }
   }
 `;
@@ -382,7 +380,6 @@ export const listSleepRecords = /* GraphQL */ `
         createdAt
         updatedAt
         sleepRecordSleepId
-        userID
       }
       nextToken
     }
@@ -416,6 +413,23 @@ export const recordsByGroup = /* GraphQL */ `
           media
           createdAt
           updatedAt
+          likes {
+            nextToken
+          }
+          comments {
+            nextToken
+          }
+          media
+          data {
+            bedStart
+            bedEnd
+            duration
+            samples {
+              startOffset
+              endOffset
+              type
+            }
+          }
         }
         groupID
         rankBedStart
@@ -424,7 +438,6 @@ export const recordsByGroup = /* GraphQL */ `
         createdAt
         updatedAt
         sleepRecordSleepId
-        userID
       }
       nextToken
     }
@@ -445,7 +458,6 @@ export const getGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
-          userID
         }
         nextToken
       }

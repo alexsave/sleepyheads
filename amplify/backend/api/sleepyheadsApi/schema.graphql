@@ -129,8 +129,9 @@ type User
 #this should ideally go into a SQL table
 type SleepRecord @model
 @auth(rules: [
-  {allow: owner, ownerField: "userID", provider: userPools, operations: [read]}
-  {allow: private, provider: iam, operations:[create]}
+  {allow: private, provider: userPools, operations: [read]}
+  #{allow: owner, ownerField: "userID", provider: userPools, operations: [read]}
+  {allow: private, provider: iam, operations:[read, create, delete]}
 ])
 {
   id: ID!
