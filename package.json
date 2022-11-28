@@ -7,7 +7,7 @@
         "ios": "react-native run-ios",
         "ios-device": "react-native run-ios --device",
         "ios-build": "react-native run-ios --device --configuration Release",
-        "start": "react-native start",
+        "start": "react-native start --reset-cache",
         "test": "jest",
         "lint": "eslint .",
         "amplify-modelgen": "node amplify/scripts/amplify-modelgen.js",

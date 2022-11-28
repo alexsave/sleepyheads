@@ -6,7 +6,7 @@
  */
 
 import type { Node } from "react";
-import React from "react";
+import React, { useEffect } from 'react';
 import { Feed } from "./src/Screens/Feed";
 import { NavigationContainer } from "@react-navigation/native";
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
@@ -20,6 +20,7 @@ import { Join } from './src/Screens/Join';
 import { Settings } from './src/Screens/Settings';
 import GroupProvider from './src/Providers/GroupProvider';
 import { SignUp } from './src/Screens/SignUp';
+import SlashScreen from 'react-native-splash-screen';
 
 /*
 adding chagnes from

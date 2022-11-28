@@ -47,11 +47,18 @@ export const Profile = props => {
     const {posts, setGroupID} = useContext(GroupContext);
 
 
+    const avg = posts.length;
+
     //this is useful, but only when viewing yourself
 
     let profileUser = signedInUser;
     if(props.route.params)
         profileUser = props.route.params.userID;
+
+    useEffect(() => {
+
+        SplashScreen.hide();
+    }, [])
 
     useEffect(() => {
         if(!profileUser)
@@ -296,6 +303,7 @@ export const Profile = props => {
 
                           <Words>{routineTitle}</Words>
 
+                          <Words>Average: {avg}</Words>
                           <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
                           <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
                               Object.entries(records).map(([k,v]) =>

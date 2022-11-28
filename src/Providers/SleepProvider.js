@@ -47,7 +47,7 @@ const SleepProvider = props => {
   // or to split them up?
 
   // really should be UserDefault
-  const [autoUpload, setAutoUpload] = useState(true);
+  const [autoUpload, setAutoUpload] = useState(false);
   const [uploaded, setUploaded] = useState(new Set());
 
   // check which workouts are backedup in async storage

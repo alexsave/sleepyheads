@@ -9,6 +9,7 @@ import { EmailModal } from '../Components/Profile/EmailModal';
 import { appleSignIn } from '../Network/Login';
 import { BACKGROUND_ZZZ } from '../Values/Styles';
 import { useNavigation } from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
 
 // the login/signup screen
 export const Join = props => {
@@ -19,6 +20,7 @@ export const Join = props => {
 
   // these two will clash
   useEffect(() =>  {
+    SplashScreen.hide();
     console.log('join useffect', username, newSignUp )
     //hope this gets called even in email modal
     if (newSignUp)
@@ -47,7 +49,7 @@ export const Join = props => {
 
           <Words
             style={{transform: [{rotate: '-30deg'}], fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}
-          >Join the <Words style={{color: 'red'}}>SLEEPYHEADS</Words>{'\n'}</Words>
+          >Join deez <Words style={{color: 'red'}}>SLEEPYHEADS</Words>{'\n'}</Words>
         </View>
 
         <View style={{flex: 1, justifyContent: 'center'}}>
