@@ -37,7 +37,6 @@ export const processSleep = raw => {
     // for newer types of data, there is awake 10-11, core 11-12, awake 12-1, core 1-5, and so on
     // for older, there is alseep 10-11, alseep 12-3, asleep 4-5
 
-    console.log()
     raw.forEach(sample => {
         if (sample.value === INBED || (sample.value !== ASLEEP && currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
 

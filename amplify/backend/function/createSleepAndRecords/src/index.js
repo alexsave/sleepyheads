@@ -276,7 +276,6 @@ const createSleepRecord = /* GraphQL */ `
             rankBedStart
             rankBedEnd
             rankSleepTime
-            userID
             createdAt
             updatedAt
             sleepRecordSleepId

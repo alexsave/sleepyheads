@@ -68,7 +68,7 @@ export const Post = props => {
   //new Date(sleepSession.bedEnd) -
   //new Date(sleepSession.bedStart);
 
-  const likes = sleepSession.likes.items || [];
+  const likes = postUploaded ? sleepSession.likes.items : [];
   const zzz = likes.filter(l => l.type === LikeType.SNOOZE);//.length;
   const alarm = likes.filter(l => l.type === LikeType.ALARM);//.length;
 

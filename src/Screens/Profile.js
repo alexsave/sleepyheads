@@ -21,7 +21,6 @@ import { UserContext } from '../Providers/UserProvider';
 import { BACKGROUND, DARKER } from '../Values/Colors';
 import SplashScreen from 'react-native-splash-screen';
 import { Post } from '../Components/Feed/Post';
-import { SleepContext } from '../Providers/SleepProvider';
 import { GroupContext } from '../Providers/GroupProvider';
 
 export const Profile = props => {
@@ -67,68 +66,16 @@ export const Profile = props => {
         loadUser(profileUser).then(d => setName(d.name));
     }, [profileUser])
 
-    const [gym, setGym] = useState({name: '', id: ''});
     const [imageKey, setImageKey] = useState('');
-    const [routineTitle, setRoutineTitle] = useState('');
 
     //this does so much lol
     useEffect(() => {
         if(!signedInUser || !profileUser)
             return;
 
-        //jsut get gym name
-        /*API.graphql(graphqlOperation(getUserLocation, {
-            userID: profileUser
-        })).then(result => {
-            if(result.data.getUserLocation)
-                setGym(result.data.getUserLocation.gym);
-        });
-
-        API.graphql(graphqlOperation(getUserImage, {
-            userID: profileUser
-        })).then(result => {
-            if(result.data.getUserImage)
-                setImageKey(result.data.getUserImage.uri);
-        });
-
-        API.graphql(graphqlOperation(listCurrentRoutinesByUser, {
-            userID: profileUser,
-            current: {eq: 1}
-        })).then(result => {
-            if(result.data.listCurrentRoutinesByUser)
-                setRoutineTitle(result.data.listCurrentRoutinesByUser.items[0].title)
-        });*/
-
-        //todo just get the userRecord objects
-        const mainLifts = ['Squat', 'Bench', 'Press', 'Deadlift'];
-        //at last, we get to use user prs
-        mainLifts.forEach(exercise => {
-            //shoudl work lol
-            /*API.graphql(graphqlOperation(getUserRecord, {
-                userID: profileUser,
-                exercise: exercise
-            }))
-                .then(result => {
-                    const record = result.data.getUserRecord;
-                    if(record){
-                        setRecords(prev => ({
-                            ...prev,
-                            [record.exercise]: {
-                                weight: record.orm,
-                                postID: record.postID
-                            }
-                        }));
-                    }
-                });*/
-        });
-
     }, [signedInUser, profileUser]);
 
     const viewingSelf = signedInUser === profileUser;
-
-    const handleGymPress = () => {
-        props.navigation.navigate('leaderboard', {gymID: gym.id, exercise: 'Squat'});
-    };
 
     const handleProfilePress = () => {
         const options = {
@@ -230,8 +177,6 @@ export const Profile = props => {
             )
         }
     })
-    //return <View></View>
-    const {inHealth} = useContext(SleepContext);
 
     return (
       <View style={{flex: 1, backgroundColor: BACKGROUND}}>
@@ -294,15 +239,6 @@ export const Profile = props => {
                               <Words style={{fontSize: 60, fontWeight: 'bold'}}>{name}</Words>
                           </Animated.View>
 
-                          <TouchableOpacity onPress={handleGymPress}>{
-                              (viewingSelf) ?
-                                <Words>Set Gym</Words>
-                                :
-                                <Words>{gym.name}</Words>
-                          }</TouchableOpacity>
-
-                          <Words>{routineTitle}</Words>
-
                           <Words>Average: {avg}</Words>
                           <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
                           <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
@@ -347,4 +283,3 @@ export const Profile = props => {
       </View>
     );
 };
-

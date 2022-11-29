@@ -80,7 +80,7 @@ const SleepProvider = props => {
           createdAt: {ge: weekAgo.toISOString()}
         }
       }))
-      console.log(JSON.stringify(res));
+      //console.log(JSON.stringify(res));
       setUploaded(new Set(res.data.listSleeps.items.map(s => makeSleepKey(s.data))));
 
 
@@ -135,6 +135,7 @@ const SleepProvider = props => {
   // two uses: manually uploading recentSleep object
   // auto upload, no title
   const uploadSleep = async sleep => {
+    //console.log('upload sleep called')
     const key = makeSleepKey(sleep.data);
     //convert to proper post object, with comments and shit
     // then upload to AWS
@@ -151,16 +152,17 @@ const SleepProvider = props => {
         //description: '',
         //data: sleep
       };
+      console.log(JSON.stringify(csi));
 
       //console.log(JSON.stringify(input.data));
       //const res = await API.graphql(graphqlOperation(createSleep, { input }));
       const res = await API.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
 
-      console.log(res)
+      //console.log(res)
       //hmmmmmmm
       setUploaded(new Set([...uploaded]).add(key));//prev => new Set(prev).add(key));
     } else { //2
-      console.log(Object.keys(sleep))
+      //console.log(Object.keys(sleep))
       delete sleep.likes;
       delete sleep.comments;
       delete sleep.updatedAt;
@@ -175,7 +177,7 @@ const SleepProvider = props => {
       return;*/
 
       const res = await API.graphql(graphqlOperation(updateSleep, {input: sleep}));
-      console.log(res);
+      //console.log(res);
 
 
     }
@@ -204,6 +206,7 @@ const SleepProvider = props => {
     let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
       .filter(x => !uploaded.has(makeSleepKey(x)))
 
+    //console.log('candidate:', makeSleepKey(inHealth.filter(sleep => new Date(sleep.bedEnd) > today)[0]));
     if (candidate.length !== 0){
       if (autoUpload) {
         uploadSleep({
@@ -228,8 +231,11 @@ const SleepProvider = props => {
   //const [recentSleep, setRecentSleep] = useState({data:null});
   const [recentSleepData, setRecentSleepData] = useState(null);
 
-  const recentSleep = useCallback(() => {
-    return {id: RECENT, data: recentSleep()}
+  const recentSleep = useMemo(() => {
+    //console.log('recent sleep reset')
+    //return 'hi'
+    return {id: RECENT, data: recentSleepData};
+    //return {id: RECENT, data: null};
   }, [recentSleepData]);
 
 
