@@ -1,19 +1,22 @@
-export const formatDuration = ms => {
+export const formatMilliSeconds = ms => {
   ms -= ms % 1000;
   ms /= 1000;
+  return formatSeconds(ms);
+};
 
-  let seconds = ms % 60;
-  ms -= seconds;
-  ms /= 60;
+export const formatSeconds = s => {
+  let seconds = s % 60;
+  s -= seconds;
+  s /= 60;
 
-  let minutes = ms % 60;
-  ms -= minutes;
-  ms /= 60;
+  let minutes = s % 60;
+  s -= minutes;
+  s /= 60;
 
-  let hours = ms % 24;
-  ms -= hours;
-  ms /= 24;
-  let days = ms;
+  let hours = s % 24;
+  s -= hours;
+  s /= 24;
+  let days = s;
 
   if (seconds < 10)
     seconds = '0' + seconds;

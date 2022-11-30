@@ -23,7 +23,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { Post } from '../Components/Feed/Post';
 import { GroupContext } from '../Providers/GroupProvider';
 import { useNavigation } from '@react-navigation/native';
-import { formatDuration } from '../Utils/MathUtil';
+import { formatMilliSeconds, formatSeconds } from '../Utils/MathUtil';
 
 export const Profile = props => {
     useEffect(() => {
@@ -247,55 +247,28 @@ export const Profile = props => {
                               <Words style={{fontSize: 60, fontWeight: 'bold'}}>{name}</Words>
                           </Animated.View>
 
-                          <Words>Average: {formatDuration(avg)}</Words>
+                          <Words>Average: {formatMilliSeconds(avg)}</Words>
 
                           <TouchableOpacity
                             onPress={() =>
                                 navigation.navigate('post', {sleepSession: sorted[sorted.length-1]})
                             }
                           >
-                              <Words>Latest Wakeup: {max}</Words>
+                              <Words>Latest Wakeup: {formatSeconds(max)}</Words>
                           </TouchableOpacity>
 
                           <TouchableOpacity
                             onPress={() =>
                                 navigation.navigate('post', {sleepSession: sorted[0]})
-
                             }
                           >
-                              <Words>Earliest Wakeup: {min}</Words>
+                              <Words>Earliest Wakeup: {formatSeconds(min)}</Words>
                           </TouchableOpacity>
-
-                          <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
-                          <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
-                              Object.entries(records).map(([k,v]) =>
-                                <TouchableOpacity
-                                  key={k}
-                                  style={{width: 150}}
-                                  onPress={() =>
-                                    props.navigation.navigate('post', {postID: v.postID})
-                                  }
-                                >
-                                    <Row style={{display: 'flex', justifyContent: 'space-between'}}>
-                                        <Words style={{fontSize: 20, textAlign: 'center'}}>{k + '\n' /* + FORMAT_WEIGHT(v.weight)*/}</Words>
-                                    </Row>
-                                </TouchableOpacity>
-                              )
-                          }</View>
 
                           {
                             posts &&
                             posts.map(sleepSession => <Post key={sleepSession.id} sleepSession={sleepSession.sleep} />)
                           }
-                          <PostList
-                            listOperation={''/*listPostsSortedByUserAndTimestamp*/}
-                            sortKey={'userID'}
-                            sortValue={profileUser}
-                            filledSubscriptionOperation={() => {}}
-                            subscriptionCriteria={post =>
-                              post.userID === profileUser
-                            }
-                          />
                       </View>
 
                   </Animated.ScrollView>

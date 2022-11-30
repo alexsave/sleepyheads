@@ -13,7 +13,7 @@ import { UserContext } from '../../Providers/UserProvider';
 import { Like, LikeType } from '../../models';
 import { API, graphqlOperation } from 'aws-amplify';
 import { likeSleep } from '../../graphql/mutations';
-import { formatDuration } from '../../Utils/MathUtil';
+import { formatMilliSeconds } from '../../Utils/MathUtil';
 
 
 export const Post = props => {
@@ -108,7 +108,7 @@ export const Post = props => {
 
       <Words style={{fontSize: 30}}>{sleepSession.title}</Words>
       <Words style={{fontSize: 30}}>{new Date(data.bedStart).toDateString()}</Words>
-      <Words>{formatDuration(duration)}</Words>
+      <Words>{formatMilliSeconds(duration)}</Words>
       <Sample duration={duration} session={data}/>
     </View>
 
