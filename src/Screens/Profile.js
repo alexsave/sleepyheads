@@ -22,6 +22,8 @@ import { BACKGROUND, DARKER } from '../Values/Colors';
 import SplashScreen from 'react-native-splash-screen';
 import { Post } from '../Components/Feed/Post';
 import { GroupContext } from '../Providers/GroupProvider';
+import { useNavigation } from '@react-navigation/native';
+import { formatDuration } from '../Utils/MathUtil';
 
 export const Profile = props => {
     useEffect(() => {
@@ -46,7 +48,11 @@ export const Profile = props => {
     const {posts, setGroupID} = useContext(GroupContext);
 
 
-    const avg = posts.length;
+    const avg = posts.reduce((a,b) => a + b.rankSleepTime, 0)/posts.length;
+    const sorted = posts.sort((a,b) => a.rankBedEnd - b.rankBedEnd);
+    const max = sorted[sorted.length-1]?.rankBedEnd;//Math.max.apply(Math, posts.map(x => x.rankBedEnd));
+    const min = sorted[0]?.rankBedEnd;//Math.max.apply(Math, posts.map(x => x.rankBedEnd));
+    //const min = Math.min.apply(Math, posts.map(x => x.rankBedEnd));
 
     //this is useful, but only when viewing yourself
 
@@ -67,6 +73,8 @@ export const Profile = props => {
     }, [profileUser])
 
     const [imageKey, setImageKey] = useState('');
+
+    const navigation = useNavigation();
 
     //this does so much lol
     useEffect(() => {
@@ -239,7 +247,25 @@ export const Profile = props => {
                               <Words style={{fontSize: 60, fontWeight: 'bold'}}>{name}</Words>
                           </Animated.View>
 
-                          <Words>Average: {avg}</Words>
+                          <Words>Average: {formatDuration(avg)}</Words>
+
+                          <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate('post', {sleepSession: sorted[sorted.length-1]})
+                            }
+                          >
+                              <Words>Latest Wakeup: {max}</Words>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate('post', {sleepSession: sorted[0]})
+
+                            }
+                          >
+                              <Words>Earliest Wakeup: {min}</Words>
+                          </TouchableOpacity>
+
                           <Words style={{fontWeight: 'bold', fontSize: 40, textAlign: 'left'}}>Records</Words>
                           <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around', height: 300}}>{
                               Object.entries(records).map(([k,v]) =>

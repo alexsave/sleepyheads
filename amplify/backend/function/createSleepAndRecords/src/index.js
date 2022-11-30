@@ -63,8 +63,8 @@ export async function handler(event, context, callback){
             };
         }
         console.log(JSON.stringify({url: env.API_SLEEPYHEADSAPI_GRAPHQLAPIENDPOINTOUTPUT,
-              region: env.REGION,
-              auth: graphql_auth,}));
+            region: env.REGION,
+            auth: graphql_auth,}));
         graphqlClient = new AWSAppSyncClient({
             //i think this is the problem
             url: env.API_SLEEPYHEADSAPI_GRAPHQLAPIENDPOINTOUTPUT,
@@ -130,7 +130,8 @@ export async function handler(event, context, callback){
 };
 
 const secondsFromDayStart = t => {
-    const today = new Date(t), today_abs = new Date(t);
+    const zoneless = t.split(/-\d{4}/)[0]; // So that EST is not cheating
+    const today = new Date(zoneless), today_abs = new Date(zoneless);
     today_abs.setHours(0);
     today_abs.setMinutes(0);
     today_abs.setSeconds(0);
