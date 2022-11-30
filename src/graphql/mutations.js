@@ -523,16 +523,6 @@ export const createGroup = /* GraphQL */ `
         }
         nextToken
       }
-      users {
-        items {
-          id
-          userID
-          groupID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
       owner

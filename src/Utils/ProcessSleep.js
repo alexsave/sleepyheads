@@ -9,13 +9,7 @@ So if we do descending, we have a big INBED followed by a bunch of intervals wit
 
  */
 
-export const INBED = "INBED";
-export const ASLEEP = "ASLEEP";
-export const CORE = "CORE";
-export const DEEP = "DEEP";
-export const REM = "REM";
-export const AWAKE = "AWAKE";
-
+import { SleepSampleType } from '../models';
 
 export const processSleep = raw => {
     let groupings = [];
@@ -38,7 +32,7 @@ export const processSleep = raw => {
     // for older, there is alseep 10-11, alseep 12-3, asleep 4-5
 
     raw.forEach(sample => {
-        if (sample.value === INBED || (sample.value !== ASLEEP && currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
+        if (sample.value === SleepSampleType.INBED || (sample.value !== SleepSampleType.ASLEEP && currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
 
             // signifies new sleep
             groupings.push(currentGroup);

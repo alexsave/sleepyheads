@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { API, Auth, graphqlOperation, Hub } from 'aws-amplify';
 import { getUser } from '../graphql/queries';
 import { createUser } from '../graphql/mutations';
+import { GLOBAL } from './GroupProvider';
 
 //import { API, Auth, graphqlOperation } from 'aws-amplify';
 //import { getUserImage, getUserLocation } from '../../graphql/queries';
@@ -99,6 +100,13 @@ const UserProvider = props => {
     }
         //const res = await
 
+    const getGroupName = gId => {
+        if (!gId)
+            return '';
+        if (gId === GLOBAL)
+            return 'Global Feed';
+        return groups.find(g => g.id === gId).name;
+    }
 
     //}
 
@@ -110,6 +118,8 @@ const UserProvider = props => {
           makeUser,
           profileURI,
           groups,
+
+          getGroupName,
 
           //more generic, for loading any user
           loadUser

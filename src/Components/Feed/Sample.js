@@ -1,22 +1,22 @@
 import { View } from "react-native";
 import { Defs, LinearGradient, Path, Rect, Stop, Svg, Text, TextPath } from 'react-native-svg';
-import { ASLEEP, AWAKE, CORE, DEEP, INBED, REM } from "../../Utils/ProcessSleep";
 import { BACKGROUND, DARK_GRAY, DARKER, LIGHTER, PRIMARY } from '../../Values/Colors';
 import { BlurView } from "@react-native-community/blur";
+import { SleepSampleType } from '../../models';
 
 const sleepTypeToColor = type => {
   switch (type) {
-    case AWAKE:
+    case SleepSampleType.AWAKE:
       return DARK_GRAY;
-    case INBED:
+    case SleepSampleType.INBED:
       return 'gray';
-    case CORE:
+    case SleepSampleType.CORE:
       return PRIMARY;//'blue';
-    case REM:
+    case SleepSampleType.REM:
       return LIGHTER;
-    case DEEP:
+    case SleepSampleType.DEEP:
       return DARKER;//'navy';
-    case ASLEEP:
+    case SleepSampleType.ASLEEP:
       return PRIMARY;
   }
 };

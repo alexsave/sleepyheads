@@ -251,7 +251,7 @@ export const Profile = props => {
 
                           <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate('post', {sleepSession: sorted[sorted.length-1]})
+                                navigation.navigate('post', {sleepSession: sorted[sorted.length-1].sleep})
                             }
                           >
                               <Words>Latest Wakeup: {formatSeconds(max)}</Words>
@@ -259,7 +259,7 @@ export const Profile = props => {
 
                           <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate('post', {sleepSession: sorted[0]})
+                                navigation.navigate('post', {sleepSession: sorted[0].sleep})
                             }
                           >
                               <Words>Earliest Wakeup: {formatSeconds(min)}</Words>

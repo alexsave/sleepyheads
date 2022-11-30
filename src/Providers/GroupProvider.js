@@ -122,6 +122,7 @@ const GroupProvider = props => {
       isLoading,
       posts,
       getAdditionalPosts,
+      groupID,
       setGroupID,
 
     }}>

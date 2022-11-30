@@ -1,25 +1,23 @@
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import NavBar from '../Components/Navigation/NavBar';
 import { useContext, useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Post } from '../Components/Feed/Post';
 import { BACKGROUND, DARKER, PRIMARY } from '../Values/Colors';
-import TopBar from '../Components/Navigation/TopBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { SleepContext } from '../Providers/SleepProvider';
 import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
-import { Auth, graphqlOperation } from 'aws-amplify';
-import { GroupContext, GLOBAL } from '../Providers/GroupProvider';
+import { GLOBAL, GroupContext } from '../Providers/GroupProvider';
 import { Words } from '../Components/Basic/Words';
 import { GroupModal } from '../Components/Feed/GroupModal';
 
 export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
-  const {username} = useContext(UserContext);
+  const {groups, getGroupName, username} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
-  const {posts, setGroupID, getAdditionalPosts, isLoading} = useContext(GroupContext);
+  const {posts, groupID, setGroupID, getAdditionalPosts, isLoading} = useContext(GroupContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
@@ -54,7 +52,7 @@ export const Feed = props => {
         setGroupModalVisible(true);
         //open group view
       }}>
-        <Words style={{fontSize: 30, fontWeight: 'bold'}}>{'Global Feed'}<Ionicons size={30} name={'chevron-down-outline'}/></Words>
+        <Words style={{fontSize: 30, fontWeight: 'bold'}}>{getGroupName(groupID)}<Ionicons size={30} name={'chevron-down-outline'}/></Words>
       </TouchableOpacity>
     </View>
 

@@ -7,25 +7,21 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { createGroup, createGroupUser } from '../../graphql/mutations';
 import { GroupContext } from '../../Providers/GroupProvider';
 
-export const GroupModal = ({visible, close}) => {
-
-    //const [groups, setGroups] = useState(['the boyz', 'the sleepyheads', 'jim']);
-    const {groups, username} = useContext(UserContext);
-
-    const {setGroupID} = useContext(GroupContext);
-
+const NewGroupButton = ({close}) => {
+    const {username} = useContext(UserContext);
     const [name, setName] = useState('');
     const [groupCreating, setGroupCreating] = useState(false);
 
-    const newGroupPress = () => {
-        //open a keyboard to set the name
-        setGroupCreating(true);
-    };
-
-    // do we NEED a lambda for this?
     const makeGroup = async () => {
+        let res;
         //... just give it a name, and off you go
-        const res = await API.graphql(graphqlOperation(createGroup, {input: {name}}))
+        try  {
+            res = await API.graphql(graphqlOperation(createGroup, {input: {name}}))
+        } catch (e) {
+            // fails because there are no users in it?
+            console.log(e)
+
+        }
         console.log(res);
         // of course, the user joins the gropu immediately
         const guInput = {
@@ -44,6 +40,46 @@ export const GroupModal = ({visible, close}) => {
 
     };
 
+    return <View
+      style={{backgroundColor: LIGHTER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
+    >
+        {
+            groupCreating ?
+
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                style={{height: 40, color: TEXT_COLOR, backgroundColor: BACKGROUND, width: '80%', fontSize: 25, padding: 5}}
+                placeholder='Group name' // load a list of all groups, call it SleepyGroup67 or so
+                autoFocus={true}
+                autoCorrect={false}
+                returnKeyType={'go'}
+                onSubmitEditing={makeGroup}
+
+              />
+              :
+              <TouchableOpacity
+                style={{flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center'}}
+                onPress={() => setGroupCreating(true)}
+              >
+                  <Words>Create new group</Words>
+
+              </TouchableOpacity>
+
+        }
+    </View>
+};
+
+export const GroupModal = ({visible, close}) => {
+
+    //const [groups, setGroups] = useState(['the boyz', 'the sleepyheads', 'jim']);
+    const {groups} = useContext(UserContext);
+
+    const {setGroupID} = useContext(GroupContext);
+
+
+    // do we NEED a lambda for this?
+
     return <Modal animationType={'slide'} transparent={true} visible={visible}>
         <SafeAreaView>
 
@@ -59,6 +95,7 @@ export const GroupModal = ({visible, close}) => {
                         //next, make this switch the groupid
                         groups.map(g =>
                           <TouchableOpacity
+                            key={g.id}
                             style={{backgroundColor: DARKER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
                             onPress={() => {
                                 setGroupID(g.id);
@@ -71,35 +108,7 @@ export const GroupModal = ({visible, close}) => {
                         )
                     }
                     <View style={{borderColor: TEXT_COLOR, borderWidth: StyleSheet.hairlineWidth, width: '80%'}}/>
-                    <View
-                      style={{backgroundColor: LIGHTER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
-                    >
-                        {
-                            groupCreating ?
-
-                              <TextInput
-                                value={name}
-                                onChangeText={setName}
-                                style={{height: 40, color: TEXT_COLOR, backgroundColor: BACKGROUND, width: '80%', fontSize: 25, padding: 5}}
-                                placeholder='Group name' // load a list of all groups, call it SleepyGroup67 or so
-                                autoFocus={true}
-                                autoCorrect={false}
-                                returnKeyType={'go'}
-                                onSubmitEditing={makeGroup}
-
-                              />
-                              :
-                              <TouchableOpacity
-                                style={{flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center'}}
-                                onPress={newGroupPress}
-                              >
-                                  <Words>Create new group</Words>
-
-                              </TouchableOpacity>
-
-
-                        }
-                    </View>
+                    <NewGroupButton close={close}/>
                 </View>
             </TouchableOpacity>
         </SafeAreaView>
