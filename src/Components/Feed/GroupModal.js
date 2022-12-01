@@ -70,14 +70,23 @@ const NewGroupButton = ({close}) => {
     </View>
 };
 
+const GroupButton = ({group, close}) => {
+    const {setGroupID} = useContext(GroupContext);
+    return <TouchableOpacity
+      style={{backgroundColor: DARKER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
+      onPress={() => {
+          setGroupID(group.id);
+          close();
+      }}
+    >
+        <Words>{group.name}</Words>
+
+    </TouchableOpacity>
+
+}
 export const GroupModal = ({visible, close}) => {
+    const {groups } = useContext(GroupContext);
 
-    //const [groups, setGroups] = useState(['the boyz', 'the sleepyheads', 'jim']);
-
-    const {groups, setGroupID} = useContext(GroupContext);
-
-
-    // do we NEED a lambda for this?
 
     return <Modal animationType={'slide'} transparent={true} visible={visible}>
         <SafeAreaView>
@@ -92,19 +101,7 @@ export const GroupModal = ({visible, close}) => {
                 >
                     {
                         //next, make this switch the groupid
-                        groups.map(g =>
-                          <TouchableOpacity
-                            key={g.id}
-                            style={{backgroundColor: DARKER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
-                            onPress={() => {
-                                setGroupID(g.id);
-                                close();
-                            }}
-                          >
-                              <Words>{g.name}</Words>
-
-                          </TouchableOpacity>
-                        )
+                        groups.map(g => <GroupButton key={g.id} group={g} close={close}/> )
                     }
                     <View style={{borderColor: TEXT_COLOR, borderWidth: StyleSheet.hairlineWidth, width: '80%'}}/>
                     <NewGroupButton close={close}/>
