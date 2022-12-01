@@ -14,6 +14,7 @@ import { Search } from "./src/Screens/Search";
 import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
 import SleepProvider from './src/Providers/SleepProvider';
+import SocialProvider from './src/Providers/SocialProvider';
 import { Group } from './src/Screens/Group';
 import { PostScreen } from './src/Screens/PostScreen';
 import { Join } from './src/Screens/Join';
@@ -59,31 +60,34 @@ const App: () => Node = () => {
   // fuck that, it's old. Just going to wait for a fix to react-native-health. In the mean time, let's just run a query once an hour and see if any new bed thing pops up
   // then notify the user.
 
-  return <UserProvider>
+  return <GroupProvider>
+    <UserProvider>
+      <SleepProvider>
+        <SocialProvider>
 
-    <SleepProvider>
-      <GroupProvider>
 
 
-        <NavigationContainer>
+          <NavigationContainer>
 
-          <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
-            <Stack.Screen name="feed" component={Feed} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
-            <Stack.Screen name="post" component={PostScreen}/>
+            <Stack.Navigator initialRouteName="feed" screenOptions={{headerShown: false}}>
+              <Stack.Screen name="feed" component={Feed} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+              <Stack.Screen name="post" component={PostScreen}/>
 
-            <Stack.Screen name="search" component={Search} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+              <Stack.Screen name="search" component={Search} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
 
-            <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
-            <Stack.Screen name="settings" component={Settings} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
-            <Stack.Screen name="group" component={Group}/>
+              <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
+              <Stack.Screen name="settings" component={Settings} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
+              <Stack.Screen name="group" component={Group}/>
 
-            <Stack.Screen name="join" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
-            <Stack.Screen name="signup" component={SignUp}/>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </GroupProvider>
-    </SleepProvider>
-  </UserProvider>
+              <Stack.Screen name="join" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
+              <Stack.Screen name="signup" component={SignUp}/>
+            </Stack.Navigator>
+          </NavigationContainer>
+
+        </SocialProvider>
+      </SleepProvider>
+    </UserProvider>
+  </GroupProvider>
 
 };
 

@@ -24,6 +24,7 @@ import { Post } from '../Components/Feed/Post';
 import { GroupContext } from '../Providers/GroupProvider';
 import { useNavigation } from '@react-navigation/native';
 import { formatMilliSeconds, formatSeconds } from '../Utils/MathUtil';
+import { SocialContext } from '../Providers/SocialProvider';
 
 export const Profile = props => {
     useEffect(() => {
@@ -45,7 +46,8 @@ export const Profile = props => {
     const [name, setName] = useState('');
 
     // posts is a bit different from the feed here, as we get records
-    const {posts, setGroupID} = useContext(GroupContext);
+    const {setGroupID} = useContext(GroupContext);
+    const {posts } = useContext(SocialContext);
 
 
     const avg = posts.reduce((a,b) => a + b.rankSleepTime, 0)/posts.length;

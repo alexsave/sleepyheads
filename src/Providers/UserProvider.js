@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { API, Auth, graphqlOperation, Hub } from 'aws-amplify';
 import { getUser } from '../graphql/queries';
 import { createUser } from '../graphql/mutations';
-import { GLOBAL } from './GroupProvider';
-
-//import { API, Auth, graphqlOperation } from 'aws-amplify';
-//import { getUserImage, getUserLocation } from '../../graphql/queries';
+import { GroupContext } from './GroupProvider';
 
 export const UserContext = React.createContext();
 
@@ -15,33 +12,33 @@ export const ANONYMOUS = 'ANONYMOUS';
 // we need this because navigation
 export const NOT_SIGNED_IN = 'NOT_SIGNED_IN';
 
-
 const UserProvider = props => {
+
+    const {setGroups} = useContext(GroupContext);
+
     //is this legal
     const [username, setUsername] = useState(null);
     const [displayName, setDisplayName] = useState('');
     const [profileURI, setProfileURI] = useState('');
     const [newSignUp, setNewSignUp] = useState(false);
 
-    const [groups, setGroups] = useState([]);
+    //const [groups, setGroups] = useState([]);
 
     useEffect(() => {
         if(!username || username === ANONYMOUS || username === NOT_SIGNED_IN)
             return;
         //issue user info query
 
-
         (async () => {
 
             const res = await loadUser(username);
 
-            console.log(JSON.stringify(res));
+            //console.log(JSON.stringify(res));
             setDisplayName(res.name);
 
             // Migth need more
             setGroups(res.groups.items.map(x => x.group))
         })();
-
 
     }, [username]);
 
@@ -94,21 +91,9 @@ const UserProvider = props => {
     }
 
     const loadUser = async id => {
-
         const res = await API.graphql(graphqlOperation(getUser, { id }));
         return res.data.getUser;
     }
-        //const res = await
-
-    const getGroupName = gId => {
-        if (!gId)
-            return '';
-        if (gId === GLOBAL)
-            return 'Global Feed';
-        return groups.find(g => g.id === gId).name;
-    }
-
-    //}
 
     return (
       <UserContext.Provider value={{
@@ -117,13 +102,9 @@ const UserProvider = props => {
           newSignUp,
           makeUser,
           profileURI,
-          groups,
-
-          getGroupName,
 
           //more generic, for loading any user
           loadUser
-
       }}>
           {props.children}
       </UserContext.Provider>

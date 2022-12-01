@@ -25,7 +25,7 @@ export const Post = props => {
   const {data} = sleepSession;
   const navigation = useNavigation();
   const {username} = useContext(UserContext);
-  const {imported, uploaded, uploadSleep} = useContext(SleepContext);
+  const { uploaded, uploadSleep} = useContext(SleepContext);
   const {posts} = useContext(GroupContext);
 
   const postUploaded = sleepSession.id !== RECENT;

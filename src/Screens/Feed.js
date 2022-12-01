@@ -12,12 +12,14 @@ import { NOT_SIGNED_IN, UserContext } from '../Providers/UserProvider';
 import { GLOBAL, GroupContext } from '../Providers/GroupProvider';
 import { Words } from '../Components/Basic/Words';
 import { GroupModal } from '../Components/Feed/GroupModal';
+import { SocialContext } from '../Providers/SocialProvider';
 
 export const Feed = props => {
   //const [sleepData, setSleepData] = useState([]);
-  const {groups, getGroupName, username} = useContext(UserContext);
+  const {groups,  username} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
-  const {posts, groupID, setGroupID, getAdditionalPosts, isLoading} = useContext(GroupContext);
+  const {groupID, getGroupName, setGroupID, } = useContext(GroupContext);
+  const {posts, getAdditionalPosts, isLoading} = useContext(SocialContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();

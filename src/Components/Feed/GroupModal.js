@@ -73,9 +73,8 @@ const NewGroupButton = ({close}) => {
 export const GroupModal = ({visible, close}) => {
 
     //const [groups, setGroups] = useState(['the boyz', 'the sleepyheads', 'jim']);
-    const {groups} = useContext(UserContext);
 
-    const {setGroupID} = useContext(GroupContext);
+    const {groups, setGroupID} = useContext(GroupContext);
 
 
     // do we NEED a lambda for this?
