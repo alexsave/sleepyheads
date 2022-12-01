@@ -3,7 +3,7 @@ import { BACKGROUND, DARK_GRAY, DARKER, PRIMARY, TEXT_COLOR } from '../Values/Co
 import { Words } from '../Components/Basic/Words';
 import { Auth } from 'aws-amplify';
 import { useNavigation } from '@react-navigation/native';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { makeSleepKey, SleepContext } from '../Providers/SleepProvider';
 import { Row } from '../Components/Basic/Row';
 import Flip from '../Components/Basic/Flip';
@@ -12,32 +12,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const ROW_HEIGHT = 50;
 
 export const Settings = () => {
-  const {inHealth, autoImport, setAutoImport, imported, uploadSleep, importSleep, clearCache, autoUpload, setAutoUpload} = useContext(SleepContext);
+  const {inHealth, uploaded, uploadSleep, clearCache, autoUpload, setAutoUpload} = useContext(SleepContext);
 
   const navigation = useNavigation();
   return <SafeAreaView style={{flex: 1, backgroundColor: BACKGROUND}}>
 
-
-
-
-
     <View style={{flex: 1}}>
-      <Row style={styles.row}>
-        <Words>Auto-import: </Words>
-        <Flip value={autoImport} onChange={setAutoImport}/>
-      </Row>
-
       <Row style={styles.row}>
         <Words>Auto-upload: </Words>
         <Flip value={autoUpload} onChange={setAutoUpload}/>
       </Row>
 
-
       <FlatList
-
         data={inHealth}
         renderItem={({item}) => {
-          const i = imported.has(makeSleepKey(item));
+          const i = uploaded.has(makeSleepKey(item));
           return <Row
             key={item.bedStart}
             style={{
@@ -48,11 +37,7 @@ export const Settings = () => {
               borderWidth: 1
             }}>
             <Words>Sleep on {new Date(item.bedStart).toLocaleDateString()}</Words>
-            <Words>Backed up: {i ? 'true' : 'false'}</Words>
-            <Words>Uploaded: {true}</Words>
-            <TouchableOpacity onPress={() => importSleep(item)}>
-              <Words><Ionicons color={TEXT_COLOR} size={40} name={'save-outline'} /></Words>
-            </TouchableOpacity>
+            <Words>Uploaded: {i ? 'true' : 'false'}</Words>
             <TouchableOpacity onPress={() => uploadSleep(item)}>
               <Words><Ionicons color={TEXT_COLOR} size={40} name={'cloud-upload-outline'} /></Words>
             </TouchableOpacity>

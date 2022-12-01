@@ -36,23 +36,17 @@ const SleepProvider = props => {
   // there are three "levels" of getting sleep
   // ONE: only exists in health "inHealth"
   // this could be visible if the user opts for manual import
-  // TWO: exists in health, imported in storage "imported"
-  // this will be visible if the user opts for manual upload
-  // THREE: exists in health, imported in storage, uploaded to cloud
+  // TWO: exists in health, , uploaded to cloud
   // this would be visible if they view their own sleeps
   const [inHealth, setInHealth] = useState([]);
 
-  //should probably go in settings honestly
-  const [autoImport, setAutoImport] = useState(true);
-
   // best to only call this in the settings screen
-  const [imported, setImported] = useState(new Set());
   // what's better, to store all the sleep sessions in a single AsyncStorage object,
   // or to split them up?
 
   // really should be UserDefault
-  const [autoUpload, setAutoUpload] = useState(true);
-  const [uploaded, setUploaded] = useState(new Set());
+  const [autoUpload, setAutoUpload] = useState(false);
+  const [uploaded, setUploaded] = useState(null);
 
   useEffect(() => {
     if(username) // not this simple
@@ -60,17 +54,14 @@ const SleepProvider = props => {
   }, [username]);
 
   const init = async () => {
-    console.log('init called')
     //await AsyncStorage.setItem(UPLOADED_SLEEPS_KEY, JSON.stringify('[]'))
     const us = await AsyncStorage.getItem(UPLOADED_SLEEPS_KEY);
-    console.log('cached is ', JSON.stringify(us));
-    console.log(JSON.stringify(us) === '{}')
 
     let existing = []
     let nextUploaded;
 
     if (us === null || us === '{}') {
-      console.log('cache is null, no wonder')
+      console.log('cache is null, getting from network')
       // no cache, try getting from network
       //setUploaded(new Set(res.data.listSleeps.items.map(s => makeSleepKey(s.data))));
       const fu = await fetchUploaded();
@@ -81,10 +72,8 @@ const SleepProvider = props => {
 
     } else {
       const list = JSON.parse(us);
-      console.log(list);
       existing = list;
       //setUploaded(new Set(list));
-      console.log('fail after this');
       nextUploaded = await handleUploadedChange(new Set(list), false);
     }
     const n = new Set([...existing, ...nextUploaded]);
@@ -92,40 +81,19 @@ const SleepProvider = props => {
     setUploaded(n);
   }
 
-
-
-  useEffect(() => {
-    console.log('uploaded updaed!!!', uploaded);
-  }, [uploaded]);
-
   const handleUploadedChange = async (u, checkedNetwork) => {
-    console.log('u', u)
-    console.log('only uploaded', u.size);
-
-    //feel like this is important, but why
-    //if (uploaded.size === 0)
-    //return;
-    //do this later once the method is done
-    //await AsyncStorage.setItem(UPLOADED_SLEEPS_KEY, JSON.stringify(u));
 
     const ih = await loadFromHealth();
     setInHealth(ih); // it's own thing
-
-
-    console.log('in health is', ih.length);
-
 
     // now, check for the diff between ih and uploaded
 
     let inHealthNotUploaded = ih.filter(x => !u.has(makeSleepKey(x)));
 
-    console.log('difference of', inHealthNotUploaded.length);
-
     if (inHealthNotUploaded.length === 0)
       return u;
 
     if (!checkedNetwork) {
-      console.log('somethign to upload, checking again')
       u = await fetchUploaded();// the point of this is that here we can check AFTER some date
       const checkDiff = ih.filter(x => !u.has(makeSleepKey(x)));
 
@@ -138,7 +106,6 @@ const SleepProvider = props => {
     }
 
     // at this point, inHealthNotUploaded DEFINITELY has something
-    console.log('for sure a difference of', inHealthNotUploaded.length);
 
     // everything in health is uploaded and marked uploaded, nothing to do
     if (!autoUpload)
@@ -155,26 +122,7 @@ const SleepProvider = props => {
       newUploads.push(k)
     }
 
-
-    console.log('newUploads', newUploads);
-
     return [...u, ...newUploads];
-    //setUploaded(newUploaded);
-
-    // at this point, we need to update both uploaded in React and in Async Storage
-
-
-
-    // also,
-
-    // otherwise let's do some magic
-
-
-
-
-
-
-
   }
 
   const fetchUploaded = async (after) => {
@@ -187,51 +135,9 @@ const SleepProvider = props => {
     return new Set(res.data.listSleeps.items.map(s => makeSleepKey(s.data)))
   };
 
-// check which workouts are backedup in async storage
-// this needs to be called on wake, literally
-  /*useEffect(() => {
-    (async () => {
-      setInHealth(await loadFromHealth());
-      // so what do we want to do
-      // if there are imported sleeps, let's use those first
-      // THEN look at inhealth only
-      const keys = await AsyncStorage.getAllKeys();
-      setImported(new Set(keys.filter(k => k.startsWith(SLEEP_PREFIX))));
-    })();
-  }, []);*/
-
-  /*useEffect(() => {
-    if(!username)
-      return;
-
-    (async () => {
-
-      const now = new Date();
-
-      const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-      //more important, what have we uploaded
-      const res = await API.graphql(graphqlOperation(listSleeps, {
-        //this filter is crucial
-        filter: {
-          userID: {eq: username},
-          createdAt: {ge: weekAgo.toISOString()}
-        }
-      }))
-      //console.log(JSON.stringify(res));
-      setUploaded(new Set(res.data.listSleeps.items.map(s => makeSleepKey(s.data))));
-
-
-    })();
-
-  }, [username])*/
-
-  /*useEffect(() => {
-    tryImportDiff();
-  }, [autoImport, imported, inHealthA])*/
-
   // the "recent sleep data" useEffect
   useEffect(() => {
-    if (!username)
+    if (!username || !uploaded)
       return;
 
     const today = new Date();
@@ -242,10 +148,8 @@ const SleepProvider = props => {
     let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
       .filter(x => !uploaded.has(makeSleepKey(x)))
 
-    console.log('first in health is ', inHealth[0]);
-    console.log('candidate:', inHealth.filter(sleep => new Date(sleep.bedEnd) > today));
     if (candidate.length !== 0 && !autoUpload) {
-        setRecentSleepData(candidate[0]);
+      setRecentSleepData(candidate[0]);
     } else {
       setRecentSleepData(null);
     }
@@ -254,59 +158,17 @@ const SleepProvider = props => {
 
   }, [inHealth, uploaded, username]);
 
-
-
-  const tryImportDiff = async () => {
-    if (!autoImport)
-      return;
-
-    // kind of a base case
-    //if (imported.size >= inHealth.length)
-    //return;
-
-    /*let diff = new Set(inHealth.map(makeSleepKey));
-    console.log(imported);
-    [...imported].forEach(i => diff.delete(i));
-    console.log(inHealth.length);
-    console.log(imported.size);
-    console.log(diff.size);*/
-
-    let diff = [...inHealth];
-    diff = diff.filter(d => !imported.has(makeSleepKey(d)));
-    if (diff.length === 0)
-      return;
-
-    await Promise.all(
-      diff.map(sleep =>
-        new Promise((resolve, reject) =>
-          AsyncStorage.setItem(makeSleepKey(sleep), JSON.stringify(sleep)).then(resolve))))
-    setImported(new Set(inHealth.map(makeSleepKey)));
-
-  }
-
-  const importSleep = async sleep => {
-    try {
-
-      await AsyncStorage.setItem(makeSleepKey(sleep), JSON.stringify(sleep));
-      setImported(prev => new Set(prev).add(makeSleepKey(sleep)))
-    } catch (e) {
-      console.log(e);// could make a custom error bar popup
-    }
-  }
-
 // this one's going to be a bit more interesting
 
 // two uses: manually uploading recentSleep object
 // auto upload, no title
   const uploadSleep = async sleep => {
-    //console.log('upload sleep called')
     const key = makeSleepKey(sleep.data);
     //convert to proper post object, with comments and shit
     // then upload to AWS
 
     //1
     if (sleep.id === RECENT){
-
 
       // we'll do this for now
       const csi = {...sleep,
@@ -318,11 +180,6 @@ const SleepProvider = props => {
       };
       console.log(JSON.stringify(csi));
 
-      //console.log(JSON.stringify(input.data));
-      //const res = await API.graphql(graphqlOperation(createSleep, { input }));
-
-      //if (false){
-
       await API.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
 
 
@@ -333,27 +190,16 @@ const SleepProvider = props => {
       delete sleep.comments;
       delete sleep.updatedAt;
       delete sleep.createdAt;//hmm
-      /*const usi = {
-        ...sleep,
-        likes: undefined,
-        comments: undefined,
-        updatedAt: undefined
-
-      }
-      return;*/
 
       const res = await API.graphql(graphqlOperation(updateSleep, {input: sleep}));
       //console.log(res);
-
-
     }
   }
 
   const clearCache = async () => {
     try {
-
       await AsyncStorage.clear();
-      setImported(new Set());
+      setUploaded(new Set());
     } catch(e) {
       console.log(e);
     }
@@ -366,10 +212,7 @@ const SleepProvider = props => {
   const [recentSleepData, setRecentSleepData] = useState(null);
 
   const recentSleep = useMemo(() => {
-    //console.log('recent sleep reset')
-    //return 'hi'
     return {id: RECENT, data: recentSleepData};
-    //return {id: RECENT, data: null};
   }, [recentSleepData]);
 
   return (
@@ -377,14 +220,8 @@ const SleepProvider = props => {
       inHealth,
 
       //  could be in settings for sure
-      autoImport,
-      setAutoImport,
-
       autoUpload,
       setAutoUpload,
-
-      importSleep,
-      imported,
 
       recentSleep,
 
