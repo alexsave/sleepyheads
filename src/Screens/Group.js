@@ -6,9 +6,9 @@ import SplashScreen from 'react-native-splash-screen';
 import { Row } from '../Components/Basic/Row';
 
 export const Group = props => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  //useEffect(() => {
+    //SplashScreen.hide();
+  //}, []);
 
   const groupNames = ['thesleepiestheads', 'snoozers', 'jcbrothayaknow'];
 

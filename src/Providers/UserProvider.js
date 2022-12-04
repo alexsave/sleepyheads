@@ -24,6 +24,7 @@ const UserProvider = props => {
 
     //const [groups, setGroups] = useState([]);
 
+    // this one is ok
     useEffect(() => {
         if(!username || username === ANONYMOUS || username === NOT_SIGNED_IN)
             return;
@@ -42,7 +43,7 @@ const UserProvider = props => {
 
     }, [username]);
 
-
+    // this one is ok
     useEffect(() => {
         //hopefully this doesn't take long lol
         Auth.currentAuthenticatedUser().then(user => {

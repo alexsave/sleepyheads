@@ -34,9 +34,9 @@ const SocialProvider = props => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [nextToken, setNextToken] = useState(null);
-  // essentially a map of [groupID -> [timelines]], timelines used in Feed.js & Profile.js
   const [postsByGroup, dispatch] = useReducer(groupReducer, {});
 
+  // this one is fine
   useEffect(() => {
     if (!username || username === NOT_SIGNED_IN || username === ANONYMOUS)
       return;

@@ -26,7 +26,6 @@ export const RECENT = 'RECENT';
 // holy fuck this is complicated. better idea is to just save a string in async storage of a list of uploaded sleeps
 // and get rid of the whole idea of importing, only keep uploaded
 
-// TODO fuck know if what I did works, let's try tmrw
 const UPLOADED_SLEEPS_KEY = "uploadedSleep";
 
 const SleepProvider = props => {

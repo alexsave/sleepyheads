@@ -29,17 +29,18 @@ export const Feed = props => {
     height: '100%',
   };
 
+  useEffect(() => SplashScreen.hide(), []);
+
   useEffect(() => {
     // yes, this definitely is called when the app opens due to background delivery. You can assume providers do too.
-    SplashScreen.hide();
     console.log('feed use effect called')
 
     if (username === NOT_SIGNED_IN)
       navigation.navigate('join');
     else
       setGroupID(GLOBAL); //global
-
   }, [username]);
+
   const [groupModalVisible, setGroupModalVisible] = useState(false);
 
   // How do I want to do this?

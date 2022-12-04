@@ -21,7 +21,6 @@ import { Join } from './src/Screens/Join';
 import { Settings } from './src/Screens/Settings';
 import GroupProvider from './src/Providers/GroupProvider';
 import { SignUp } from './src/Screens/SignUp';
-import SlashScreen from 'react-native-splash-screen';
 
 /*
 adding chagnes from

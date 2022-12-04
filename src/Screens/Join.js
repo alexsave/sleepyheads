@@ -20,7 +20,7 @@ export const Join = props => {
 
   // these two will clash
   useEffect(() =>  {
-    SplashScreen.hide();
+    //SplashScreen.hide();
     console.log('join useffect', username, newSignUp )
     //hope this gets called even in email modal
     if (newSignUp)

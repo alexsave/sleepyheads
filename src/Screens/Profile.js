@@ -27,9 +27,9 @@ import { formatMilliSeconds, formatSeconds } from '../Utils/MathUtil';
 import { SocialContext } from '../Providers/SocialProvider';
 
 export const Profile = props => {
-    useEffect(() => {
-        SplashScreen.hide();
-    }, []);
+    //useEffect(() => {
+        //SplashScreen.hide();
+    //}, []);
     //return <View></View>;
     //fuck it, we'll just do it straight from this without using the context
     // This could be something like longest sleep streak, longest sleep
@@ -61,11 +61,6 @@ export const Profile = props => {
     let profileUser = signedInUser;
     if(props.route.params)
         profileUser = props.route.params.userID;
-
-    useEffect(() => {
-
-        SplashScreen.hide();
-    }, [])
 
     useEffect(() => {
         if(!profileUser)
