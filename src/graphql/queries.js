@@ -7,6 +7,22 @@ export const getSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -58,6 +74,13 @@ export const listSleeps = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -100,6 +123,13 @@ export const sleepsByTimestamp = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -155,6 +185,13 @@ export const sleepsByUser = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -364,6 +401,13 @@ export const getSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -445,6 +489,13 @@ export const recordsByGroup = /* GraphQL */ `
           id
           type
           userID
+          user {
+            id
+            image
+            name
+            createdAt
+            updatedAt
+          }
           title
           description
           media

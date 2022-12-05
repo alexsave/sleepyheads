@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
-//import { Storage } from 'aws-amplify';
+import { Storage } from 'aws-amplify';
 import RNFetchBlob from 'rn-fetch-blob';
 const dirs = RNFetchBlob.fs.dirs;
 
-//gonna simplify this a bit, and make a new component for userimages
-const CachedImage = props => {
-    const {placeholder, imageKey, width, height, style} = props;
+const CachedImage = ({placeholder, imageKey, width, height, style}) => {
     const [loaded, setLoaded] = useState(false);
 
     const downloadImage = async (key) => {
         //this url is ridiculously long lol
-        const url = '';//await Storage.get(key);
+        const url = await Storage.get(key);
         RNFetchBlob
             .config({
                 // response data will be saved to this path if it has access right.

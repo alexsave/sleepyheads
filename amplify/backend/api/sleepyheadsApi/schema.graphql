@@ -40,6 +40,7 @@ type Sleep
   id: ID!
   type: String! @index(name: "byTimestamp", sortKeyFields: ["createdAt"], queryField: "sleepsByTimestamp")
   userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "sleepsByUser") #@auth(rules: [{allow: owner, operations: [read, delete]}])
+  user: User @belongsTo(fields: ["userID"])
   title: String
   description: String
   likes: [Like] @hasMany(indexName: "bySleep", fields: ["id"])

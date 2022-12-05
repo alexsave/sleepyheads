@@ -68,19 +68,17 @@ export const Profile = props => {
         if(!profileUser)
             return;
         setGroupID(profileUser);
-        loadUser(profileUser).then(d => setName(d.name));
+        loadUser(profileUser).then(d => {
+            console.log(d.image);
+            setImageKey(d.image);
+            setName(d.name);
+        });
     }, [profileUser])
 
+    // set the first image key here
     const [imageKey, setImageKey] = useState('');
 
     const navigation = useNavigation();
-
-    //this does so much lol
-    useEffect(() => {
-        if(!signedInUser || !profileUser)
-            return;
-
-    }, [signedInUser, profileUser]);
 
     const viewingSelf = signedInUser === profileUser;
 

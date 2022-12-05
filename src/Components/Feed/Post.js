@@ -26,7 +26,6 @@ export const Post = props => {
   const navigation = useNavigation();
   const {username} = useContext(UserContext);
   const {uploadSleep} = useContext(SleepContext);
-  const {posts} = useContext(GroupContext);
 
   const postUploaded = sleepSession.id !== RECENT;
 
@@ -79,7 +78,7 @@ export const Post = props => {
 
         { postUploaded &&
           <View style={{flex: 1}}>
-            <UserImage size={50} />
+            <UserImage imageKey={sleepSession.user.image} userID={sleepSession.userID} size={50} />
           </View>
         }
 

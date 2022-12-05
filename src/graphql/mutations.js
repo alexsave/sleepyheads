@@ -10,6 +10,22 @@ export const createSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -59,6 +75,22 @@ export const updateSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -108,6 +140,22 @@ export const deleteSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -399,6 +447,13 @@ export const createSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -437,6 +492,13 @@ export const updateSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -475,6 +537,13 @@ export const deleteSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -520,6 +589,16 @@ export const createGroup = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
+        }
+        nextToken
+      }
+      users {
+        items {
+          id
+          userID
+          groupID
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -738,6 +817,22 @@ export const createSleepAndRecords = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {

@@ -7,6 +7,22 @@ export const onCreateSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -53,6 +69,22 @@ export const onUpdateSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -99,6 +131,22 @@ export const onDeleteSleep = /* GraphQL */ `
       id
       type
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       title
       description
       likes {
@@ -239,6 +287,13 @@ export const onCreateSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -276,6 +331,13 @@ export const onUpdateSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
@@ -313,6 +375,13 @@ export const onDeleteSleepRecord = /* GraphQL */ `
         id
         type
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         title
         description
         likes {
