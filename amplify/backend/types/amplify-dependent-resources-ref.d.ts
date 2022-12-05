@@ -58,5 +58,11 @@ export type AmplifyDependentResourcesAttributes = {
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
         }
+    },
+    "storage": {
+        "sleepyheadsstorage": {
+            "BucketName": "string",
+            "Region": "string"
+        }
     }
 }

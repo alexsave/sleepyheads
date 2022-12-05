@@ -48,6 +48,9 @@
       },
       "api": {
         "sleepyheadsApi": {}
+      },
+      "storage": {
+        "sleepyheadsstorage": {}
       }
     }
   }

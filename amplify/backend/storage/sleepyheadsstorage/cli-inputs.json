@@ -1,0 +1,16 @@
+{
+  "resourceName": "sleepyheadsstorage",
+  "policyUUID": "d83bee40",
+  "bucketName": "sleepyheadscff12f1da1d54c468083c41cc1e6e8fd",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

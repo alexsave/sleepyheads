@@ -2,7 +2,7 @@
   "version": "1",
   "cognitoConfig": {
     "identityPoolName": "sleepyheads8ada7554_identitypool_8ada7554",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "sleepy8ada7554",
     "userPoolName": "sleepyheads8ada7554_userpool_8ada7554",
     "autoVerifiedAttributes": [
@@ -61,6 +61,64 @@
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [
+      {
+        "category": "function",
+        "resourceName": "sleepyheadsAuthCreateAuthChallenge",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "sleepyheadsAuthDefineAuthChallenge",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "sleepyheadsAuthPreSignup",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "sleepyheadsAuthVerifyAuthChallengeResponse",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      }
+    ],
+    "permissions": [],
+    "authTriggerConnections": [
+      "{\"triggerType\":\"CreateAuthChallenge\",\"lambdaFunctionName\":\"sleepyheadsAuthCreateAuthChallenge\"}",
+      "{\"triggerType\":\"DefineAuthChallenge\",\"lambdaFunctionName\":\"sleepyheadsAuthDefineAuthChallenge\"}",
+      "{\"triggerType\":\"PreSignUp\",\"lambdaFunctionName\":\"sleepyheadsAuthPreSignup\"}",
+      "{\"triggerType\":\"VerifyAuthChallengeResponse\",\"lambdaFunctionName\":\"sleepyheadsAuthVerifyAuthChallengeResponse\"}"
+    ]
   }
 }

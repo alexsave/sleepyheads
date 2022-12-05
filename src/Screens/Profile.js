@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { v4 as uuidv4 } from 'uuid';
 import NavBar from '../Components/Navigation/NavBar';
 import FollowButton from '../Components/Profile/FollowButton';
 import UserImage from '../Components/Profile/UserImage';
@@ -25,6 +24,9 @@ import { GroupContext } from '../Providers/GroupProvider';
 import { useNavigation } from '@react-navigation/native';
 import { formatMilliSeconds, formatSeconds } from '../Utils/MathUtil';
 import { SocialContext } from '../Providers/SocialProvider';
+import { uploadImage } from '../Network/Blobs';
+import { API, graphqlOperation } from 'aws-amplify';
+import { updateUser } from '../graphql/mutations';
 
 export const Profile = props => {
     //useEffect(() => {
@@ -82,7 +84,10 @@ export const Profile = props => {
 
     const viewingSelf = signedInUser === profileUser;
 
-    const handleProfilePress = () => {
+    const handleProfilePress = async () => {
+        if (!viewingSelf)
+            return;
+
         const options = {
             maxWidth: 1080,//is this important?
             maxHeight: 1080,
@@ -90,37 +95,25 @@ export const Profile = props => {
             mediaType: 'photo'
         }
 
-        launchImageLibrary(options, res => {
+        const res = await launchImageLibrary(options);
 
-            if(!res.didCancel && !res.errorMessage){
-                //save uri and show image
-                //setMedia(res.uri);
-                //res.uri is what you want
+        if(res.didCancel || res.errorMessage)
+            return;
 
-                uploadImage(res.uri)
-                  .then(key => {
-                      /*API.graphql(graphqlOperation(createUserImage, {
-                          input: {
-                              userID: signedInUser,
-                              uri: key
-                          }
-                      }))*/
-                  });
-            }
-        });
+        //save uri and show image
+        //setMedia(res.uri);
+        //res.uri is what you want
+        console.log(res);
+
+        const key = await uploadImage(res.assets[0].uri);
+
+        const input = {
+            id: signedInUser,
+            image: key
+        };
+
+        await API.graphql(graphqlOperation(updateUser, { input }));
     };
-
-    //almost as if you should resuse this code elsewhere...
-    const uploadImage = async uri => {
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        const urlParts = uri.split('.');
-        const extension = urlParts[urlParts.length - 1];
-        const key = `${uuidv4()}.${extension}`;
-        //await Storage.put(key, blob);
-        return key;
-    };
-
 
     //next up, lets clean up the user profile
     //we may eblae to get graphs and shit too
@@ -248,7 +241,7 @@ export const Profile = props => {
 
                           <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate('post', {sleepSession: sorted[sorted.length-1].sleep})
+                              navigation.navigate('post', {sleepSession: sorted[sorted.length-1].sleep})
                             }
                           >
                               <Words>Latest Wakeup: {formatSeconds(max)}</Words>
@@ -256,7 +249,7 @@ export const Profile = props => {
 
                           <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate('post', {sleepSession: sorted[0].sleep})
+                              navigation.navigate('post', {sleepSession: sorted[0].sleep})
                             }
                           >
                               <Words>Earliest Wakeup: {formatSeconds(min)}</Words>
