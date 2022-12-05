@@ -14,7 +14,7 @@ import { Words } from '../Components/Basic/Words';
 import { GroupModal } from '../Components/Feed/GroupModal';
 import { SocialContext } from '../Providers/SocialProvider';
 
-export const Feed = props => {
+export const Feed = () => {
   //const [sleepData, setSleepData] = useState([]);
   const {groups,  username} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
@@ -59,7 +59,6 @@ export const Feed = props => {
       </TouchableOpacity>
     </View>
 
-    <Words>{isLoading}</Words>
     <FlatList
       data={[recentSleep, ...posts]}
       //data={posts}

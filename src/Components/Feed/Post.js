@@ -1,20 +1,18 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Words } from "../Basic/Words";
-import { Row } from "../Basic/Row";
-import { BACKGROUND, DARKER, PRIMARY } from '../../Values/Colors';
-import { Sample } from "./Sample";
+import { StyleSheet, TextInput, TouchableOpacity, View, } from 'react-native';
+import { Words } from '../Basic/Words';
+import { Row } from '../Basic/Row';
+import { BACKGROUND, DARKER, PRIMARY, TEXT_COLOR } from '../../Values/Colors';
+import { Sample } from './Sample';
 import UserImage from '../Profile/UserImage';
-import { makeSleepKey, RECENT, SleepContext } from '../../Providers/SleepProvider';
+import { RECENT, SleepContext } from '../../Providers/SleepProvider';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useContext, useEffect, useState } from 'react';
-import { GroupContext } from '../../Providers/GroupProvider';
+import { useContext, useState } from 'react';
 import { UserContext } from '../../Providers/UserProvider';
-import { Like, LikeType } from '../../models';
+import { LikeType } from '../../models';
 import { API, graphqlOperation } from 'aws-amplify';
-import { likeSleep } from '../../graphql/mutations';
+import { createComment, likeSleep } from '../../graphql/mutations';
 import { formatMilliSeconds } from '../../Utils/MathUtil';
-
 
 export const Post = props => {
   // ew
@@ -35,15 +33,17 @@ export const Post = props => {
   const ownPost = sleepSession && (username === sleepSession.userID || !sleepSession.userID);
 
   if (!data)
-    return <View></View>
+    return <View/>;
 
   const {duration} = data;
-  //new Date(sleepSession.bedEnd) -
-  //new Date(sleepSession.bedStart);
 
   const likes = postUploaded ? sleepSession.likes.items : [];
   const zzz = likes.filter(l => l.type === LikeType.SNOOZE);//.length;
   const alarm = likes.filter(l => l.type === LikeType.ALARM);//.length;
+
+  const comments = postUploaded ? sleepSession.comments.items : [];
+  const [commenting, setCommenting] = useState(false);
+  const [commentDraft, setCommentDraft] = useState('');
 
   // might be good to have a lambda for this
 
@@ -54,6 +54,19 @@ export const Post = props => {
       type
     };
     const res = await API.graphql(graphqlOperation(likeSleep,  {lsi} ));
+    console.log(res);
+  }
+
+  const postComment = async () => {
+    const input = {
+      sleepID: sleepSession.id,
+      userID: username,
+      content: commentDraft
+    };
+
+    const res = await API.graphql(graphqlOperation(createComment, {input}));
+    setCommenting(false);
+    setCommentDraft('');
     console.log(res);
   }
 
@@ -113,27 +126,60 @@ export const Post = props => {
 
     {
       postUploaded &&
-
       <Row style={{width: '100%', height: 40, justifyContent: 'space-between', alignItems: 'center', backgroundColor: highlight}}>
-        <TouchableOpacity
-          style={{flex:1, alignItems: 'center'}}
-          onPress={() => likeAction(LikeType.SNOOZE)}
-        >
-          <Words style={{fontWeight: zzz.some(l => l.userID === username)? 'bold': 'normal'}}> 😴{zzz.length}</Words>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            borderLeftWidth: StyleSheet.hairlineWidth,
-            borderRightWidth: StyleSheet.hairlineWidth,
-            flex:1, alignItems: 'center'}}
-          onPress={() => likeAction(LikeType.ALARM)}
-        >
-          <Words style={{fontWeight: alarm.some(l => l.userID === username)? 'bold': 'normal'}}> 😳{alarm.length}</Words>
-        </TouchableOpacity>
-        <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
-          <Words>⬆️</Words>
-        </TouchableOpacity>
+        {
+          commenting ?
+            <TextInput
+              value={commentDraft}
+              placeholder='Leave a roast of their sleep'
+              autoFocus
+              onChangeText={setCommentDraft}
+              onBlur={() => setCommenting(false)}
+              //placeholderTextColor={TEXT_COLOR}
 
+              style={{color: TEXT_COLOR, width: '80%', paddingLeft: 10}}
+              returnKeyType={'go'}
+              onSubmitEditing={postComment}
+            />
+            :
+
+            <>
+              <Row style={{flex: 1}}>
+                <TouchableOpacity
+                  style={{flex:1, alignItems: 'center'}}
+                  onPress={() => likeAction(LikeType.SNOOZE)}
+                >
+                  <Words style={{fontWeight: zzz.some(l => l.userID === username)? 'bold': 'normal'}}> 😴{zzz.length}</Words>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{flex:1, alignItems: 'center'}}
+                  onPress={() => likeAction(LikeType.ALARM)}
+                >
+                  <Words style={{fontWeight: alarm.some(l => l.userID === username)? 'bold': 'normal'}}> 😳{alarm.length}</Words>
+                </TouchableOpacity>
+              </Row>
+
+              <TouchableOpacity
+                style={{
+                  borderLeftWidth: StyleSheet.hairlineWidth,
+                  borderRightWidth: StyleSheet.hairlineWidth,
+                  flex:1, alignItems: 'center', justifyContent: 'center'
+                }}
+                // maybe long press?
+                onPress={() => setCommenting(true)}
+              >
+                <Words><Ionicons color={TEXT_COLOR} name={'chatbox-outline'} size={20}></Ionicons>️{comments.length}</Words>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{flex:1, justifyContent: 'center', alignItems: 'center'}}
+              >
+                <Words><Ionicons color={BACKGROUND} name={'push-outline'} size={20}></Ionicons>️</Words>
+              </TouchableOpacity>
+
+            </>
+        }
       </Row>
     }
   </View>;

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import NavBar from '../Components/Navigation/NavBar';
 import FollowButton from '../Components/Profile/FollowButton';
@@ -13,12 +13,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Words } from '../Components/Basic/Words';
-import { Row } from '../Components/Basic/Row';
-import PostList from '../Components/Feed/PostList';
 import CachedImage from '../Components/Profile/CachedImage';
 import { UserContext } from '../Providers/UserProvider';
 import { BACKGROUND, DARKER } from '../Values/Colors';
-import SplashScreen from 'react-native-splash-screen';
 import { Post } from '../Components/Feed/Post';
 import { GroupContext } from '../Providers/GroupProvider';
 import { useNavigation } from '@react-navigation/native';

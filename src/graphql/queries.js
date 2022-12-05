@@ -144,6 +144,14 @@ export const sleepsByTimestamp = /* GraphQL */ `
           nextToken
         }
         comments {
+          items {
+            id
+            sleepID
+            content
+            userID
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         media
@@ -513,6 +521,14 @@ export const recordsByGroup = /* GraphQL */ `
             nextToken
           }
           comments {
+            items {
+              id
+              sleepID
+              content
+              userID
+              createdAt
+              updatedAt
+            }
             nextToken
           }
           media
