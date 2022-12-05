@@ -70,13 +70,15 @@ const SocialProvider = props => {
         nextToken: nextToken
       }));
 
-      dispatch({ type: type, groupID, posts: res.data.sleepsByTimestamp.items });
+      dispatch({ type: type, groupID, posts: res.data.sleepsByTimestamp.items.map(x => ({sleep: x})) });
 
       setNextToken(res.data.sleepsByTimestamp.nextToken);
       setIsLoading(false);
     } else {
       if (groupID === '')
         return;
+
+      console.log(groupID);
 
       const res = await API.graphql(graphqlOperation(recordsByGroup, {
         groupID: groupID,
@@ -85,7 +87,9 @@ const SocialProvider = props => {
         nextToken: nextToken
       }));
 
-      dispatch({ type: type, groupID, posts: res.data.recordsByGroup.items });
+      console.log(res.data.recordsByGroup.items.length);
+
+      dispatch({ type: type, groupID, posts: res.data.recordsByGroup.items});
 
       setNextToken(res.data.recordsByGroup.nextToken);
       setIsLoading(false);

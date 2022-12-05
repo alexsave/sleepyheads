@@ -16,10 +16,10 @@ import { SocialContext } from '../Providers/SocialProvider';
 
 export const Feed = () => {
   //const [sleepData, setSleepData] = useState([]);
-  const {groups,  username} = useContext(UserContext);
+  const {username} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
-  const {groupID, getGroupName, setGroupID, } = useContext(GroupContext);
-  const {posts, getAdditionalPosts, isLoading} = useContext(SocialContext);
+  const {groupID, getGroupName, setGroupID} = useContext(GroupContext);
+  const {posts, getAdditionalPosts} = useContext(SocialContext);
 
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
@@ -59,11 +59,15 @@ export const Feed = () => {
       </TouchableOpacity>
     </View>
 
+    <View style={{height: 200}}>
+
+    </View>
+
     <FlatList
       data={[recentSleep, ...posts]}
       //data={posts}
       // rename this from sleepSession to postData or smth
-      renderItem={({item}) => <Post sleepSession={item}/>}
+      renderItem={({item}) => <Post sleepRecord={item}/>}
     />
     <TouchableOpacity onPress={getAdditionalPosts}>
       <Words>More</Words>

@@ -64,8 +64,8 @@ export const processSleep = raw => {
     groupings.map(group => {
         const start = new Date(group.bedStart);
         group.samples = group.samples.map(sample => ({
-            startOffset: new Date(sample.startDate) - start,
-            endOffset: new Date(sample.endDate) - start,
+            startOffset: (new Date(sample.startDate) - start) / 1000,
+            endOffset: (new Date(sample.endDate) - start) / 1000,
             type: sample.value
         }));
         // should this be end - start or total asleep time? both?

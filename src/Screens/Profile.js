@@ -26,10 +26,6 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { updateUser } from '../graphql/mutations';
 
 export const Profile = props => {
-    //useEffect(() => {
-        //SplashScreen.hide();
-    //}, []);
-    //return <View></View>;
     //fuck it, we'll just do it straight from this without using the context
     // This could be something like longest sleep streak, longest sleep
     const [records, setRecords] = useState({
