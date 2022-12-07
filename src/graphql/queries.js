@@ -20,6 +20,9 @@ export const getSleep = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -149,6 +152,10 @@ export const sleepsByTimestamp = /* GraphQL */ `
             sleepID
             content
             userID
+            user {
+              id
+              image
+            }
             createdAt
             updatedAt
           }
@@ -228,6 +235,25 @@ export const getComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -245,6 +271,13 @@ export const listComments = /* GraphQL */ `
         sleepID
         content
         userID
+        user {
+          id
+          image
+          name
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -361,6 +394,17 @@ export const getUser = /* GraphQL */ `
         }
         nextToken
       }
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -392,6 +436,9 @@ export const listUsers = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt
@@ -526,6 +573,10 @@ export const recordsByGroup = /* GraphQL */ `
               sleepID
               content
               userID
+              user {
+                id
+                image
+              }
               createdAt
               updatedAt
             }
@@ -630,6 +681,9 @@ export const getGroupUser = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt

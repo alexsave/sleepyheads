@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, TouchableOpacity, View, } from 'react-native';
+import { StyleSheet, TextInput, Touchable, TouchableOpacity, View } from 'react-native';
 import { Words } from '../Basic/Words';
 import { Row } from '../Basic/Row';
 import { BACKGROUND, DARKER, PRIMARY, TEXT_COLOR } from '../../Values/Colors';
@@ -129,7 +129,7 @@ export const Post = ({sleepRecord}) => {
 
     const {duration} = data;
 
-    return <View
+    return <TouchableOpacity
         style={{
             //position: 'absolute',
             //top: pos,
@@ -142,7 +142,9 @@ export const Post = ({sleepRecord}) => {
             //backgroundColor: sample.value === 'UNKNOWN' ? 'black' : sample.value === 'ASLEEP' ? 'blue': 'green',
             //zIndex: sample.value === 'INBED' ? -1: 1,
             //height: something,
-        }}>
+        }}
+        onPress={() => navigation.navigate('post', {sleep})}
+    >
         <View style={{borderRadius: 10, backgroundColor: BACKGROUND}}>
 
 
@@ -186,7 +188,7 @@ export const Post = ({sleepRecord}) => {
         {
             postUploaded && <PostFooter sleep={sleep}/>
         }
-    </View>;
+    </TouchableOpacity>;
 }
 
 

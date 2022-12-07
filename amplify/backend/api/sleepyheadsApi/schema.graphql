@@ -26,6 +26,7 @@
 
 # it's a lot, but get these checked and we can honestly submit the app at that point
 
+
 type Sleep
 @model (
   mutations: {create: "createSleep", delete: "deleteSleep", update:"updateSleep" }
@@ -83,7 +84,8 @@ type Comment
   id: ID!
   sleepID: ID! @index(name: "bySleep", sortKeyFields: ["createdAt"])
   content: String!
-  userID: ID! #@index(name: "byUser")
+  userID: ID! @index(name: "byUser")
+  user: User @belongsTo(fields: ["userID"])
   createdAt: String!
 }
 
@@ -123,6 +125,8 @@ type User
   # this ones tricky. To keep track of user statistics, we make a secret singleton group for each user inaccessible
   #to the users and put all their own sleep records in it
   sleepRecords: [SleepRecord] @hasMany(indexName: "byGroup", fields: ["id"])
+  # this is for loading user images from post comments
+  comments: [Comment] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
 # kinda dumb, but if we copy SleepRecords to all the groups a user is in, we also need to copy it to a group of [user]

@@ -59,9 +59,13 @@ export const Feed = () => {
       </TouchableOpacity>
     </View>
 
-    <View style={{height: 200}}>
+    {
+      groupID !== GLOBAL &&
 
-    </View>
+      <View style={{height: 200}}>
+
+      </View>
+    }
 
     <FlatList
       data={[recentSleep, ...posts]}

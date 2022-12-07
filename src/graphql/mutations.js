@@ -23,6 +23,9 @@ export const createSleep = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -86,6 +89,9 @@ export const updateSleep = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt
@@ -153,6 +159,9 @@ export const deleteSleep = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -206,6 +215,25 @@ export const createComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -221,6 +249,25 @@ export const updateComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -236,6 +283,25 @@ export const deleteComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -331,6 +397,17 @@ export const createUser = /* GraphQL */ `
         }
         nextToken
       }
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -381,6 +458,17 @@ export const updateUser = /* GraphQL */ `
         }
         nextToken
       }
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -428,6 +516,17 @@ export const deleteUser = /* GraphQL */ `
           createdAt
           updatedAt
           sleepRecordSleepId
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          sleepID
+          content
+          userID
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -704,6 +803,9 @@ export const createGroupUser = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -745,6 +847,9 @@ export const updateGroupUser = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt
@@ -790,6 +895,9 @@ export const deleteGroupUser = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -828,6 +936,9 @@ export const createSleepAndRecords = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt

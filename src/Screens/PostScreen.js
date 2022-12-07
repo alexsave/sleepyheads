@@ -11,13 +11,13 @@ import { UserContext } from '../Providers/UserProvider';
 
 // look up shared transitions, that's the ideal behavior for this
 export const PostScreen = props => {
-  const {sleepSession} = props.route.params;
-  const {id} = sleepSession;
+  const {sleep} = props.route.params;
+  const {id} = sleep;
   const {username} = useContext(UserContext);
   const {uploadSleep} = useContext(SleepContext);
 
-  const [title, setTitle] = useState(sleepSession.title);
-  const [description, setDesc] = useState(sleepSession.description);
+  const [title, setTitle] = useState(sleep.title);
+  const [description, setDesc] = useState(sleep.description);
 
   // recent is dirty by default, as it is not uploaded
   // uploaded posts can be made dirty if you modify them
@@ -35,7 +35,7 @@ export const PostScreen = props => {
   }, [id]);
 
   //use this a bit more
-  const ownPost = id === RECENT || username === sleepSession.userID;
+  const ownPost = id === RECENT || username === sleep.userID;
 
   const navigation = useNavigation();
   return <SafeAreaView style={{flex: 1, backgroundColor: BACKGROUND}}>
@@ -43,7 +43,7 @@ export const PostScreen = props => {
       style={{
         flex: 1,
         borderColor: PRIMARY,
-        borderStyle: id === 'RECENT' ? 'solid': 'dashed',
+        borderStyle: id === RECENT ? 'dashed': 'solid',
         borderWidth: 3,
         borderRadius: 10,
       }}
@@ -62,7 +62,7 @@ export const PostScreen = props => {
               if(!dirty)
                 return;
               // upload or update
-              uploadSleep({...sleepSession, title, description})
+              uploadSleep({...sleep, title, description})
                 .then(navigation.goBack)
             }}
           >
@@ -82,7 +82,7 @@ export const PostScreen = props => {
         placeholder={'Title'}
       />
 
-      <Sample duration={sleepSession.data.duration} session={sleepSession.data}/>
+      <Sample duration={sleep.data.duration} session={sleep.data}/>
 
       <TextInput
         onChangeText={t => {
@@ -96,6 +96,14 @@ export const PostScreen = props => {
         placeholder={'Notes'}
       />
 
+      {
+        sleep.comments.items.map(comment => {
+
+          return <View key={comment.id}>
+            <Words>{JSON.stringify(comment)}</Words>
+          </View>
+        })
+      }
 
 
     </View>

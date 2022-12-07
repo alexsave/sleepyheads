@@ -20,6 +20,9 @@ export const onCreateSleep = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -80,6 +83,9 @@ export const onUpdateSleep = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt
@@ -144,6 +150,9 @@ export const onDeleteSleep = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -197,6 +206,25 @@ export const onCreateComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -212,6 +240,25 @@ export const onUpdateComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -227,6 +274,25 @@ export const onDeleteComment = /* GraphQL */ `
       sleepID
       content
       userID
+      user {
+        id
+        sleeps {
+          nextToken
+        }
+        image
+        name
+        groups {
+          nextToken
+        }
+        sleepRecords {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -542,6 +608,9 @@ export const onCreateGroupUser = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -585,6 +654,9 @@ export const onUpdateGroupUser = /* GraphQL */ `
         sleepRecords {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -626,6 +698,9 @@ export const onDeleteGroupUser = /* GraphQL */ `
           nextToken
         }
         sleepRecords {
+          nextToken
+        }
+        comments {
           nextToken
         }
         createdAt
