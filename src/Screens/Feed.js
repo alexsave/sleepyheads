@@ -3,7 +3,7 @@ import NavBar from '../Components/Navigation/NavBar';
 import { useContext, useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { Post } from '../Components/Feed/Post';
+import { Sleep } from '../Components/Feed/Sleep';
 import { BACKGROUND, DARKER, PRIMARY } from '../Values/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -71,7 +71,7 @@ export const Feed = () => {
       data={[recentSleep, ...posts]}
       //data={posts}
       // rename this from sleepSession to postData or smth
-      renderItem={({item}) => <Post sleepRecord={item}/>}
+      renderItem={({item}) => <Sleep sleepRecord={item}/>}
     />
     <TouchableOpacity onPress={getAdditionalPosts}>
       <Words>More</Words>

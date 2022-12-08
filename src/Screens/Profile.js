@@ -16,7 +16,7 @@ import { Words } from '../Components/Basic/Words';
 import CachedImage from '../Components/Profile/CachedImage';
 import { UserContext } from '../Providers/UserProvider';
 import { BACKGROUND, DARKER } from '../Values/Colors';
-import { Post } from '../Components/Feed/Post';
+import { Sleep } from '../Components/Feed/Sleep';
 import { GroupContext } from '../Providers/GroupProvider';
 import { useNavigation } from '@react-navigation/native';
 import { formatMilliSeconds, formatSeconds } from '../Utils/MathUtil';
@@ -248,7 +248,7 @@ export const Profile = props => {
 
                           {
                             posts &&
-                            posts.map(sleepSession => <Post key={sleepSession.id} sleepSession={sleepSession.sleep} />)
+                            posts.map(sleepSession => <Sleep key={sleepSession.sleep.id} sleepRecord={sleepSession} />)
                           }
                       </View>
 

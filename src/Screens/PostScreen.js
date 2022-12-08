@@ -15,9 +15,7 @@ const Comment = ({comment}) => <Row
   key={comment.id}
 >
   <UserImage imageKey={comment.user.image} userID={comment.userID} size={50} />
-  <View style={{flex: 1, alignItems: 'center'}}>
-    <Words>{comment.content}</Words>
-  </View>
+  <Words style={{marginLeft: 10}}>{comment.content}</Words>
 </Row>
 
 
@@ -82,8 +80,6 @@ export const PostScreen = props => {
         </TouchableOpacity>
       </Row>
 
-
-
       <FlatList
         data={sleep.comments.items}
         renderItem={({item, index}) => {
@@ -122,7 +118,6 @@ export const PostScreen = props => {
           }
           return <Comment comment={item}/>;
         }}/>
-
 
     </View>
 

@@ -105,7 +105,7 @@ const PostFooter = ({sleep}) => {
     </Row>
 }
 
-export const Post = ({sleepRecord}) => {
+export const Sleep = ({sleepRecord}) => {
     const navigation = useNavigation();
     const {username} = useContext(UserContext);
     const {uploadSleep} = useContext(SleepContext);
