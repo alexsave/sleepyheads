@@ -151,31 +151,29 @@ export const Sleep = ({sleepRecord}) => {
             <Row style={{height: 50, justifyContent: 'flex-end'}}>
 
                 { postUploaded &&
-                    <View style={{flex: 1}}>
-                        <UserImage imageKey={sleep.user.image} userID={sleep.userID} size={50} />
-                    </View>
+                  <View style={{flex: 1}}>
+                      <UserImage imageKey={sleep.user.image} userID={sleep.userID} size={50} />
+                  </View>
                 }
 
-                {
-                    ownPost &&
-                    <Row style={{paddingLeft: 3, alignItems: 'center', backgroundColor: highlight, borderBottomLeftRadius: 10}}>
-                        {
-                            !postUploaded &&
+                { ownPost &&
+                  <Row style={{paddingLeft: 3, alignItems: 'center', backgroundColor: highlight, borderBottomLeftRadius: 10}}>
+                      { !postUploaded &&
 
-                            <TouchableOpacity
-                                style={{width: 50, alignItems: 'center', borderRightWidth: StyleSheet.hairlineWidth}}
-                                onPress={() => uploadSleep(sleep)}
-                            >
-                                <Words><Ionicons size={30} name='cloud-upload-outline'/></Words>
-                            </TouchableOpacity>
-                        }
                         <TouchableOpacity
-                            style={{width: 50, alignItems: 'center'}}
-                            onPress={() => navigation.navigate('post', {sleep})}
+                          style={{width: 50, alignItems: 'center', borderRightWidth: StyleSheet.hairlineWidth}}
+                          onPress={() => uploadSleep(sleep)}
                         >
-                            <Words><Ionicons size={30} name='pencil-outline'/></Words>
+                            <Words><Ionicons size={30} name='cloud-upload-outline'/></Words>
                         </TouchableOpacity>
-                    </Row>
+                      }
+                      <TouchableOpacity
+                        style={{width: 50, alignItems: 'center'}}
+                        onPress={() => navigation.navigate('post', {sleep})}
+                      >
+                          <Words><Ionicons size={30} name='pencil-outline'/></Words>
+                      </TouchableOpacity>
+                  </Row>
                 }
             </Row>
 
@@ -186,7 +184,7 @@ export const Sleep = ({sleepRecord}) => {
         </View>
 
         {
-            postUploaded && <PostFooter sleep={sleep}/>
+          postUploaded && <PostFooter sleep={sleep}/>
         }
     </TouchableOpacity>;
 }
