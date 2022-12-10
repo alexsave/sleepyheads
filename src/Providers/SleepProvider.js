@@ -4,7 +4,7 @@ import { loadFromHealth } from '../Network/PostLoad';
 import { API, graphqlOperation } from 'aws-amplify';
 import { UserContext } from './UserProvider';
 import { createSleepAndRecords, updateSleep } from '../graphql/mutations';
-import { listSleeps } from '../graphql/queries';
+import { listSleeps, sleepsByUser } from '../graphql/queries';
 
 export const SleepContext = React.createContext();
 
@@ -125,13 +125,10 @@ const SleepProvider = props => {
   }
 
   const fetchUploaded = async (after) => {
-    const res = await API.graphql(graphqlOperation(listSleeps, {
-      //this filter is crucial
-      filter: {
-        userID: {eq: username},
-      }
+    const res = await API.graphql(graphqlOperation(sleepsByUser, {
+      userID: username
     }));
-    return new Set(res.data.listSleeps.items.map(s => makeSleepKey(s.data)))
+    return new Set(res.data.sleepsByUser.items.map(s => makeSleepKey(s.data)))
   };
 
   // the "recent sleep data" useEffect

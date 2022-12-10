@@ -155,6 +155,7 @@ export const sleepsByTimestamp = /* GraphQL */ `
             user {
               id
               image
+              name
             }
             createdAt
             updatedAt
@@ -576,6 +577,7 @@ export const recordsByGroup = /* GraphQL */ `
               user {
                 id
                 image
+                name
               }
               createdAt
               updatedAt

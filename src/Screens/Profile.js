@@ -167,99 +167,98 @@ export const Profile = props => {
         }
     })
 
-    return (
-      <View style={{flex: 1, backgroundColor: BACKGROUND}}>
-          <Animated.View style={[{position: 'absolute'}, imageStyle]}>
-              <CachedImage imageKey={imageKey} style={{height: width, width: width}} placeholder={
-                  <Words style={{fontSize: 50}}>
-                      zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
-                      z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
-                      z😴zzz😴z😴z😴z😴z😴zzz😴z😴z😴
-                      z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
-                      zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
-                      z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
-                      z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
-                  </Words>
-              }/>
-          </Animated.View>
+    return <View style={{flex: 1, backgroundColor: BACKGROUND}}>
+        <Animated.View style={[{position: 'absolute'}, imageStyle]}>
+            <CachedImage imageKey={imageKey} style={{height: width, width: width}} placeholder={
+                <Words style={{fontSize: 50}}>
+                    zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
+                    z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
+                    z😴zzz😴z😴z😴z😴z😴zzz😴z😴z😴
+                    z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
+                    zzz😴z😴z😴z😴z😴z😴z😴z😴z😴
+                    z😴zzz😴z😴z😴z😴z😴z😴zzz😴zzz😴
+                    z😴z😴z😴z😴z😴zzz😴z😴z😴z😴
+                </Words>
+            }/>
+        </Animated.View>
 
 
-          <SafeAreaView style={{flex: 1}}>
-              <View style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1}}>
+            <View style={{flex: 1}}>
 
 
-                  <View style={{zIndex: 10, position: 'absolute', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, top: 0, right: 0}}>
-                      {
-                          viewingSelf?
-                            <>
-                                <TouchableOpacity onPress={() => props.navigation.navigate('group')}>
-                                    <Words><Ionicons size={30} name='people-outline'/></Words>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => props.navigation.navigate('settings')}>
-                                    <Words><Ionicons size={30} name='settings-outline'/></Words>
-                                </TouchableOpacity>
-                            </>
-                            :
-                            <FollowButton profileUser={profileUser}/>
-                      }
-                  </View>
+                <View style={{zIndex: 10, position: 'absolute', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, top: 0, right: 0}}>
+                    {
+                        viewingSelf?
+                          <>
+                              <TouchableOpacity onPress={() => props.navigation.navigate('group')}>
+                                  <Words><Ionicons size={30} name='people-outline'/></Words>
+                              </TouchableOpacity>
+                              <TouchableOpacity onPress={() => props.navigation.navigate('settings')}>
+                                  <Words><Ionicons size={30} name='settings-outline'/></Words>
+                              </TouchableOpacity>
+                          </>
+                          :
+                          <FollowButton profileUser={profileUser}/>
+                    }
+                </View>
 
-                  <Animated.View style={[{zIndex: 5, position: 'absolute', top: 10, left: 10}, fadeInProfile]}>
-                      <UserImage onPress={handleProfilePress} imageKey={imageKey} userID={profileUser} size={100}/>
-                  </Animated.View>
-
-
-                  <Animated.View style={[{ alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}, simpleHeaderStyle]}>
-                      <Words style={{fontSize: 30, fontWeight: 'bold'}}>{name}</Words>
-                  </Animated.View>
+                <Animated.View style={[{zIndex: 5, position: 'absolute', top: 10, left: 10}, fadeInProfile]}>
+                    <UserImage onPress={handleProfilePress} imageKey={imageKey} userID={profileUser} size={100}/>
+                </Animated.View>
 
 
-                  <Animated.ScrollView
-                    onScroll={scrollHandler}
-                    showsVerticalScrollIndicator={false}
-                    scrollEventThrottle={1}
-                    contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
-                  >
-                      <View
-                        style={{width: '95%', backgroundColor: BACKGROUND, top: imageHeight-HEADER_MAX_HEIGHT}}
-                      >
+                <Animated.View style={[{ alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}, simpleHeaderStyle]}>
+                    <Words style={{fontSize: 30, fontWeight: 'bold'}}>{name}</Words>
+                </Animated.View>
 
-                          <Animated.View style={[{paddingHorizontal: 10, borderRadius: 10, position: 'absolute', right: 0, top: -70, zIndex: 20, backgroundColor: 'rgba(93,93,93,0.37)'},coolText]}>
-                              <Words style={{fontSize: 60, fontWeight: 'bold'}}>{name}</Words>
-                          </Animated.View>
 
-                          <Words>Average: {formatMilliSeconds(avg)}</Words>
+                <Animated.ScrollView
+                  onScroll={scrollHandler}
+                  showsVerticalScrollIndicator={false}
+                  scrollEventThrottle={1}
+                  contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
+                >
+                    <View
+                      style={{width: '95%', backgroundColor: BACKGROUND, top: imageHeight-HEADER_MAX_HEIGHT}}
+                    >
 
-                          <TouchableOpacity
-                            onPress={() =>
-                              navigation.navigate('post', {sleepSession: sorted[sorted.length-1].sleep})
-                            }
-                          >
-                              <Words>Latest Wakeup: {formatSeconds(max)}</Words>
-                          </TouchableOpacity>
+                        <Animated.View style={[{paddingHorizontal: 10, borderRadius: 10, position: 'absolute', right: 0, top: -70, zIndex: 20, backgroundColor: 'rgba(93,93,93,0.37)'},coolText]}>
+                            <Words style={{fontSize: 60, fontWeight: 'bold'}}>{name}</Words>
+                        </Animated.View>
 
-                          <TouchableOpacity
-                            onPress={() =>
-                              navigation.navigate('post', {sleepSession: sorted[0].sleep})
-                            }
-                          >
-                              <Words>Earliest Wakeup: {formatSeconds(min)}</Words>
-                          </TouchableOpacity>
+                        <Words>Average: {formatMilliSeconds(avg)}</Words>
 
-                          {
-                            posts &&
-                            posts.map(sleepSession => <Sleep key={sleepSession.sleep.id} sleepRecord={sleepSession} />)
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('post', {sleepSession: sorted[sorted.length-1].sleep})
                           }
-                      </View>
+                        >
+                            <Words>Latest Wakeup: {formatSeconds(max)}</Words>
+                        </TouchableOpacity>
 
-                  </Animated.ScrollView>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('post', {sleepSession: sorted[0].sleep})
+                          }
+                        >
+                            <Words>Earliest Wakeup: {formatSeconds(min)}</Words>
+                        </TouchableOpacity>
 
-                  {
-                    viewingSelf &&
-                    <NavBar current={'profile'}/>
-                  }
-              </View>
-          </SafeAreaView>
-      </View>
-    );
+                        {
+                          posts &&
+                          posts.map(sleepSession => <Sleep key={sleepSession.sleep.id} sleepRecord={sleepSession} />)
+                        }
+                    </View>
+
+                </Animated.ScrollView>
+
+                {
+                  viewingSelf &&
+                  <NavBar current={'profile'}/>
+                }
+            </View>
+        </SafeAreaView>
+    </View>
+
 };

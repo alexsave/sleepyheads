@@ -15,7 +15,7 @@ const Comment = ({comment}) => <Row
   key={comment.id}
 >
   <UserImage imageKey={comment.user.image} userID={comment.userID} size={50} />
-  <Words style={{marginLeft: 10}}>{comment.content}</Words>
+  <Words style={{marginLeft: 10}}><Words style={{fontWeight: 'bold'}}>{comment.user.name}</Words>: {comment.content}</Words>
 </Row>
 
 
