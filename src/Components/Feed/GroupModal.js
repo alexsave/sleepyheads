@@ -20,9 +20,10 @@ const NewGroupButton = ({close}) => {
         } catch (e) {
             // fails because there are no users in it?
             console.log(e)
+            res = e; //absolute hack
 
         }
-        console.log(res);
+        console.log('create group result', res);
         // of course, the user joins the gropu immediately
         const guInput = {
             userID: username,

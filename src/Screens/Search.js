@@ -7,7 +7,7 @@ import UserImage from '../Components/Profile/UserImage';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
-import { listUsers } from '../graphql/queries';
+import { listGroups, listUsers } from '../graphql/queries';
 import { Row } from '../Components/Basic/Row';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -16,15 +16,12 @@ export const Search = props => {
 
   // so while we could turn on elastic search, I'm going to make it easy and just do a list users
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
 
-  const runSearch = async () => {
-    if (query === '')
-      return;
 
-    // split query by ' ', make each token into another OR clause
-    // holy shit this reminds me of work too much
+  const [userResults, setUserResults] = useState([]);
+  const [groupResults, setGroupResults] = useState([]);
 
+  const fetchUsers = async () => {
     const res = await API.graphql(graphqlOperation(listUsers, {
       // sort? who knows, some function of #likes, #groups, #comments
       filter: {
@@ -34,8 +31,35 @@ export const Search = props => {
         ]
       }
     }));
+    console.log(res);
 
-    setResults(res.data.listUsers.items)
+    setUserResults(res.data.listUsers.items)
+  };
+
+  const fetchGroups = async () => {
+    const res = await API.graphql(graphqlOperation(listGroups, {
+      // sort? who knows, some function of #likes, #groups, #comments
+      filter: {
+        // //id is random, proabbly don't want to match on a query
+        name: {contains: query},
+      }
+    }));
+    console.log(JSON.stringify(res));
+
+    // something weird is going on
+    setGroupResults(res.data.listGroups.items)
+
+  };
+
+  const runSearch = async () => {
+    if (query === '')
+      return;
+
+    // split query by ' ', make each token into another OR clause
+    // holy shit this reminds me of work too much
+
+    fetchUsers();
+    fetchGroups();
   };
 
   // then filter it
@@ -54,7 +78,7 @@ export const Search = props => {
         <Words style={{width: 30}}><Ionicons size={25} name={'search'} color={TEXT_COLOR}/></Words>
       </Row>
       <View style={{flex:1}}>{
-        results.length === 0 ?
+        groupResults.length + userResults.length === 0 ?
           //sparkles-outline not working for some reason
           <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Words>
@@ -64,20 +88,38 @@ export const Search = props => {
             </Words>
 
           </View> :
-          results.map(user =>
-            <TouchableOpacity
-              key={user.id}
-              // since we have it, should we just send the entire user object over?
-              // nah, we have to load posts and we don't want to load them here
-              onPress={() => navigation.navigate('profile', {userID: user.id})}
-              style={{flexDirection: 'row', height: 100, alignItems: 'center', borderWidth: 1, borderColor: BACKGROUND, backgroundColor: DARKER}}
-            >
-              <View style={{width: 100, alignItems: 'center'}}>
-                <UserImage imageKey={user.image} size={50}/>
-              </View>
-              <Words>{user.name}</Words>
-            </TouchableOpacity>
-          )
+          <>
+            {
+              userResults.map(user =>
+                <TouchableOpacity
+                  key={user.id}
+                  // since we have it, should we just send the entire user object over?
+                  // nah, we have to load posts and we don't want to load them here
+                  onPress={() => navigation.navigate('profile', {userID: user.id})}
+                  style={{flexDirection: 'row', height: 100, alignItems: 'center', borderWidth: 1, borderColor: BACKGROUND, backgroundColor: DARKER}}
+                >
+                  <View style={{width: 100, alignItems: 'center'}}>
+                    <UserImage imageKey={user.image} size={50}/>
+                  </View>
+                  <Words>{user.name}</Words>
+                </TouchableOpacity>)
+            }
+            {
+              groupResults.map(group =>
+                <TouchableOpacity
+                  key={group.id}
+                  // since we have it, should we just send the entire user object over?
+                  // nah, we have to load posts and we don't want to load them here
+                  // group page later
+                  onPress={() => navigation.navigate('group', {groupID: group.id})}
+                  style={{flexDirection: 'row', height: 100, alignItems: 'center', borderWidth: 1, borderColor: BACKGROUND, backgroundColor: DARKER}}
+                >
+                  <View style={{width: 100, alignItems: 'center'}}/>
+                  <Words>{group.name}</Words>
+                </TouchableOpacity>)
+            }
+          </>
+
       }</View>
     </View>
 

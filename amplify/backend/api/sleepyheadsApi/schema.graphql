@@ -163,7 +163,7 @@ type Group @model
   id: ID!
   name: String!
   sleepRecords: [SleepRecord] @hasMany(indexName: "byGroup", fields: ["id"])
-  users: [User] @manyToMany(relationName: "GroupUser") @auth(rules: [{allow: owner}, {allow: private, provider: iam, operations:[read]}]) #plz tell me this works how I expect
+  users: [User] @manyToMany(relationName: "GroupUser") @auth(rules: [{allow: owner}, {allow: private, provider: userPools, operations: [read]}, {allow: private, provider: iam, operations:[read]}]) #plz tell me this works how I expect
 }
 
 input SleepSampleInput {
