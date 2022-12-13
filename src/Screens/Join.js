@@ -20,13 +20,18 @@ export const Join = props => {
 
   // these two will clash
   useEffect(() =>  {
-    //SplashScreen.hide();
-    console.log('join useffect', username, newSignUp )
+    if (username && username !== NOT_SIGNED_IN) {
+      if (newSignUp)
+        navigation.navigate('signup');
+      else
+        navigation.goBack();
+    }
+      //SplashScreen.hide();
+    //console.log('join useffect', username, newSignUp )
     //hope this gets called even in email modal
-    if (newSignUp)
-      navigation.navigate('signup');
-    else if (username && username !== NOT_SIGNED_IN)
-      navigation.goBack();
+    //if (newSignUp)// this is called too early
+    //else if (username && username !== NOT_SIGNED_IN)
+      //navigation.goBack();
   }, [username, newSignUp]);
 
   // same for SIWA and email. This makes things a bit messy, not sure where to put it
@@ -49,7 +54,7 @@ export const Join = props => {
 
           <Words
             style={{transform: [{rotate: '-30deg'}], fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}
-          >Join deez <Words style={{color: 'red'}}>SLEEPYHEADS</Words>{'\n'}</Words>
+          >Join the <Words style={{color: 'red'}}>SLEEPYHEADS</Words>{'\n'}</Words>
         </View>
 
         <View style={{flex: 1, justifyContent: 'center'}}>

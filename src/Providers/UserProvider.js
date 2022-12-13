@@ -34,7 +34,11 @@ const UserProvider = props => {
 
             const res = await loadUser(username);
 
+            if (!res)
+                return;
+
             //console.log(JSON.stringify(res));
+            console.log('is this null', res)
             setDisplayName(res.name);
 
             // Migth need more
@@ -63,7 +67,7 @@ const UserProvider = props => {
                     break;
                 case 'signUp': //ffs, just do this lol
                     setNewSignUp(true);
-                    setUsername(data.username);
+                    //setUsername(data.username);
                     break;
                 case "signOut":
                     //console.log(null);

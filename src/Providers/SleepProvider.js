@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadFromHealth } from '../Network/PostLoad';
 import { API, graphqlOperation } from 'aws-amplify';
-import { UserContext } from './UserProvider';
+import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from './UserProvider';
 import { createSleepAndRecords, updateSleep } from '../graphql/mutations';
 import { listSleeps, sleepsByUser } from '../graphql/queries';
 
@@ -48,7 +48,7 @@ const SleepProvider = props => {
   const [uploaded, setUploaded] = useState(null);
 
   useEffect(() => {
-    if(username) // not this simple
+    if(username && username !== ANONYMOUS && username !== NOT_SIGNED_IN)
       init();
   }, [username]);
 
