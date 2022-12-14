@@ -30,7 +30,6 @@ const SIX_HOURS = 6 * 60 * 60;
 
 const timeToTheta = timestamp => {
   const s = new Date(timestamp)
-  console.log(s);
   const seconds = s.getHours()*60*60 + s.getMinutes() * 60 + s.getSeconds();
   const mod = (Math.PI/2 - (seconds)/noon * 2*Math.PI) % (2*Math.PI);
   if (mod < 0)

@@ -3,43 +3,13 @@ import { Words } from '../Basic/Words';
 import { useContext, useState } from 'react';
 import { BACKGROUND, DARKER, LIGHTER, TEXT_COLOR } from '../../Values/Colors';
 import { UserContext } from '../../Providers/UserProvider';
-import { API, graphqlOperation } from 'aws-amplify';
-import { createGroup, createGroupUser } from '../../graphql/mutations';
 import { GroupContext } from '../../Providers/GroupProvider';
 
 const NewGroupButton = ({close}) => {
     const {username} = useContext(UserContext);
+    const {makeGroup} = useContext(GroupContext);
     const [name, setName] = useState('');
     const [groupCreating, setGroupCreating] = useState(false);
-
-    const makeGroup = async () => {
-        let res;
-        //... just give it a name, and off you go
-        try  {
-            res = await API.graphql(graphqlOperation(createGroup, {input: {name}}))
-        } catch (e) {
-            // fails because there are no users in it?
-            console.log(e)
-            res = e; //absolute hack
-
-        }
-        console.log('create group result', res);
-        // of course, the user joins the gropu immediately
-        const guInput = {
-            userID: username,
-            groupID: res.data.createGroup.id
-        }
-
-        try {
-            await API.graphql(graphqlOperation(createGroupUser, {input: guInput/*???*/}));
-        } catch (e) {
-            //ignore it, the createGroupUser operation seems to load groups before the user is an owner
-
-        }
-        close();
-        setName('');
-
-    };
 
     return <View
       style={{backgroundColor: LIGHTER, justifyContent: 'center', borderRadius: 25, height: 50, width: '100%', alignItems: 'center'}}
@@ -55,7 +25,11 @@ const NewGroupButton = ({close}) => {
                 autoFocus={true}
                 autoCorrect={false}
                 returnKeyType={'go'}
-                onSubmitEditing={makeGroup}
+                onSubmitEditing={async () => {
+                    await makeGroup(username, name);
+                    close();
+                    setName('');
+                }}
 
               />
               :

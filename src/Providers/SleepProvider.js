@@ -143,7 +143,6 @@ const SleepProvider = props => {
 
     let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
       .filter(x => !uploaded.has(makeSleepKey(x)))
-    console.log(JSON.stringify(candidate));
 
     if (candidate.length !== 0 && !autoUpload) {
       setRecentSleepData(candidate[0]);

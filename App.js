@@ -15,7 +15,6 @@ import { Profile } from "./src/Screens/Profile";
 import UserProvider from './src/Providers/UserProvider';
 import SleepProvider from './src/Providers/SleepProvider';
 import SocialProvider from './src/Providers/SocialProvider';
-import { Group } from './src/Screens/Group';
 import { PostScreen } from './src/Screens/PostScreen';
 import { Join } from './src/Screens/Join';
 import { Settings } from './src/Screens/Settings';
@@ -76,7 +75,6 @@ const App: () => Node = () => {
 
               <Stack.Screen name="profile" component={Profile} options={{cardStyleInterpolator: CardStyleInterpolators.forNoAnimation}}/>
               <Stack.Screen name="settings" component={Settings} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
-              <Stack.Screen name="group" component={Group}/>
 
               <Stack.Screen name="join" component={Join} options={{cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}}/>
               <Stack.Screen name="signup" component={SignUp}/>

@@ -18,7 +18,7 @@ export const Feed = () => {
   //const [sleepData, setSleepData] = useState([]);
   const {username} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
-  const {groups, groupID, getGroupName, setGroupID} = useContext(GroupContext);
+  const {groups, groupID, getGroupName, setGroupID, addUserToGroup} = useContext(GroupContext);
   const {posts, getAdditionalPosts} = useContext(SocialContext);
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -37,8 +37,10 @@ export const Feed = () => {
 
     if (username === NOT_SIGNED_IN)
       navigation.navigate('join');
-    else
-      setGroupID(GLOBAL); //global
+    else {
+      if (!groupID)
+        setGroupID(GLOBAL); //global
+    }
   }, [username]);
 
   const [groupModalVisible, setGroupModalVisible] = useState(false);
@@ -66,14 +68,18 @@ export const Feed = () => {
         {
           groups.includes(groupID)?
             <View><Words>in group</Words></View> :
-            <View><Words>not in group</Words></View>
+            <View>
+              <TouchableOpacity onPress={() => addUserToGroup(username, groupID) }>
+                <Words>Join Group</Words>
+              </TouchableOpacity>
+            </View>
         }
 
       </View>
     }
 
     <FlatList
-      data={[recentSleep, ...posts]}
+      data={groups.includes(groupID)? [recentSleep, ...posts] : posts}
       //data={posts}
       // rename this from sleepSession to postData or smth
       renderItem={({item}) => <Sleep sleepRecord={item}/>}
