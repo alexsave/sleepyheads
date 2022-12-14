@@ -69,7 +69,7 @@ export const processSleep = raw => {
             type: sample.value
         }));
         // should this be end - start or total asleep time? both?
-        group.duration = new Date(group.bedEnd) - new Date(group.bedStart);
+        group.duration = (new Date(group.bedEnd) - new Date(group.bedStart)) / 1000;
 
         return group;
     });

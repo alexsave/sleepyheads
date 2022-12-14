@@ -18,7 +18,7 @@ export const Feed = () => {
   //const [sleepData, setSleepData] = useState([]);
   const {username} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
-  const {groupID, getGroupName, setGroupID} = useContext(GroupContext);
+  const {groups, groupID, getGroupName, setGroupID} = useContext(GroupContext);
   const {posts, getAdditionalPosts} = useContext(SocialContext);
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -63,6 +63,11 @@ export const Feed = () => {
       groupID !== GLOBAL &&
 
       <View style={{height: 200}}>
+        {
+          groups.includes(groupID)?
+            <View><Words>in group</Words></View> :
+            <View><Words>not in group</Words></View>
+        }
 
       </View>
     }

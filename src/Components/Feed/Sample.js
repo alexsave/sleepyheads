@@ -25,13 +25,14 @@ const graphicWidth = 300;
 const graphicHeight = 300;
 const strokeWidth = 15;
 
-const noon = 12 * 60 * 60 * 1000;
-const SIX_HOURS = 6 * 60 * 60 * 1000;
+const noon = 12 * 60 * 60;
+const SIX_HOURS = 6 * 60 * 60;
 
 const timeToTheta = timestamp => {
   const s = new Date(timestamp)
-  const mseconds = (s.getHours()*60*60 + s.getMinutes() * 60 + s.getSeconds())*1000 + s.getMilliseconds();
-  const mod = (Math.PI/2 - (mseconds)/noon * 2*Math.PI) % (2*Math.PI);
+  console.log(s);
+  const seconds = s.getHours()*60*60 + s.getMinutes() * 60 + s.getSeconds();
+  const mod = (Math.PI/2 - (seconds)/noon * 2*Math.PI) % (2*Math.PI);
   if (mod < 0)
     return mod + Math.PI * 2;
   return mod;

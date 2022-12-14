@@ -143,6 +143,7 @@ const SleepProvider = props => {
 
     let candidate = inHealth.filter(sleep => new Date(sleep.bedEnd) > today)
       .filter(x => !uploaded.has(makeSleepKey(x)))
+    console.log(JSON.stringify(candidate));
 
     if (candidate.length !== 0 && !autoUpload) {
       setRecentSleepData(candidate[0]);
@@ -208,7 +209,7 @@ const SleepProvider = props => {
   const [recentSleepData, setRecentSleepData] = useState(null);
 
   const recentSleep = useMemo(() => {
-    return {id: RECENT, data: recentSleepData};
+    return {sleep: {id: RECENT, data: recentSleepData}};
   }, [recentSleepData]);
 
   return (
