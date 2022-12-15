@@ -13,10 +13,11 @@ import { GLOBAL, GroupContext } from '../Providers/GroupProvider';
 import { Words } from '../Components/Basic/Words';
 import { GroupModal } from '../Components/Feed/GroupModal';
 import { SocialContext } from '../Providers/SocialProvider';
+import { Row } from '../Components/Basic/Row';
 
-export const Feed = () => {
+export const Feed = (props) => {
   //const [sleepData, setSleepData] = useState([]);
-  const {username} = useContext(UserContext);
+  const {username, userGroups} = useContext(UserContext);
   const {recentSleep} = useContext(SleepContext);
   const {groups, groupID, getGroupName, setGroupID, addUserToGroup} = useContext(GroupContext);
   const {posts, getAdditionalPosts} = useContext(SocialContext);
@@ -37,13 +38,14 @@ export const Feed = () => {
 
     if (username === NOT_SIGNED_IN)
       navigation.navigate('join');
-    else {
-      if (!groupID)
-        setGroupID(GLOBAL); //global
+    else if (!props.route.params?.groupID) {
+      setGroupID(GLOBAL); //global
     }
   }, [username]);
 
   const [groupModalVisible, setGroupModalVisible] = useState(false);
+
+  const showRecent = groups.includes(groupID) || groupID === GLOBAL;
 
   // How do I want to do this?
   // When they open the feed, they'll see all the usual posts of the timeline, but on top of every group timeline,
@@ -51,35 +53,40 @@ export const Feed = () => {
   // If it is enabled, it'll just upload automatically and they can find it in
   return <SafeAreaView style={backgroundStyle}><View style={{flex: 1}}>
 
-    <View style={{ zIndex: 5, alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'center'}}>
-
+    <Row style={{ zIndex: 5, alignItems: 'center', right:0,left: 0, top: 0, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: DARKER, height: 60, justifyContent: 'space-between'}}>
+      <View style={{width: 100}}/>
       <TouchableOpacity onPress={() => {
         setGroupModalVisible(true);
         //open group view
       }}>
         <Words style={{fontSize: 30, fontWeight: 'bold'}}>{getGroupName(groupID)}<Ionicons size={30} name={'chevron-down-outline'}/></Words>
       </TouchableOpacity>
-    </View>
+      <View style={{width: 100}}>
+        {
+          (groupID !== GLOBAL && !userGroups.includes(groupID)) &&
+          <TouchableOpacity
+            style={{justifyContent: 'center', alignItems: 'center', backgroundColor: PRIMARY, width: '100%', height: 60}}
+            onPress={() => addUserToGroup(username, groupID)}>
+            <Words>Join Group</Words>
+          </TouchableOpacity>
+        }
+      </View>
+    </Row>
 
     {
       groupID !== GLOBAL &&
 
       <View style={{height: 200}}>
         {
-          groups.includes(groupID)?
-            <View><Words>in group</Words></View> :
-            <View>
-              <TouchableOpacity onPress={() => addUserToGroup(username, groupID) }>
-                <Words>Join Group</Words>
-              </TouchableOpacity>
-            </View>
+          userGroups.includes(groupID) &&
+          <View><Words>in group</Words></View>
         }
 
       </View>
     }
 
     <FlatList
-      data={groups.includes(groupID)? [recentSleep, ...posts] : posts}
+      data={showRecent? [recentSleep, ...posts] : posts}
       //data={posts}
       // rename this from sleepSession to postData or smth
       renderItem={({item}) => <Sleep sleepRecord={item}/>}
@@ -87,6 +94,7 @@ export const Feed = () => {
     <TouchableOpacity onPress={getAdditionalPosts}>
       <Words>More</Words>
     </TouchableOpacity>
+
     <NavBar current='feed'/>
 
     <GroupModal visible={groupModalVisible} close={() => setGroupModalVisible(false)}/>

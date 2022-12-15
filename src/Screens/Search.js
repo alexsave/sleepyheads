@@ -14,7 +14,7 @@ import { GroupContext } from '../Providers/GroupProvider';
 
 export const Search = props => {
   const navigation = useNavigation();
-  const {setGroupID} = useContext(GroupContext);
+  const {setGroups, setGroupID} = useContext(GroupContext);
 
   // so while we could turn on elastic search, I'm going to make it easy and just do a list users
   const [query, setQuery] = useState('');
@@ -117,7 +117,9 @@ export const Search = props => {
                   // group page later
                   onPress={async () => {
                     await setGroupID(group.id);
-                    navigation.navigate('feed');
+                    // avoid an extra call by doing this
+                    setGroups(prev => [...prev, group]);
+                    navigation.navigate('feed', {groupID: group.id});
                   }}
                   style={{flexDirection: 'row', height: 100, alignItems: 'center', borderWidth: 1, borderColor: BACKGROUND, backgroundColor: DARKER}}
                 >

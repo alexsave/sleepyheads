@@ -16,6 +16,9 @@ const UserProvider = props => {
 
     const {setGroups} = useContext(GroupContext);
 
+
+    // different from groups in that the user is actually part of these
+    const [userGroups, setUserGroups] = useState([]);
     //is this legal
     const [username, setUsername] = useState(null);
     const [displayName, setDisplayName] = useState('');
@@ -43,6 +46,7 @@ const UserProvider = props => {
 
             // Migth need more
             setGroups(res.groups.items.map(x => x.group))
+            setUserGroups(res.groups.items.map(x => x.group.id))
         })();
 
     }, [username]);
@@ -107,6 +111,7 @@ const UserProvider = props => {
           newSignUp,
           makeUser,
           profileURI,
+          userGroups,
 
           //more generic, for loading any user
           loadUser

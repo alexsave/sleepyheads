@@ -35,7 +35,8 @@ const GroupProvider = props => {
     }
 
     try {
-      await API.graphql(graphqlOperation(createGroupUser, {input: guInput/*???*/}));
+      const res = await API.graphql(graphqlOperation(createGroupUser, {input: guInput/*???*/}));
+      console.log(res);
     } catch (e) {
       //ignore it, the createGroupUser operation seems to load groups before the user is an owner
     }

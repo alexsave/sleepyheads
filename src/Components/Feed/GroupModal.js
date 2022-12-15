@@ -62,7 +62,6 @@ const GroupButton = ({group, close}) => {
 export const GroupModal = ({visible, close}) => {
     const {groups } = useContext(GroupContext);
 
-
     return <Modal animationType={'slide'} transparent={true} visible={visible}>
         <SafeAreaView>
 
