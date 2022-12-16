@@ -10,18 +10,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { UserContext } from '../Providers/UserProvider';
 import UserImage from '../Components/Profile/UserImage';
 
-const Comment = ({comment}) => <Row
-  style={{alignItems: 'center'}}
-  key={comment.id}
->
-  <UserImage imageKey={comment.user.image} userID={comment.userID} size={50} />
-  <Words style={{marginLeft: 10}}><Words style={{fontWeight: 'bold'}}>{comment.user.name}</Words>: {comment.content}</Words>
-</Row>
-
+const Comment = ({comment}) => {
+  if (!comment)
+    return <View/>
+  return <Row
+    style={{alignItems: 'center'}}
+    key={comment.id}
+  >
+    <UserImage imageKey={comment.user.image} userID={comment.userID} size={50} />
+    <Words style={{marginLeft: 10}}><Words style={{fontWeight: 'bold'}}>{comment.user.name}</Words>: {comment.content}</Words>
+  </Row>
+}
 
 // look up shared transitions, that's the ideal behavior for this
 export const PostScreen = props => {
   const {sleep} = props.route.params;
+
+  const comments = (id === RECENT || !sleep.comments) ? [null] : sleep.comments.items;
+
   const {id} = sleep;
   const {username} = useContext(UserContext);
   const {uploadSleep} = useContext(SleepContext);
@@ -80,8 +86,9 @@ export const PostScreen = props => {
         </TouchableOpacity>
       </Row>
 
+
       <FlatList
-        data={sleep.comments.items}
+        data={comments}
         renderItem={({item, index}) => {
           if(!index){
             return <View>
@@ -111,6 +118,8 @@ export const PostScreen = props => {
                 placeholder={'Notes'}
               />
 
+
+
               <Comment comment={item}/>
 
             </View>
@@ -118,6 +127,8 @@ export const PostScreen = props => {
           }
           return <Comment comment={item}/>;
         }}/>
+
+
 
     </View>
 

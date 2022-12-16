@@ -139,16 +139,15 @@ const secondsFromDayStart = t => {
 }
 
 const createSleepRecords = async (graphqlClient, userID, input) => {
-    const queryInput = {
-        userID,
-        limit: 100000,
-    };
-
     //bascially we need groups by user,
     const listGroupUsersResult = await graphqlClient.query({
         query: gql(listGroupUsers),
         fetchPolicy: 'network-only',
-        variables: queryInput,
+        variables: {
+            filter: {
+                userID: {eq: userID}
+            }
+        }
     });
 
     console.log(listGroupUsersResult.data.listGroupUsers);

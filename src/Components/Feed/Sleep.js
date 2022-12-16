@@ -12,7 +12,7 @@ import { UserContext } from '../../Providers/UserProvider';
 import { LikeType } from '../../models';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createComment, likeSleep } from '../../graphql/mutations';
-import { formatMilliSeconds } from '../../Utils/MathUtil';
+import { formatSeconds } from '../../Utils/MathUtil';
 
 const PostFooter = ({sleep}) => {
     const {username} = useContext(UserContext);
@@ -179,7 +179,7 @@ export const Sleep = ({sleepRecord}) => {
 
             <Words style={{fontSize: 30}}>{sleep.title}</Words>
             <Words style={{fontSize: 30}}>{new Date(data.bedStart).toDateString()}</Words>
-            <Words>{formatMilliSeconds(duration)}</Words>
+            <Words>{formatSeconds(duration)}</Words>
             <Sample duration={duration} session={data}/>
         </View>
 
