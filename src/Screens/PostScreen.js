@@ -26,9 +26,11 @@ const Comment = ({comment}) => {
 export const PostScreen = props => {
   const {sleep} = props.route.params;
 
-  const comments = (id === RECENT || !sleep.comments) ? [null] : sleep.comments.items;
-
   const {id} = sleep;
+  // this NEEDS to have at least one element
+  let comments = (id === RECENT) ? [null] : sleep.comments.items;
+  if (!sleep.comments.items.length)
+    comments = [null]
   const {username} = useContext(UserContext);
   const {uploadSleep} = useContext(SleepContext);
 

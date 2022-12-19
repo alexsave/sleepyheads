@@ -80,10 +80,29 @@ const SocialProvider = props => {
 
       console.log(groupID);
 
+      // if it's ADDITIONAL QUERY, we may need to do this differently
+
+      // previous last sunday 0:00:00
+      const now = new Date();
+      now.setDate(now.getDate() - now.getDay());
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
+
+      //const startDate = new Date(
+        //Date.now() -  8 * 7 * 24 * 60 * 60 * 1000,
+      //).toISOString();
+      console.log(now);
+
       const res = await API.graphql(graphqlOperation(recordsByGroup, {
         groupID: groupID,
         sortDirection: 'DESC',
-        limit: 20,
+        filter: {
+          // 1 week
+          realStart: {ge: now.toISOString()}
+          //rankBedStart: {ge: now.toISOString()}
+        },
+        //limit: 20,
         nextToken: nextToken
       }));
 

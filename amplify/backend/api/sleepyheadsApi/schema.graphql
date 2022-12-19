@@ -149,6 +149,9 @@ type SleepRecord @model
   #handled by singleton [user] group
   #userID: ID! @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "recordsByUser")
   createdAt: String!
+  # super dumb but necessary for making sure sleeprecords are properly sorted
+  # related to rankBedStart, but with Date info
+  realStart: String!
 }
 
 #need groupsByUser, but then again getUser should take care of it

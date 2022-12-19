@@ -47,6 +47,7 @@ export const Feed = (props) => {
 
   const showRecent = groups.includes(groupID) || groupID === GLOBAL;
 
+  // final addition before release attempt: get stats of who sleeps least/ most/earliest/latest in group
   // How do I want to do this?
   // When they open the feed, they'll see all the usual posts of the timeline, but on top of every group timeline,
   // they will see their latest sleep, If auto upload is not enabled.
@@ -79,7 +80,7 @@ export const Feed = (props) => {
       <View style={{height: 200}}>
         {
           userGroups.includes(groupID) &&
-          <View><Words>in group</Words></View>
+          <View><Words>mmm sleepy stats...</Words></View>
         }
 
       </View>
@@ -91,9 +92,6 @@ export const Feed = (props) => {
       // rename this from sleepSession to postData or smth
       renderItem={({item}) => <Sleep sleepRecord={item}/>}
     />
-    <TouchableOpacity onPress={getAdditionalPosts}>
-      <Words>More</Words>
-    </TouchableOpacity>
 
     <NavBar current='feed'/>
 

@@ -120,7 +120,8 @@ export async function handler(event, context, callback){
         sleepRecordSleepId: sleepID,
         rankBedStart: start,
         rankBedEnd: end,
-        rankSleepTime: asleep
+        rankSleepTime: asleep,
+        realStart: sleepData.bedStart
     }
     await createSleepRecords(graphqlClient, userID, input)
     // might add some stat work here
