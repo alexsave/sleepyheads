@@ -15,6 +15,44 @@ import { GroupModal } from '../Components/Feed/GroupModal';
 import { SocialContext } from '../Providers/SocialProvider';
 import { Row } from '../Components/Basic/Row';
 
+const statsAnalysis = posts => {
+  //first split up and group by userID
+  let byUser = {};
+  posts.forEach(({rankBedStart, rankBedEnd, rankSleepTime, sleep}) => {
+    const k = sleep.user.name;
+
+    if (!byUser[k])
+      byUser[k] = []
+    byUser[k].push({rankBedStart, rankBedEnd, rankSleepTime});
+  })
+
+  let earlyRise, lateRise, mostSleep, leastSleep;
+
+  //averages? sure why not
+  byUser = Object.entries(byUser).map(([key, userStats]) => {
+    const reduced = userStats.reduce((a,b) => {
+        a.rankBedStart += b.rankBedStart/userStats.length;
+        a.rankBedEnd += b.rankBedEnd/userStats.length;
+        a.rankSleepTime += b.rankSleepTime/userStats.length;
+        return a
+
+      }, {rankBedStart: 0, rankBedEnd: 0, rankSleepTime: 0});
+
+    // check stats
+    if (!lateRise || reduced.rankBedEnd > lateRise.val)
+      lateRise = {name: key, val: reduced.rankBedEnd}
+    if (!earlyRise || reduced.rankBedEnd < earlyRise.val)
+      earlyRise = {name: key, val: reduced.rankBedEnd}
+    if (!mostSleep || reduced.rankSleepTime > mostSleep.val)
+      mostSleep = {name: key, val: reduced.rankSleepTime}
+    if (!leastSleep || reduced.rankSleepTime < leastSleep.val)
+      leastSleep = {name: key, val: reduced.rankSleepTime}
+  });
+
+  // then transform to
+  return {earlyRise, lateRise, mostSleep, leastSleep};
+};
+
 export const Feed = (props) => {
   //const [sleepData, setSleepData] = useState([]);
   const {username, userGroups} = useContext(UserContext);
@@ -77,10 +115,15 @@ export const Feed = (props) => {
     {
       groupID !== GLOBAL &&
 
-      <View style={{height: 200}}>
+      <View>
         {
           userGroups.includes(groupID) &&
-          <View><Words>mmm sleepy stats...</Words></View>
+          <View>
+            <Words>Sleepiest head: {statsAnalysis(posts).mostSleep.name}</Words>
+            <Words>Insomniac: {statsAnalysis(posts).leastSleep.name}</Words>
+            <Words>Best grindset: {statsAnalysis(posts).earlyRise.name}</Words>
+            <Words>Snooziest head: {statsAnalysis(posts).lateRise.name}</Words>
+          </View>
         }
 
       </View>
