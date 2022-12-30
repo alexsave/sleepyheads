@@ -31,8 +31,15 @@ export const processSleep = raw => {
     // for newer types of data, there is awake 10-11, core 11-12, awake 12-1, core 1-5, and so on
     // for older, there is alseep 10-11, alseep 12-3, asleep 4-5
 
+    // thanks to a new apple watch update or smth, it's now possible to have INBED within another INBED span
+    // such as iphone INBED: 11 - 7, watch INBED 2-3, watch in bed 4-5, etc.
+    // not sure what the best approach is, so just ignoring these with the return statement
+
     raw.forEach(sample => {
         if (sample.value === SleepSampleType.INBED || (sample.value !== SleepSampleType.ASLEEP && currentGroup.samples.length && sample.startDate !== currentGroup.samples[currentGroup.samples.length-1].endDate)) {
+
+            if (sample.value === SleepSampleType.INBED && sample.endDate <= currentGroup.bedEnd)
+                return;
 
             // signifies new sleep
             groupings.push(currentGroup);
