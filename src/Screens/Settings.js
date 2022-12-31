@@ -24,7 +24,7 @@ export const Settings = () => {
       </Row>
 
       <FlatList
-        data={inHealth.reverse()}
+        data={inHealth}
         renderItem={({item}) => {
           const i = uploaded.has(makeSleepKey(item));
           return <Row

@@ -58,7 +58,8 @@ const SleepProvider = props => {
 
   const setAutoUpload = async val => {
     await Settings.set({[AUTO_UPLOAD_KEY]: val})
-    internalSetAutoUpload(val);
+    const au = await Settings.get(AUTO_UPLOAD_KEY);
+    internalSetAutoUpload(!!val);
   }
 
   const init = async () => {
@@ -66,7 +67,7 @@ const SleepProvider = props => {
     const us = await AsyncStorage.getItem(UPLOADED_SLEEPS_KEY);
 
     const au = await Settings.get(AUTO_UPLOAD_KEY);
-    internalSetAutoUpload(au);
+    internalSetAutoUpload(!!au);
 
     let existing = []
     let nextUploaded;
@@ -96,7 +97,7 @@ const SleepProvider = props => {
   const handleUploadedChange = async (u, checkedNetwork, au) => {
 
     const ih = await loadFromHealth();
-    setInHealth(ih); // it's own thing
+    setInHealth(ih.reverse()); // it's own thing
 
     // now, check for the diff between ih and uploaded
 
