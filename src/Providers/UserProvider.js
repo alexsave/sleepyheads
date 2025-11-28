@@ -41,7 +41,6 @@ const UserProvider = props => {
                 return;
 
             //console.log(JSON.stringify(res));
-            console.log('is this null', res)
             setDisplayName(res.name);
 
             // Migth need more

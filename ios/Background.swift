@@ -4,7 +4,6 @@
 //
 //  Created by Alex Saveliev on 10/9/22.
 //
-
 import Foundation
 import HealthKit
 
@@ -27,28 +26,29 @@ class Background: NSObject {
     let write: Set<HKSampleType> = Set(arrayLiteral: HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!)
     // health auth has to come first
     healthKitStore.requestAuthorization(toShare: write, read: read) { granted, error in
+        // CURRENTLY testing this if branch
       if let error = error {
         print(error)
-        return
-      }
-      
-      center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-        if let error = error {
-          print(error)
-          return
-        }
+      } else {
         
-        let query: HKObserverQuery = HKObserverQuery(sampleType: self.sampleType, predicate: nil, updateHandler: self.sleepChangedHandler)
-        self.healthKitStore.execute(query)
-        
-        self.healthKitStore.enableBackgroundDelivery(for: self.sampleType, frequency: HKUpdateFrequency.immediate) { (success: Bool, error: Error!) in
-          if (success) {
-            print("Enabled background delivery of step count")
-            
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+          
+          if let error = error {
+            print(error)
           } else {
-            if let theError = error{
-              print("Failed to enable background delivery of step count. ")
-              print("Error = \(theError)")
+            let query: HKObserverQuery = HKObserverQuery(sampleType: self.sampleType, predicate: nil, updateHandler: self.sleepChangedHandler)
+            self.healthKitStore.execute(query)
+            
+            self.healthKitStore.enableBackgroundDelivery(for: self.sampleType, frequency: HKUpdateFrequency.immediate) { (success: Bool, error: Error!) in
+              if (success) {
+                print("Enabled background delivery of step count")
+                
+              } else {
+                if let theError = error{
+                  print("Failed to enable background delivery of step count. ")
+                  print("Error = \(theError)")
+                }
+              }
             }
           }
         }
@@ -101,6 +101,7 @@ class Background: NSObject {
       if (x > lastFound) {
         defaults.set(x, forKey: "lastSleepFound")
         
+        // this works
         // also will be different content if auto upload
         let autoU: Bool = defaults.bool(forKey: "autoUploadSleep")
         
@@ -111,6 +112,9 @@ class Background: NSObject {
         }
         
         // Can we wake up the app and save to async storage from here? Yes, we do
+        
+        
+        // this part works
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
         dateFormatter.locale = .current
