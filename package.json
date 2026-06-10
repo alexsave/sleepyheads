@@ -60,6 +60,11 @@
         "preset": "react-native"
     },
     "overrides": {
-        "axios": "0.32.0"
+        "axios": "0.32.0",
+        "braces": "^3.0.3",
+        "micromatch": "^4.0.8",
+        "ip": "^2.0.1",
+        "tmp": "^0.2.4",
+        "form-data": "^4.0.4"
     }
 }
