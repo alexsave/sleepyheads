@@ -58,5 +58,8 @@
     },
     "jest": {
         "preset": "react-native"
+    },
+    "overrides": {
+        "axios": "0.32.0"
     }
 }
