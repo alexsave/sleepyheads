@@ -1,8 +1,13 @@
 import appleAuth from '@invertase/react-native-apple-authentication';
-import { Auth } from 'aws-amplify';
+import { signIn, signUp, confirmSignIn } from 'aws-amplify/auth';
 import jwtDecode from 'jwt-decode';
 
-export const CUSTOM_CHALLENGE = 'CUSTOM_CHALLENGE';
+// In Amplify v6 the custom-challenge next step is reported under this name.
+export const CUSTOM_CHALLENGE = 'CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE';
+
+// Start a passwordless (custom challenge) sign-in for the given username.
+const startCustomSignIn = username =>
+  signIn({ username, options: { authFlowType: 'CUSTOM_WITHOUT_SRP' } });
 
 // If decoded is not null, we are logging in after the signup and already have the SIWA token
 export const appleSignIn = async (token=null, decoded=null) => {
@@ -33,28 +38,30 @@ export const appleSignIn = async (token=null, decoded=null) => {
   const {email} = decoded;
   console.log(decoded);
 
-  Auth.signIn(email)
-    .then(result => {
-      if(result.challengeName === CUSTOM_CHALLENGE) {
-        Auth.sendCustomChallengeAnswer(result, token)
+  startCustomSignIn(email)
+    .then(({ nextStep }) => {
+      if (nextStep.signInStep === CUSTOM_CHALLENGE) {
+        confirmSignIn({ challengeResponse: token })
           .then(user => console.log(user))
           .catch(e => console.log(e));
 
       }
     })
     .catch(err => {
-      if (err.code === 'UserNotFoundException') {
-        Auth.signUp({
+      if (err.name === 'UserNotFoundException') {
+        signUp({
           username: email,
           password: email,
-          attributes: {
-            email: email,
-            'custom:siwa': 'true'
+          options: {
+            userAttributes: {
+              email: email,
+              'custom:siwa': 'true'
+            }
           }
         })
           .then(() => appleSignIn(token, decoded))
           .catch(err => console.log(err))
-      } else if (err.code === 'UsernameExistsException') {
+      } else if (err.name === 'UsernameExistsException') {
         console.log('Need verification')
       }
     });
@@ -69,22 +76,26 @@ export const emailSignIn = email => {
     if (email.length === 0)
       return;
 
-    Auth.signIn(email)
-      .then(result => {
-        console.log(result);
-        if (result.challengeName === CUSTOM_CHALLENGE) {
-          // Nothing we can do here, we need to wait for user input
-          resolve(result);
+    startCustomSignIn(email)
+      .then(({ nextStep }) => {
+        console.log(nextStep);
+        if (nextStep.signInStep === CUSTOM_CHALLENGE) {
+          // Nothing we can do here, we need to wait for user input.
+          // Amplify v6 holds the sign-in session internally, so we just signal
+          // that the custom challenge is ready to be answered.
+          resolve(true);
         }
       })
       .catch(err => {
-        if (err.code === 'UserNotFoundException') {
-          Auth.signUp({
+        if (err.name === 'UserNotFoundException') {
+          signUp({
             username: email,
             password: email,
-            attributes: {
-              email: email,
-              'custom:siwa': 'false'
+            options: {
+              userAttributes: {
+                email: email,
+                'custom:siwa': 'false'
+              }
             }
           })
             .then(() => {
@@ -92,7 +103,7 @@ export const emailSignIn = email => {
             })
             .catch(reject);
 
-        } else if (err.code === 'UsernameExistsException') {
+        } else if (err.name === 'UsernameExistsException') {
           reject('Need verification');
         }
       });
@@ -106,20 +117,22 @@ const phoneSignIn = phone => {
     if (formattedPhone.length === 0)
       return;
 
-    Auth.signIn(phone)
-      .then(result => {
-        console.log(result);
-        if (result.challengeName === CUSTOM_CHALLENGE)
-          resolve(result);
+    startCustomSignIn(phone)
+      .then(({ nextStep }) => {
+        console.log(nextStep);
+        if (nextStep.signInStep === CUSTOM_CHALLENGE)
+          resolve(true);
       })
       .catch(err => {
-        if (err.code === 'UserNotFoundException') {
-          Auth.signUp({
+        if (err.name === 'UserNotFoundException') {
+          signUp({
             username: phone,
             password: phone,
-            attributes: {
-              phone_number: phone,
-              'custom:siwa': 'false'
+            options: {
+              userAttributes: {
+                phone_number: phone,
+                'custom:siwa': 'false'
+              }
             }
           })
             .then(() => {
@@ -127,7 +140,7 @@ const phoneSignIn = phone => {
             })
             .catch(reject);
 
-        } else if (err.code === 'UsernameExistsException') {
+        } else if (err.name === 'UsernameExistsException') {
           reject('Need verification');
         }
       });

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from './UserProvider';
 import { GroupContext, GLOBAL } from './GroupProvider';
-import { API, graphqlOperation } from 'aws-amplify';
+import { client, graphqlOperation } from '../Network/graphqlClient';
 import { recordsByGroup, sleepsByTimestamp } from '../graphql/queries';
 
 export const SocialContext = React.createContext();
@@ -63,7 +63,7 @@ const SocialProvider = props => {
     console.log(groupID);
 
     if (groupID === GLOBAL) {
-      const res = await API.graphql(graphqlOperation(sleepsByTimestamp, {
+      const res = await client.graphql(graphqlOperation(sleepsByTimestamp, {
         type: 'sleep',
         sortDirection: 'DESC',
         limit: 20,
@@ -94,7 +94,7 @@ const SocialProvider = props => {
       //).toISOString();
       console.log(now);
 
-      const res = await API.graphql(graphqlOperation(recordsByGroup, {
+      const res = await client.graphql(graphqlOperation(recordsByGroup, {
         groupID: groupID,
         sortDirection: 'DESC',
         filter: {

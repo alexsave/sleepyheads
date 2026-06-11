@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { client, graphqlOperation } from '../Network/graphqlClient';
 import { createGroup, createGroupUser } from '../graphql/mutations';
 
 export const GroupContext = React.createContext();
@@ -15,7 +15,7 @@ const GroupProvider = props => {
     let res;
     //... just give it a name, and off you go
     try  {
-      res = await API.graphql(graphqlOperation(createGroup, {input: {name: groupName}}))
+      res = await client.graphql(graphqlOperation(createGroup, {input: {name: groupName}}))
     } catch (e) {
       // fails because there are no users in it?
       console.log(e)
@@ -35,7 +35,7 @@ const GroupProvider = props => {
     }
 
     try {
-      const res = await API.graphql(graphqlOperation(createGroupUser, {input: guInput/*???*/}));
+      const res = await client.graphql(graphqlOperation(createGroupUser, {input: guInput/*???*/}));
       console.log(res);
     } catch (e) {
       //ignore it, the createGroupUser operation seems to load groups before the user is an owner

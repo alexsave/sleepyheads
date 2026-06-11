@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
-import { Storage } from 'aws-amplify';
+import { getUrl } from 'aws-amplify/storage';
 import RNFetchBlob from 'rn-fetch-blob';
 const dirs = RNFetchBlob.fs.dirs;
 
@@ -9,13 +9,14 @@ const CachedImage = ({placeholder, imageKey, width, height, style}) => {
 
     const downloadImage = async (key) => {
         //this url is ridiculously long lol
-        const url = await Storage.get(key);
+        // Amplify v6: getUrl returns a { url } URL object; stringify for fetch.
+        const { url } = await getUrl({ key });
         RNFetchBlob
             .config({
                 // response data will be saved to this path if it has access right.
                 path : `${dirs.DocumentDir}/${key}`
             })
-            .fetch('GET', url, {
+            .fetch('GET', url.toString(), {
                 //some headers ..
             })
             .then((res) => {

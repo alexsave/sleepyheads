@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadFromHealth } from '../Network/PostLoad';
-import { API, graphqlOperation } from 'aws-amplify';
+import { client, graphqlOperation } from '../Network/graphqlClient';
 import { ANONYMOUS, NOT_SIGNED_IN, UserContext } from './UserProvider';
 import { createSleepAndRecords, updateSleep } from '../graphql/mutations';
 import { sleepsByUser } from '../graphql/queries';
@@ -132,7 +132,7 @@ const SleepProvider = props => {
   }
 
   const fetchUploaded = async (after) => {
-    const res = await API.graphql(graphqlOperation(sleepsByUser, {
+    const res = await client.graphql(graphqlOperation(sleepsByUser, {
       userID: username
     }));
     return new Set(res.data.sleepsByUser.items.map(s => makeSleepKey(s.data)))
@@ -189,7 +189,7 @@ const SleepProvider = props => {
       };
       console.log(JSON.stringify(csi));
 
-      await API.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
+      await client.graphql(graphqlOperation(createSleepAndRecords,  {csi} ));
 
 
       return key;
@@ -200,7 +200,7 @@ const SleepProvider = props => {
       delete sleep.updatedAt;
       delete sleep.createdAt;//hmm
 
-      const res = await API.graphql(graphqlOperation(updateSleep, {input: sleep}));
+      const res = await client.graphql(graphqlOperation(updateSleep, {input: sleep}));
       //console.log(res);
     }
   }

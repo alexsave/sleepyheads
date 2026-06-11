@@ -1,4 +1,4 @@
-import { Storage } from 'aws-amplify';
+import { uploadData } from 'aws-amplify/storage';
 import { v4 } from 'uuid';
 
 export const uploadImage = async uri => {
@@ -7,6 +7,7 @@ export const uploadImage = async uri => {
   const urlParts = uri.split('.');
   const extension = urlParts[urlParts.length - 1];
   const key = `${v4()}.${extension}`;
-  await Storage.put(key, blob);
+  // Amplify v6: uploadData returns a task; await its .result to finish the upload.
+  await uploadData({ key, data: blob }).result;
   return key;
 };
