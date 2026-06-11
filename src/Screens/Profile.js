@@ -22,7 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { formatMilliSeconds, formatSeconds } from '../Utils/MathUtil';
 import { SocialContext } from '../Providers/SocialProvider';
 import { uploadImage } from '../Network/Blobs';
-import { API, graphqlOperation } from 'aws-amplify';
+import { client, graphqlOperation } from '../Network/graphqlClient';
 import { updateUser } from '../graphql/mutations';
 
 export const Profile = props => {
@@ -103,7 +103,7 @@ export const Profile = props => {
             image: key
         };
 
-        await API.graphql(graphqlOperation(updateUser, { input }));
+        await client.graphql(graphqlOperation(updateUser, { input }));
     };
 
     //next up, lets clean up the user profile

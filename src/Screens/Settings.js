@@ -1,7 +1,7 @@
 import { StyleSheet, FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { BACKGROUND, DARK_GRAY, DARKER, PRIMARY, TEXT_COLOR } from '../Values/Colors';
 import { Words } from '../Components/Basic/Words';
-import { Auth } from 'aws-amplify';
+import { signOut } from 'aws-amplify/auth';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 import { makeSleepKey, SleepContext } from '../Providers/SleepProvider';
@@ -53,7 +53,7 @@ export const Settings = () => {
     <TouchableOpacity
       style={styles.redRow}
       onPress={() => {
-        Auth.signOut().then(() => {
+        signOut().then(() => {
           clearCache();
           // quick flash of white here, I don't like it
 

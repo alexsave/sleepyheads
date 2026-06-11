@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../Providers/UserProvider';
 import { LikeType } from '../../models';
-import { API, graphqlOperation } from 'aws-amplify';
+import { client, graphqlOperation } from '../../Network/graphqlClient';
 import { createComment, likeSleep } from '../../graphql/mutations';
 import { formatSeconds } from '../../Utils/MathUtil';
 
@@ -26,7 +26,7 @@ const PostFooter = ({sleep}) => {
             content: commentDraft
         };
 
-        const res = await API.graphql(graphqlOperation(createComment, {input}));
+        const res = await client.graphql(graphqlOperation(createComment, {input}));
         setCommenting(false);
         setCommentDraft('');
         console.log(res);
@@ -38,7 +38,7 @@ const PostFooter = ({sleep}) => {
             userID: username,
             type
         };
-        const res = await API.graphql(graphqlOperation(likeSleep, {lsi} ));
+        const res = await client.graphql(graphqlOperation(likeSleep, {lsi} ));
         console.log(res);
     }
 

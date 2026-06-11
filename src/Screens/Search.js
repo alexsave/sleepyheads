@@ -6,7 +6,7 @@ import Write from '../Components/Basic/Write';
 import UserImage from '../Components/Profile/UserImage';
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { client, graphqlOperation } from '../Network/graphqlClient';
 import { listGroups, listUsers } from '../graphql/queries';
 import { Row } from '../Components/Basic/Row';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,7 +24,7 @@ export const Search = props => {
   const [groupResults, setGroupResults] = useState([]);
 
   const fetchUsers = async () => {
-    const res = await API.graphql(graphqlOperation(listUsers, {
+    const res = await client.graphql(graphqlOperation(listUsers, {
       // sort? who knows, some function of #likes, #groups, #comments
       filter: {
         or: [
@@ -39,7 +39,7 @@ export const Search = props => {
   };
 
   const fetchGroups = async () => {
-    const res = await API.graphql(graphqlOperation(listGroups, {
+    const res = await client.graphql(graphqlOperation(listGroups, {
       // sort? who knows, some function of #likes, #groups, #comments
       filter: {
         // //id is random, proabbly don't want to match on a query

@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { API, Auth, graphqlOperation, Hub } from 'aws-amplify';
+import { client, graphqlOperation } from '../Network/graphqlClient';
+import { getCurrentUser } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 import { getUser } from '../graphql/queries';
 import { createUser } from '../graphql/mutations';
 import { GroupContext } from './GroupProvider';
@@ -53,7 +55,7 @@ const UserProvider = props => {
     // this one is ok
     useEffect(() => {
         //hopefully this doesn't take long lol
-        Auth.currentAuthenticatedUser().then(user => {
+        getCurrentUser().then(user => {
             console.log('signed in as ' + JSON.stringify(user.username))
             setUsername(user.username);
         }).catch(() => {
@@ -61,18 +63,17 @@ const UserProvider = props => {
             setUsername(NOT_SIGNED_IN)
         })
 
+        // v6 renamed the Hub auth events (signIn -> signedIn, signOut ->
+        // signedOut) and removed the 'signUp' event. New-user detection that
+        // used the old 'signUp' event now needs to be set from the signUp call.
         return Hub.listen("auth", ({ payload: { event, data } }) => {
             console.log(event);//, JSON.stringify(data));
             switch (event) {
-                case "signIn":
+                case "signedIn":
                     //console.log(data);
-                    setUsername(data.username);
+                    setUsername(data?.username);
                     break;
-                case 'signUp': //ffs, just do this lol
-                    setNewSignUp(true);
-                    //setUsername(data.username);
-                    break;
-                case "signOut":
+                case "signedOut":
                     //console.log(null);
                     setUsername(NOT_SIGNED_IN)
                     break;
@@ -93,13 +94,13 @@ const UserProvider = props => {
             id: username,
             name,
         };
-        const res = await API.graphql(graphqlOperation(createUser, { input }));
+        const res = await client.graphql(graphqlOperation(createUser, { input }));
         console.log(res);
         return true;
     }
 
     const loadUser = async id => {
-        const res = await API.graphql(graphqlOperation(getUser, { id }));
+        const res = await client.graphql(graphqlOperation(getUser, { id }));
         return res.data.getUser;
     }
 

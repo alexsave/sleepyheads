@@ -3,7 +3,7 @@ import { BACKGROUND, DARKER, LIGHTER, TEXT_COLOR } from '../../Values/Colors';
 import Write from '../Basic/Write';
 import { useEffect, useRef, useState } from 'react';
 import { Words } from '../Basic/Words';
-import { Auth } from 'aws-amplify';
+import { confirmSignIn } from 'aws-amplify/auth';
 import { emailSignIn } from '../../Network/Login';
 
 // for signing up and signing in
@@ -30,7 +30,9 @@ export const EmailModal = ({visible, close}) => {
     if (text.length === 4) {
       // Turn off keyboard
       otpRef.current.blur();
-      Auth.sendCustomChallengeAnswer(session, text)
+      // Amplify v6 tracks the in-progress sign-in session internally, so the
+      // challenge answer is submitted without passing the session object.
+      confirmSignIn({ challengeResponse: text })
         .then(res => {
           close();
         })
