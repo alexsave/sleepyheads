@@ -64,6 +64,11 @@
         "ip": "^2.0.1",
         "tmp": "^0.2.4",
         "form-data": "^4.0.4",
-        "@babel/plugin-transform-typescript": "^7.25.0"
+        "@babel/plugin-transform-typescript": "^7.25.0",
+        "react-devtools-core": "^4.28.5",
+        "@xmldom/xmldom": "^0.8.13",
+        "@tootallnate/once": "^2.0.1",
+        "node-notifier": "^8.0.2",
+        "uuid": "^11.1.1"
     }
 }
